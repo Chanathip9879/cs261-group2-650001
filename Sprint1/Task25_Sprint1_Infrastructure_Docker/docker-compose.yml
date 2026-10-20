@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 1. Web Application Container (Mobile-first UI + REST API)
   app:
