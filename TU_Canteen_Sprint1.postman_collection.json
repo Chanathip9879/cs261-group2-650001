@@ -1,183 +1,252 @@
 {
   "info": {
-    "_postman_id": "tu-canteen-sprint1-collection",
-    "name": "TU Canteen WebApp - Sprint 1 API Tests",
-    "description": "Postman Collection สำหรับทดสอบ API ทั้งหมดใน Sprint 1 (CS261 Group 2) ครอบคลุมทั้งฝั่ง User, Merchant และ Admin",
+    "_postman_id": "hiwkhaw-sprint1-collection-v2",
+    "name": "HiwKhaw (TU Canteen) - CS261 Sprint 1 API Tests",
+    "description": "Postman Collection สำหรับทดสอบ API ทั้งหมดใน Sprint 1 (CS261 Group 2) ตามขอบเขต U1 ถึง U5",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000",
+      "value": "http://localhost:5000",
       "type": "string"
     },
     {
-      "key": "ownerToken",
+      "key": "vendorToken",
       "value": "",
       "type": "string"
     }
   ],
   "item": [
     {
-      "name": "0. Healthcheck & System Info",
+      "name": "0. System Info & Canteens (U3)",
       "item": [
         {
-          "name": "Healthcheck API",
+          "name": "0.1 Healthcheck API",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/health",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "health"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
             }
           }
         },
         {
-          "name": "Get All Canteens",
+          "name": "0.2 Get All Canteens (กรีนแคนทีน & คณะวิทย์)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/canteens",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "canteens"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "canteens"
+              ]
             }
           }
         },
         {
-          "name": "Get All Food Categories",
+          "name": "0.3 Get All Food Categories",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/categories",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "categories"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ]
             }
           }
         }
       ]
     },
     {
-      "name": "1. User Story 2 & 3: Search & Filter (User)",
+      "name": "1. User Story 1, 2, 3: Search, Filter & Location (User)",
       "item": [
         {
-          "name": "Search: ค้นหาร้านทั้งหมด",
+          "name": "1.1 U1: ดึงร้านอาหารทั้งหมด (แสดงสถานะเปิด/ปิด)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"]
-            }
-          }
-        },
-        {
-          "name": "Search: กรองเฉพาะโรงอาหารกรีนแคนทีน",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search?canteen=GREEN_CANTEEN",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"],
-              "query": [
-                { "key": "canteen", "value": "GREEN_CANTEEN" }
+              "raw": "{{baseUrl}}/api/shops",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
               ]
             }
           }
         },
         {
-          "name": "Search: กรองเฉพาะโรงอาหารคณะวิทยาศาสตร์",
+          "name": "1.2 U1: กรองเฉพาะร้านที่เปิดอยู่ (status=open)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search?canteen=SCIENCE_FACULTY",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"],
+              "raw": "{{baseUrl}}/api/shops?status=open",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
+              ],
               "query": [
-                { "key": "canteen", "value": "SCIENCE_FACULTY" }
+                {
+                  "key": "status",
+                  "value": "open"
+                }
               ]
             }
           }
         },
         {
-          "name": "Search: กรองเฉพาะร้านที่เปิดอยู่ (status=OPEN)",
+          "name": "1.3 U2 & U3: กรองโรงอาหารกรีนแคนทีน (canteen=green)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search?status=OPEN",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"],
+              "raw": "{{baseUrl}}/api/shops?canteen=green",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
+              ],
               "query": [
-                { "key": "status", "value": "OPEN" }
+                {
+                  "key": "canteen",
+                  "value": "green"
+                }
               ]
             }
           }
         },
         {
-          "name": "Search: ค้นหาตามชื่ออาหาร (กะเพรา)",
+          "name": "1.4 U2 & U3: กรองโรงอาหารคณะวิทยาศาสตร์ (canteen=sci)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search?q=กะเพรา",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"],
+              "raw": "{{baseUrl}}/api/shops?canteen=sci",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
+              ],
               "query": [
-                { "key": "q", "value": "กะเพรา" }
+                {
+                  "key": "canteen",
+                  "value": "sci"
+                }
               ]
             }
           }
         },
         {
-          "name": "Search: กรองหมวดหมู่อาหาร (ก๋วยเตี๋ยว)",
+          "name": "1.5 U2: ค้นหาตามชื่ออาหาร (กะเพรา)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/search?category=ก๋วยเตี๋ยว",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "search"],
+              "raw": "{{baseUrl}}/api/shops?q=%E0%B8%81%E0%B8%B0%E0%B9%80%E0%B8%9E%E0%B8%A3%E0%B8%B2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
+              ],
               "query": [
-                { "key": "category", "value": "ก๋วยเตี๋ยว" }
+                {
+                  "key": "q",
+                  "value": "กะเพรา"
+                }
               ]
             }
           }
         },
         {
-          "name": "Detail: ดูข้อมูลร้านและเมนู (ID: 1)",
+          "name": "1.6 U2: กรองหมวดหมู่อาหาร (noodles)",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1"]
+              "raw": "{{baseUrl}}/api/shops?category=noodles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "noodles"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "1.7 U3: ดูข้อมูลร้าน ที่ตั้ง และรายการเมนู (shop-green-01)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/shops/shop-green-01",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops",
+                "shop-green-01"
+              ]
             }
           }
         }
       ]
     },
     {
-      "name": "2. User Story 4: Authentication (Merchant Login)",
+      "name": "2. User Story 4: Vendor Authentication (Phone + PIN)",
       "item": [
         {
-          "name": "Login แม่ค้าสำเร็จ (ป้าศรี ข้าวแกง 0812345678 / PIN 1234)",
+          "name": "2.1 U4: ล็อกอินแม่ค้าสำเร็จ (ป้าณี 0811111111 / PIN 1111)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
                   "var jsonData = pm.response.json();",
-                  "if (jsonData.token) {",
-                  "    pm.collectionVariables.set('ownerToken', jsonData.token);",
-                  "    console.log('Saved owner token:', jsonData.token);",
-                  "}"
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"Token is returned\", function () {",
+                  "    pm.expect(jsonData.token).to.be.a(\"string\");",
+                  "    pm.collectionVariables.set(\"vendorToken\", jsonData.token);",
+                  "});"
                 ],
                 "type": "text/javascript"
               }
@@ -186,214 +255,176 @@
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"0812345678\",\n  \"pin\": \"1234\"\n}"
+              "raw": "{\n  \"phone\": \"0811111111\",\n  \"pin\": \"1111\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/auth/owner/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "owner", "login"]
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
           }
         },
         {
-          "name": "Login แม่ค้า: กรณีใส่ PIN ผิด (Negative Test 401)",
+          "name": "2.2 U4: ล็อกอินแม่ค้ากรณี PIN ผิด (Negative Test 401)",
           "request": {
             "method": "POST",
             "header": [
-              { "key": "Content-Type", "value": "application/json" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"phone\": \"0812345678\",\n  \"pin\": \"0000\"\n}"
+              "raw": "{\n  \"phone\": \"0811111111\",\n  \"pin\": \"0000\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/auth/owner/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "owner", "login"]
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
             }
           }
         },
         {
-          "name": "Route Guard: ตรวจสอบ Session ด้วย Token (/api/auth/me)",
+          "name": "2.3 U4: Route Guard: ตรวจสอบ Session ด้วย Bearer Token (/api/auth/me)",
           "request": {
             "method": "GET",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{ownerToken}}"
+                "value": "Bearer {{vendorToken}}"
               }
             ],
             "url": {
               "raw": "{{baseUrl}}/api/auth/me",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "me"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "name": "3. User Story 5: Toggle Shop Open/Closed Status",
+      "item": [
         {
-          "name": "Logout เจ้าของร้าน",
+          "name": "3.1 U5: แม่ค้าเปลี่ยนสถานะเป็น ปิดร้าน (isOpen: false)",
           "request": {
-            "method": "POST",
+            "method": "PUT",
             "header": [
               {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
                 "key": "Authorization",
-                "value": "Bearer {{ownerToken}}"
+                "value": "Bearer {{vendorToken}}"
               }
             ],
-            "url": {
-              "raw": "{{baseUrl}}/api/auth/logout",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "auth", "logout"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "3. User Story 5 & 6: Merchant Store Management",
-      "item": [
-        {
-          "name": "Toggle สถานะร้านเป็น CLOSED (ปิดร้าน)",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
-            ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"CLOSED\"\n}"
+              "raw": "{\n  \"isOpen\": false,\n  \"statusNote\": \"ของหมด ปิดร้านชั่วคราว\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1/status",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1", "status"]
+              "raw": "{{baseUrl}}/api/shops/shop-green-01/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops",
+                "shop-green-01",
+                "status"
+              ]
             }
           }
         },
         {
-          "name": "Toggle สถานะร้านเป็น OPEN (เปิดร้าน)",
+          "name": "3.2 U5: แม่ค้าเปลี่ยนสถานะเป็น เปิดร้าน (isOpen: true)",
           "request": {
-            "method": "PATCH",
+            "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vendorToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"OPEN\"\n}"
+              "raw": "{\n  \"isOpen\": true,\n  \"statusNote\": \"เปิดให้บริการตามปกติ\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1/status",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1", "status"]
+              "raw": "{{baseUrl}}/api/shops/shop-green-01/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops",
+                "shop-green-01",
+                "status"
+              ]
             }
           }
         },
         {
-          "name": "ปรับปรุงเวลาเปิด - ปิดร้าน",
+          "name": "3.3 U5: ตรวจสอบสิทธิ์ (RBAC): ป้องกันแม่ค้าแก้สถานะร้านอื่น (403 Forbidden)",
           "request": {
-            "method": "PATCH",
+            "method": "PUT",
             "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{vendorToken}}"
+              }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"openTime\": \"06:30\",\n  \"closeTime\": \"16:30\"\n}"
+              "raw": "{\n  \"isOpen\": false\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1/hours",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1", "hours"]
-            }
-          }
-        },
-        {
-          "name": "สลับสถานะเมนูอาหารว่าหมดหรือไม่ (Sold Out)",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"isSoldOut\": true\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/products/101/soldout",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "products", "101", "soldout"]
-            }
-          }
-        },
-        {
-          "name": "เพิ่มเมนูอาหารใหม่เข้าร้าน",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" },
-              { "key": "Authorization", "value": "Bearer {{ownerToken}}" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"แกงเผ็ดเป็ดย่างพิเศษ\",\n  \"price\": 60\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1/products",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1", "products"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "4. Reviews (No Login Required)",
-      "item": [
-        {
-          "name": "ส่งรีวิวร้านอาหาร (ไม่ต้องล็อกอิน)",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"userName\": \"เด็กหอโซนบี\",\n  \"rating\": 5,\n  \"comment\": \"ข้าวแกงป้าศรีอร่อยมาก ให้กับข้าวเยอะ รสจัดจ้านโดนใจครับ!\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/restaurants/1/reviews",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "restaurants", "1", "reviews"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "5. Admin Portal",
-      "item": [
-        {
-          "name": "แอดมินเพิ่มร้านอาหารใหม่ในโรงอาหาร",
-          "request": {
-            "method": "POST",
-            "header": [
-              { "key": "Content-Type", "value": "application/json" }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"ข้าวมันไก่ตอน สูตรพิเศษ มธ.\",\n  \"canteenCode\": \"GREEN_CANTEEN\",\n  \"stallNumber\": \"ล็อค 15\",\n  \"category\": \"ข้าวมันไก่ / ข้าวหมูกรอบ\",\n  \"openTime\": \"07:00\",\n  \"closeTime\": \"15:00\",\n  \"initialOwnerPhone\": \"0891234567\",\n  \"initialOwnerPin\": \"1234\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/api/admin/restaurants",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "admin", "restaurants"]
+              "raw": "{{baseUrl}}/api/shops/shop-sci-01/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "shops",
+                "shop-sci-01",
+                "status"
+              ]
             }
           }
         }

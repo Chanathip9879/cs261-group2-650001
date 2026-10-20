@@ -1,0 +1,494 @@
+{
+  "canteens": [
+    {
+      "id": "green",
+      "name": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "shortName": "กรีนแคนทีน",
+      "description": "โรงอาหารติดแอร์ยอดนิยม ใกล้อาคารกิจกรรมนักศึกษาและคณะวิศวกรรมศาสตร์",
+      "landmark": "ข้างอาคารบรรยายรวม SC และ TU Dome",
+      "totalShops": 5,
+      "operatingHours": "07:00 - 18:00 น."
+    },
+    {
+      "id": "sci",
+      "name": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "shortName": "คณะวิทยาศาสตร์ (SC)",
+      "description": "โรงอาหารโปร่งสบาย ใต้ตึกคณะวิทยาศาสตร์และอาคารบรรยายรวม บร.4",
+      "landmark": "ใกล้อาคาร บร.4 และศูนย์คอมพิวเตอร์",
+      "totalShops": 5,
+      "operatingHours": "07:30 - 17:00 น."
+    }
+  ],
+  "categories": [
+    {
+      "id": "all",
+      "name": "ทั้งหมด",
+      "icon": "Utensils"
+    },
+    {
+      "id": "rice_curry",
+      "name": "ข้าวราดแกง",
+      "icon": "Soup"
+    },
+    {
+      "id": "made_to_order",
+      "name": "อาหารตามสั่ง",
+      "icon": "Flame"
+    },
+    {
+      "id": "noodles",
+      "name": "ก๋วยเตี๋ยว",
+      "icon": "Bowl"
+    },
+    {
+      "id": "chicken_rice",
+      "name": "ข้าวมันไก่/อาหารจานเดียว",
+      "icon": "Drumstick"
+    },
+    {
+      "id": "papaya_salad",
+      "name": "ส้มตำ/ยำรสเด็ด",
+      "icon": "Sparkles"
+    },
+    {
+      "id": "drinks_dessert",
+      "name": "เครื่องดื่ม/ของหวาน",
+      "icon": "CupSoda"
+    }
+  ],
+  "shops": [
+    {
+      "id": "shop-green-01",
+      "name": "ร้านป้าณี ข้าวราดแกงรสเด็ด",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "boothNumber": "ล็อค G-01",
+      "locationDetails": "โซนปีกซ้าย ติดประตูทางเข้าฝั่งลานกิจกรรม",
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "เปิดให้บริการตามปกติ",
+      "openingHours": "07:00 - 15:30",
+      "phone": "0811111111",
+      "pin": "1111",
+      "vendorName": "ป้าณี ศรีรังสิต",
+      "accentColor": "#10B981",
+      "rating": 4.8,
+      "reviewCount": 42,
+      "lastStatusUpdate": "2026-10-20T10:09:34.783Z",
+      "menus": [
+        {
+          "id": "m1",
+          "name": "ข้าวราดแกง 1 อย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "m2",
+          "name": "ข้าวราดแกง 2 อย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m3",
+          "name": "พะแนงหมูสูตรโบราณ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "m4",
+          "name": "ไข่พะโล้ยางมะตูม",
+          "price": 10,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-green-02",
+      "name": "ครัวคุณยาย อาหารตามสั่งกระทะร้อน",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "boothNumber": "ล็อค G-02",
+      "locationDetails": "โซนกลาง ติดกับร้านข้าวแกงป้าณี",
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "รับออเดอร์เรื่อยๆ ผัดใหม่จานต่อจาน",
+      "openingHours": "08:00 - 17:00",
+      "phone": "0822222222",
+      "pin": "2222",
+      "vendorName": "คุณยายสมศรี",
+      "accentColor": "#F59E0B",
+      "rating": 4.6,
+      "reviewCount": 38,
+      "lastStatusUpdate": "2026-10-19T08:45:00.000Z",
+      "menus": [
+        {
+          "id": "m5",
+          "name": "ข้าวกะเพราหมูกรอบไข่ดาว",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m6",
+          "name": "ข้าวผัดต้มยำทะเล",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "m7",
+          "name": "สุกี้แห้งไก่น้ำจิ้มเต้าหู้ยี้",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m8",
+          "name": "หมูกระเทียมพริกไทยไข่ข้น",
+          "price": 55,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-green-03",
+      "name": "ก๋วยเตี๋ยวเรืออยุธยา กรีนแคนทีน",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "boothNumber": "ล็อค G-03",
+      "locationDetails": "โซนปีกขวา โต๊ะอาหารหลัก",
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": false,
+      "statusNote": "น้ำซุปหมด กำลังเตรียมวัตถุดิบช่วงบ่าย",
+      "openingHours": "08:30 - 15:00",
+      "phone": "0833333333",
+      "pin": "3333",
+      "vendorName": "พี่ชาติ เตี๋ยวเรือ",
+      "accentColor": "#EF4444",
+      "rating": 4.7,
+      "reviewCount": 51,
+      "lastStatusUpdate": "2026-10-19T11:20:00.000Z",
+      "menus": [
+        {
+          "id": "m9",
+          "name": "ก๋วยเตี๋ยวเรือเนื้อน้ำตกชามเล็ก",
+          "price": 25,
+          "isAvailable": false
+        },
+        {
+          "id": "m10",
+          "name": "ก๋วยเตี๋ยวเรือหมูน้ำตกพิเศษ",
+          "price": 50,
+          "isAvailable": false
+        },
+        {
+          "id": "m11",
+          "name": "กากหมูเจียวกรอบ",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "m12",
+          "name": "แคบหมูโบราณ",
+          "price": 10,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-green-04",
+      "name": "เฮลตี้ สมูทตี้ & ขนมหวานกรีน",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "boothNumber": "ล็อค G-04",
+      "locationDetails": "ตรงข้ามทางออกโรงอาหาร",
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "เปิดพร้อมเสิร์ฟ น้ำปั่นสดชื่น",
+      "openingHours": "07:30 - 18:00",
+      "phone": "0844444444",
+      "pin": "4444",
+      "vendorName": "น้องมายด์",
+      "accentColor": "#06B6D4",
+      "rating": 4.9,
+      "reviewCount": 65,
+      "lastStatusUpdate": "2026-10-19T09:00:00.000Z",
+      "menus": [
+        {
+          "id": "m13",
+          "name": "ชาไทยเย็นปั่น หวานน้อย",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "m14",
+          "name": "อะโวคาโดนมสดปั่น",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m15",
+          "name": "เฉาก๊วยนมสดภูเขาไฟ",
+          "price": 30,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-green-05",
+      "name": "ไก่ทอด ปังปัง สไตล์เกาหลี-หาดใหญ่",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "boothNumber": "ล็อค G-05",
+      "locationDetails": "หัวมุมทางเดินกลาง",
+      "category": "chicken_rice",
+      "categoryName": "ข้าวมันไก่/อาหารจานเดียว",
+      "isOpen": true,
+      "statusNote": "ไก่ทอดร้อนๆ ทอดใหม่ทุก 15 นาที",
+      "openingHours": "09:00 - 17:30",
+      "phone": "0855555555",
+      "pin": "5555",
+      "vendorName": "พี่ตั้ม ปังปัง",
+      "accentColor": "#F97316",
+      "rating": 4.5,
+      "reviewCount": 29,
+      "lastStatusUpdate": "2026-10-19T09:15:00.000Z",
+      "menus": [
+        {
+          "id": "m16",
+          "name": "ข้าวไก่ทอดเกาหลีซอสการ์ลิค",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m17",
+          "name": "ข้าวเหนียวไก่ทอดหาดใหญ่หอมเจียว",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m18",
+          "name": "สะโพกไก่ทอดกรอบชิ้นใหญ่",
+          "price": 35,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-sci-01",
+      "name": "ลุงหนุ่ม ข้าวมันไก่ตอน & ไก่ทอด คณะวิทย์",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "boothNumber": "ล็อค SC-01",
+      "locationDetails": "ใต้ตึก บร.4 ฝั่งบันไดขึ้นชั้น 2",
+      "category": "chicken_rice",
+      "categoryName": "ข้าวมันไก่/อาหารจานเดียว",
+      "isOpen": true,
+      "statusNote": "เปิดบริการ ข้าวมันหอมนุ่ม น้ำจิ้มรสเด็ด",
+      "openingHours": "07:30 - 15:30",
+      "phone": "0866666666",
+      "pin": "6666",
+      "vendorName": "ลุงหนุ่ม มธ.",
+      "accentColor": "#10B981",
+      "rating": 4.9,
+      "reviewCount": 78,
+      "lastStatusUpdate": "2026-10-19T07:45:00.000Z",
+      "menus": [
+        {
+          "id": "m19",
+          "name": "ข้าวมันไก่ตอน เนื้อน่อง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m20",
+          "name": "ข้าวมันไก่ทอดกรอบ",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m21",
+          "name": "ข้าวมันไก่ผสม (ต้ม+ทอด)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m22",
+          "name": "ซุปต้มยำโครงไก่มะนาว",
+          "price": 20,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-sci-02",
+      "name": "ก๋วยเตี๋ยวต้มยำหมูมะนาว คณะวิทย์",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "boothNumber": "ล็อค SC-02",
+      "locationDetails": "ข้างร้านข้าวมันไก่ลุงหนุ่ม แถวหน้าห้องน้ำ",
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "เปิดปกติ มะนาวแท้ 100% หมูบะช่อแผ่นโต",
+      "openingHours": "08:00 - 16:00",
+      "phone": "0877777777",
+      "pin": "7777",
+      "vendorName": "ป้าแหวว",
+      "accentColor": "#EC4899",
+      "rating": 4.7,
+      "reviewCount": 44,
+      "lastStatusUpdate": "2026-10-19T08:10:00.000Z",
+      "menus": [
+        {
+          "id": "m23",
+          "name": "เส้นเล็กต้มยำหมูมะนาวบะช่อ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m24",
+          "name": "บะหมี่แห้งยำหมูกรอบ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m25",
+          "name": "เกี๊ยวทอดกรอบไส้หมูแน่น",
+          "price": 20,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-sci-03",
+      "name": "ข้าวไข่เจียวทรงเครื่อง & ข้าวผัดโบราณ",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "boothNumber": "ล็อค SC-03",
+      "locationDetails": "ฝั่งทางเดินออกไปตึกฟิสิกส์",
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": false,
+      "statusNote": "ปิดชั่วคราว วัตถุดิบหมด เปิดอีกทีพรุ่งนี้",
+      "openingHours": "07:30 - 14:00",
+      "phone": "0888888888",
+      "pin": "8888",
+      "vendorName": "พี่เอส ไข่เจียว",
+      "accentColor": "#EF4444",
+      "rating": 4.4,
+      "reviewCount": 22,
+      "lastStatusUpdate": "2026-10-19T13:00:00.000Z",
+      "menus": [
+        {
+          "id": "m26",
+          "name": "ข้าวไข่เจียว 2 ฟอง ใส่เครื่อง 3 อย่าง",
+          "price": 35,
+          "isAvailable": false
+        },
+        {
+          "id": "m27",
+          "name": "ข้าวผัดโบราณหมูแดงซีอิ๊วดำ",
+          "price": 45,
+          "isAvailable": false
+        }
+      ]
+    },
+    {
+      "id": "shop-sci-04",
+      "name": "ส้มตำ ยำแซ่บ อินเตอร์ SC",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "boothNumber": "ล็อค SC-04",
+      "locationDetails": "โซนด้านใน ใกล้โต๊ะนั่งรวม",
+      "category": "papaya_salad",
+      "categoryName": "ส้มตำ/ยำรสเด็ด",
+      "isOpen": true,
+      "statusNote": "เปิดตำความแซ่บ ปลาร้านัวต้มสุก",
+      "openingHours": "09:30 - 16:30",
+      "phone": "0812345678",
+      "pin": "1234",
+      "vendorName": "เจ๊หน่อย แซ่บเวอร์",
+      "accentColor": "#8B5CF6",
+      "rating": 4.8,
+      "reviewCount": 59,
+      "lastStatusUpdate": "2026-10-19T09:40:00.000Z",
+      "menus": [
+        {
+          "id": "m28",
+          "name": "ส้มตำไทยไข่เค็ม",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m29",
+          "name": "ตำป่าปลาร้าคอหมูย่าง",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "m30",
+          "name": "คอหมูย่างน้ำจิ้มแจ่วข้าวคั่ว",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "m31",
+          "name": "ต้มแซ่บกระดูกอ่อนหมู",
+          "price": 60,
+          "isAvailable": true
+        }
+      ]
+    },
+    {
+      "id": "shop-sci-05",
+      "name": "SC Cafe & Bakery กาแฟสดชาเขียว",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "boothNumber": "ล็อค SC-05",
+      "locationDetails": "หัวมุมโซนตู้กดน้ำ",
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "กาแฟคั่วสด นมสดแท้ 100%",
+      "openingHours": "07:30 - 17:00",
+      "phone": "0898765432",
+      "pin": "5432",
+      "vendorName": "พี่กิ๊ก SC",
+      "accentColor": "#0EA5E9",
+      "rating": 4.7,
+      "reviewCount": 35,
+      "lastStatusUpdate": "2026-10-19T08:00:00.000Z",
+      "menus": [
+        {
+          "id": "m32",
+          "name": "เอสเปรสโซ่เย็นเข้มข้น",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "m33",
+          "name": "มัทฉะลาเต้แท้เข้มข้น",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m34",
+          "name": "โกโก้ดาร์กช็อกโกแลต",
+          "price": 40,
+          "isAvailable": true
+        }
+      ]
+    }
+  ],
+  "admins": [
+    {
+      "id": "admin-01",
+      "phone": "0899999999",
+      "pin": "9999",
+      "name": "แอดมินกลาง มธ. รังสิต",
+      "role": "admin"
+    }
+  ]
+}
