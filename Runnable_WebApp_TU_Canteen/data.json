@@ -29,7 +29,7 @@
       "canteenCode": "GREEN_CANTEEN",
       "canteenName": "โรงอาหารกรีนแคนทีน",
       "stallNumber": "ล็อค 3",
-      "isOpen": true,
+      "isOpen": false,
       "openTime": "06:30",
       "closeTime": "16:30",
       "rating": 4.8,
@@ -75,7 +75,7 @@
           "isSoldOut": false
         }
       ],
-      "updatedAt": "2026-10-20T04:07:54.283Z"
+      "updatedAt": "2026-10-20T05:14:08.447Z"
     },
     {
       "id": 2,
