@@ -1,0 +1,14 @@
+{
+  "name": "tu-canteen-webapp",
+  "version": "1.0.0",
+  "description": "Thammasat University Rangsit Canteen Food Status WebApp (CS261 Sprint 1)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -1,0 +1,90 @@
+/* UI/UX Pro Max Design Tokens & Styles for TU Canteen Mobile WebApp */
+:root {
+  --color-primary: #059669; /* Emerald 600 */
+  --color-primary-dark: #065f46;
+  --color-accent: #d97706; /* Amber 600 */
+  --color-open: #10b981;
+  --color-closed: #ef4444;
+  --color-sold-out: #f59e0b;
+  --font-base: -apple-system, BlinkMacSystemFont, "Sarabun", "Prompt", "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  font-family: var(--font-base);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Custom Scrollbar for Canteen & Category Chips */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Safe touch target size */
+.min-touch {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Grab-like Closed Restaurant Card */
+.restaurant-card.is-closed {
+  filter: grayscale(35%);
+  opacity: 0.85;
+}
+
+.restaurant-card.is-closed .closed-overlay {
+  display: flex;
+}
+
+/* Active touch feedback */
+.touch-press:active {
+  transform: scale(0.97);
+}
+
+/* Toggle Switch Styles */
+.custom-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.custom-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
+}
+
+.custom-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+input:checked + .custom-slider {
+  background-color: #059669;
+}
+
+input:checked + .custom-slider:before {
+  transform: translateX(26px);
+}

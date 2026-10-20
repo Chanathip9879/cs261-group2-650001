@@ -1,0 +1,185 @@
+{
+  "canteens": [
+    {
+      "code": "GREEN_CANTEEN",
+      "nameTh": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "nameEn": "Green Canteen",
+      "location": "โซนหอพักนักศึกษาและอาคารเรียนรวม มธ.รังสิต"
+    },
+    {
+      "code": "SCIENCE_FACULTY",
+      "nameTh": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "nameEn": "Science Faculty Canteen",
+      "location": "ใต้อาคารบรรยายรวม คณะวิทยาศาสตร์ มธ.รังสิต"
+    }
+  ],
+  "categories": [
+    "ทั้งหมด",
+    "ข้าวแกง",
+    "อาหารตามสั่ง",
+    "ก๋วยเตี๋ยว / บะหมี่",
+    "ข้าวมันไก่ / ข้าวหมูกรอบ",
+    "เครื่องดื่ม / ชา กาแฟ",
+    "ของหวาน / ผลไม้"
+  ],
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "ร้านป้าศรี ข้าวแกงปักษ์ใต้",
+      "canteenCode": "GREEN_CANTEEN",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "stallNumber": "ล็อค 3",
+      "isOpen": true,
+      "openTime": "07:00",
+      "closeTime": "15:30",
+      "rating": 4.8,
+      "categories": ["ข้าวแกง"],
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
+      "products": [
+        { "id": 101, "name": "ข้าวราดแกงไตปลา + ไข่ต้ม", "price": 45, "isSoldOut": false },
+        { "id": 102, "name": "คั่วกลิ้งหมูสับยอดฮิต", "price": 40, "isSoldOut": true },
+        { "id": 103, "name": "แกงส้มชะอมกุ้ง", "price": 50, "isSoldOut": false },
+        { "id": 104, "name": "หมูทอดก้อนทอดกรอบ", "price": 35, "isSoldOut": false }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ก๋วยเตี๋ยวเรืออยุธยา ลุงหนุ่ม",
+      "canteenCode": "GREEN_CANTEEN",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "stallNumber": "ล็อค 7",
+      "isOpen": true,
+      "openTime": "08:30",
+      "closeTime": "16:00",
+      "rating": 4.6,
+      "categories": ["ก๋วยเตี๋ยว / บะหมี่"],
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&q=80",
+      "products": [
+        { "id": 201, "name": "ก๋วยเตี๋ยวเรือหมูน้ำตก (ธรรมดา)", "price": 45, "isSoldOut": false },
+        { "id": 202, "name": "ก๋วยเตี๋ยวเรือเนื้อหมก พิเศษ", "price": 55, "isSoldOut": false },
+        { "id": 203, "name": "กากหมูเจียวสูตรเด็ด", "price": 15, "isSoldOut": true },
+        { "id": 204, "name": "แคปหมูโบราณ", "price": 10, "isSoldOut": false }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ชาพะยอม & กาแฟสดโบราณ",
+      "canteenCode": "GREEN_CANTEEN",
+      "canteenName": "โรงอาหารกรีนแคนทีน",
+      "stallNumber": "ล็อค 12",
+      "isOpen": true,
+      "openTime": "07:30",
+      "closeTime": "17:00",
+      "rating": 4.7,
+      "categories": ["เครื่องดื่ม / ชา กาแฟ"],
+      "image": "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=400&q=80",
+      "products": [
+        { "id": 301, "name": "ชาเย็นโบราณหวานมัน", "price": 30, "isSoldOut": false },
+        { "id": 302, "name": "ชาเขียวนมสดเข้มข้น", "price": 35, "isSoldOut": false },
+        { "id": 303, "name": "กาแฟสดเอสเปรสโซ่เย็น", "price": 40, "isSoldOut": false },
+        { "id": 304, "name": "โกโก้เหนียวสูตรพิเศษ", "price": 40, "isSoldOut": true }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "ครัววิทย์ อาหารตามสั่งกระทะร้อน",
+      "canteenCode": "SCIENCE_FACULTY",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "stallNumber": "ห้อง SC1",
+      "isOpen": true,
+      "openTime": "08:00",
+      "closeTime": "16:30",
+      "rating": 4.5,
+      "categories": ["อาหารตามสั่ง"],
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80",
+      "products": [
+        { "id": 401, "name": "กะเพราหมูกรอบไข่ดาว", "price": 55, "isSoldOut": false },
+        { "id": 402, "name": "ข้าวผัดคะน้าหมูกรอบ", "price": 50, "isSoldOut": false },
+        { "id": 403, "name": "ข้าวผัดต้มยำกุ้งแม่น้ำ", "price": 60, "isSoldOut": true },
+        { "id": 404, "name": "สุกี้แห้งทะเลรวม", "price": 55, "isSoldOut": false }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "ข้าวมันไก่ตอน สูตรเบตง",
+      "canteenCode": "SCIENCE_FACULTY",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "stallNumber": "ห้อง SC4",
+      "isOpen": false,
+      "openTime": "07:30",
+      "closeTime": "14:30",
+      "rating": 4.4,
+      "categories": ["ข้าวมันไก่ / ข้าวหมูกรอบ"],
+      "image": "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&q=80",
+      "products": [
+        { "id": 501, "name": "ข้าวมันไก่ตอนต้ม พิเศษ", "price": 45, "isSoldOut": false },
+        { "id": 502, "name": "ข้าวมันไก่ทอดกรอบ", "price": 45, "isSoldOut": true },
+        { "id": 503, "name": "ข้าวมันไก่ผสม (ต้ม+ทอด)", "price": 50, "isSoldOut": false }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "ป้าใจ ก๋วยเตี๋ยวต้มยำมะนาวสด",
+      "canteenCode": "SCIENCE_FACULTY",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
+      "stallNumber": "ห้อง SC6",
+      "isOpen": true,
+      "openTime": "08:30",
+      "closeTime": "15:30",
+      "rating": 4.9,
+      "categories": ["ก๋วยเตี๋ยว / บะหมี่"],
+      "image": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&q=80",
+      "products": [
+        { "id": 601, "name": "เล็กต้มยำหมูสับไข่ออนเซ็น", "price": 50, "isSoldOut": false },
+        { "id": 602, "name": "บะหมี่แห้งยำรวมมิตร", "price": 50, "isSoldOut": false },
+        { "id": 603, "name": "เกี๊ยวหมูทอดกรอบ (ทานเล่น)", "price": 20, "isSoldOut": false }
+      ]
+    }
+  ],
+  "owners": [
+    {
+      "id": 1,
+      "phone": "0812345678",
+      "pin": "1234",
+      "restaurantId": 1
+    },
+    {
+      "id": 2,
+      "phone": "0898765432",
+      "pin": "567890",
+      "restaurantId": 2
+    },
+    {
+      "id": 3,
+      "phone": "0861112222",
+      "pin": "9999",
+      "restaurantId": 4
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "userName": "น้องเนย SC#34",
+      "rating": 5,
+      "comment": "แกงไตปลาเผ็ดสะใจมากค่ะ ทานคู่ไข่ต้มอร่อยสุดๆ ให้เยอะมาก",
+      "date": "2026-10-18"
+    },
+    {
+      "id": 2,
+      "restaurantId": 1,
+      "userName": "เด็กหอพุทธรักษา",
+      "rating": 4,
+      "comment": "คั่วกลิ้งอร่อยแต่หมดไวมาก ถ้ามาหลังบ่ายโมงมักจะไม่ทัน แนะนำมาช่วงเที่ยงครับ",
+      "date": "2026-10-19"
+    },
+    {
+      "id": 3,
+      "restaurantId": 4,
+      "userName": "พี่เจ วิศวะคอม",
+      "rating": 5,
+      "comment": "กะเพราหมูกรอบอร่อยจริง กรอบสะใจ แอร์เย็นนั่งสบาย",
+      "date": "2026-10-20"
+    }
+  ]
+}
