@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TU Canteen - สถานะร้านอาหาร มธ.รังสิต</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Sarabun & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Mobile App Frame (Max width 480px Centered on Desktop) -->
+  <div id="appContainer" class="max-w-md mx-auto bg-white min-h-screen shadow-2xl flex flex-col relative pb-20">
+
+    <!-- Top Sticky Header -->
+    <header class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-700 text-white p-4 sticky top-0 z-40 shadow-md">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-xl shadow-inner">
+            🍲
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-bold tracking-wider uppercase bg-amber-400 text-amber-950 px-1.5 py-0.5 rounded">มธ.รังสิต</span>
+              <span class="text-[11px] text-emerald-100 font-medium">TU Canteen</span>
+            </div>
+            <h1 class="font-bold text-base tracking-tight leading-tight">สถานะร้านอาหารโรงอาหาร</h1>
+          </div>
+        </div>
+        <button id="refreshDataBtn" title="รีเฟรชสถานะ" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 flex items-center justify-center text-emerald-100 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </button>
+      </div>
+
+      <!-- Search Input (Instant Search) -->
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </span>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="ค้นหาชื่อร้าน หรือชื่อเมนู (เช่น ข้าวแกง, กะเพรา)..."
+          class="w-full pl-10 pr-9 py-2.5 bg-white text-slate-800 rounded-2xl text-xs font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner"
+        />
+        <button id="clearSearchBtn" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+          &times;
+        </button>
+      </div>
+    </header>
+
+    <!-- TAB 1: USER / EXPLORE VIEW -->
+    <div id="viewExplore" class="view-panel flex-1 flex flex-col">
+
+      <!-- Canteen Filter Tabs (Green Canteen vs Science Faculty) -->
+      <div class="bg-slate-50 border-b border-slate-200 p-2.5 sticky top-[108px] z-30 shadow-xs">
+        <div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-200/80 rounded-2xl text-[11px] font-semibold text-slate-600">
+          <button class="canteen-tab active py-2 rounded-xl text-center transition-all bg-white text-emerald-800 shadow-xs" data-canteen="ALL">
+            ทั้งหมด
+          </button>
+          <button class="canteen-tab py-2 rounded-xl text-center transition-all hover:text-emerald-700" data-canteen="GREEN_CANTEEN">
+            🌿 กรีนแคนทีน
+          </button>
+          <button class="canteen-tab py-2 rounded-xl text-center transition-all hover:text-emerald-700" data-canteen="SCIENCE_FACULTY">
+            🔬 คณะวิทย์
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Chips (Horizontal Scroll) -->
+      <div class="px-4 py-2.5 overflow-x-auto no-scrollbar flex items-center gap-2 bg-white border-b border-slate-100">
+        <button class="category-chip active flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-600 text-white shadow-xs" data-cat="ทั้งหมด">
+          ทั้งหมด
+        </button>
+        <button class="category-chip flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200" data-cat="ข้าวแกง">
+          🍛 ข้าวแกง
+        </button>
+        <button class="category-chip flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200" data-cat="อาหารตามสั่ง">
+          🍳 อาหารตามสั่ง
+        </button>
+        <button class="category-chip flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200" data-cat="ก๋วยเตี๋ยว / บะหมี่">
+          🍜 ก๋วยเตี๋ยว
+        </button>
+        <button class="category-chip flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200" data-cat="ข้าวมันไก่ / ข้าวหมูกรอบ">
+          🍗 ข้าวมันไก่
+        </button>
+        <button class="category-chip flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 hover:bg-slate-200" data-cat="เครื่องดื่ม / ชา กาแฟ">
+          🧋 เครื่องดื่ม
+        </button>
+      </div>
+
+      <!-- Status Quick Toggle Pill (Show only open stores) -->
+      <div class="px-4 py-2 flex items-center justify-between text-xs text-slate-500 bg-slate-50/60">
+        <span id="resultsSummaryText">กำลังโหลดร้านอาหาร...</span>
+        <label class="flex items-center gap-1.5 cursor-pointer font-medium text-emerald-800">
+          <input type="checkbox" id="onlyOpenFilter" class="w-3.5 h-3.5 rounded text-emerald-600 focus:ring-emerald-500">
+          <span>เฉพาะร้านที่เปิด</span>
+        </label>
+      </div>
+
+      <!-- Restaurant Cards List Container -->
+      <div id="restaurantList" class="p-4 space-y-4 flex-1">
+        <!-- Cards dynamically injected by app.js -->
+      </div>
+    </div>
+
+    <!-- TAB 2: CANTEEN INFO VIEW -->
+    <div id="viewCanteens" class="view-panel flex-1 p-4 space-y-4 hidden">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-base font-bold text-slate-800">โรงอาหารที่รองรับในระบบ</h2>
+        <p class="text-xs text-slate-500">มหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต</p>
+      </div>
+
+      <!-- Green Canteen Card -->
+      <div class="bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-3xl p-5 shadow-sm space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🌿</span>
+          <span class="text-[10px] font-bold bg-emerald-600 text-white px-2 py-0.5 rounded-full">เปิดให้บริการ</span>
+        </div>
+        <h3 class="font-bold text-base text-emerald-950">โรงอาหารกรีนแคนทีน (Green Canteen)</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          ตั้งอยู่ใจกลางโซนหอพักนักศึกษา (หอพุดตาน หอพุทธรักษา) และอาคารเรียนรวม มีร้านข้าวแกง ก๋วยเตี๋ยว เครื่องดื่มหลากหลาย
+        </p>
+        <div class="pt-2 flex items-center gap-2">
+          <button class="filter-canteen-direct-btn text-xs bg-emerald-700 text-white font-medium px-3 py-1.5 rounded-xl shadow-xs" data-canteen="GREEN_CANTEEN">
+            ดูร้านในกรีนแคนทีน
+          </button>
+        </div>
+      </div>
+
+      <!-- Science Faculty Canteen Card -->
+      <div class="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-200 rounded-3xl p-5 shadow-sm space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-2xl">🔬</span>
+          <span class="text-[10px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full">เปิดให้บริการ</span>
+        </div>
+        <h3 class="font-bold text-base text-indigo-950">โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          ตั้งอยู่ใต้อาคารบรรยายรวม คณะวิทยาศาสตร์ มธ.รังสิต ติดแอร์เย็นสบาย ร้านอาหารตามสั่งรสเด็ด ข้าวมันไก่ และก๋วยเตี๋ยว
+        </p>
+        <div class="pt-2 flex items-center gap-2">
+          <button class="filter-canteen-direct-btn text-xs bg-indigo-700 text-white font-medium px-3 py-1.5 rounded-xl shadow-xs" data-canteen="SCIENCE_FACULTY">
+            ดูร้านในคณะวิทย์
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MERCHANT VIEW (Login / Dashboard) -->
+    <div id="viewMerchant" class="view-panel flex-1 flex flex-col hidden">
+
+      <!-- Subview A: Merchant Login Form (Shown when not authenticated) -->
+      <div id="merchantLoginBox" class="p-6 flex-1 flex flex-col justify-center space-y-5">
+        <div class="text-center space-y-2">
+          <div class="w-16 h-16 mx-auto bg-emerald-100 text-emerald-700 rounded-3xl flex items-center justify-center text-3xl shadow-sm">
+            🏪
+          </div>
+          <h2 class="text-xl font-bold text-slate-800">เข้าสู่ระบบสำหรับเจ้าของร้าน</h2>
+          <p class="text-xs text-slate-500">จัดการสถานะเปิด/ปิดร้าน และสต็อกเมนูอาหาร</p>
+        </div>
+
+        <form id="merchantLoginForm" class="space-y-4 bg-slate-50 border border-slate-200 p-5 rounded-3xl shadow-sm">
+          <div id="loginMsgAlert" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs"></div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">เบอร์โทรศัพท์ (10 หลัก)</label>
+            <input
+              type="tel"
+              id="mPhone"
+              maxlength="10"
+              placeholder="0812345678"
+              required
+              class="w-full px-3.5 py-3 rounded-xl border border-slate-300 bg-white text-sm font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">รหัส PIN (4-6 หลัก)</label>
+            <input
+              type="password"
+              id="mPin"
+              maxlength="6"
+              placeholder="••••"
+              required
+              class="w-full px-3.5 py-3 rounded-xl border border-slate-300 bg-white text-sm font-mono tracking-widest focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="mSubmitBtn"
+            class="w-full h-12 bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] text-white font-bold rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            เข้าสู่ระบบจัดการร้าน
+          </button>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-[11px] text-amber-900 leading-normal">
+            <strong>💡 บัญชีทดสอบสำหรับอาจารย์และกรรมการ:</strong><br>
+            • ป้าศรี ข้าวแกง: <code>0812345678</code> / PIN: <code>1234</code><br>
+            • ลุงหนุ่ม ก๋วยเตี๋ยว: <code>0898765432</code> / PIN: <code>567890</code><br>
+            • ครัววิทย์: <code>0861112222</code> / PIN: <code>9999</code>
+          </div>
+        </form>
+      </div>
+
+      <!-- Subview B: Merchant Dashboard (Shown when authenticated) -->
+      <div id="merchantDashboardBox" class="p-4 space-y-4 flex-1 hidden">
+
+        <!-- Merchant Header Card -->
+        <div class="bg-gradient-to-r from-emerald-800 to-teal-800 text-white p-4 rounded-3xl shadow-md flex items-center justify-between">
+          <div>
+            <span class="text-[10px] bg-emerald-900/80 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider text-emerald-200">ระบบเจ้าของร้าน</span>
+            <h2 id="dashShopName" class="font-bold text-lg mt-0.5">ร้านป้าศรี ข้าวแกงปักษ์ใต้</h2>
+            <p id="dashCanteenInfo" class="text-xs text-emerald-200">โรงอาหารกรีนแคนทีน</p>
+          </div>
+          <button id="mLogoutBtn" class="text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-3 py-1.5 rounded-xl transition-all">
+            ออก
+          </button>
+        </div>
+
+        <!-- Big Toggle Open/Close Status (Task 22) -->
+        <div class="bg-white border border-slate-200 p-5 rounded-3xl shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-500 uppercase">สถานะหน้าร้าน</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span id="dashStatusDot" class="w-3.5 h-3.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="dashStatusText" class="text-lg font-bold text-emerald-700">เปิดให้บริการ</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-0.5">แตะสวิตช์เพื่อเปิดหรือปิดร้านทันที</p>
+          </div>
+
+          <label class="custom-toggle">
+            <input type="checkbox" id="dashToggleSwitch" checked>
+            <span class="custom-slider"></span>
+          </label>
+        </div>
+
+        <!-- Operating Hours Card -->
+        <div class="bg-white border border-slate-200 p-4 rounded-3xl shadow-sm space-y-2.5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <span>⏰</span> เวลาเปิด - ปิดร้าน
+            </h3>
+            <button id="saveHoursBtn" class="text-xs text-emerald-700 font-bold hover:underline">
+              บันทึกเวลา
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <span class="text-[10px] text-slate-400 block mb-1">เวลาเปิด</span>
+              <input type="time" id="dashOpenTime" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block mb-1">เวลาปิด</span>
+              <input type="time" id="dashCloseTime" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Management & Sold Out Toggles -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-sm font-bold text-slate-800">จัดการเมนูอาหาร</h3>
+              <p class="text-[11px] text-slate-500">แตะเพื่อสลับ "ของหมด" หรือ "พร้อมขาย"</p>
+            </div>
+            <button id="dashAddMenuBtn" class="text-xs bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl shadow-xs active:scale-95">
+              + เพิ่มเมนู
+            </button>
+          </div>
+
+          <div id="dashMenuList" class="space-y-2">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 4: ADMIN VIEW (Add Restaurant) -->
+    <div id="viewAdmin" class="view-panel flex-1 p-4 space-y-4 hidden">
+      <div class="border-b border-slate-200 pb-2">
+        <h2 class="text-base font-bold text-slate-800">ระบบแอดมิน (Admin Portal)</h2>
+        <p class="text-xs text-slate-500">เพิ่มร้านอาหารใหม่ในโรงอาหาร มธ.รังสิต</p>
+      </div>
+
+      <form id="adminAddShopForm" class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อร้านอาหาร *</label>
+          <input type="text" id="adminShopName" required placeholder="เช่น ข้าวหมูกรอบนายฮุย" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">โรงอาหาร *</label>
+          <select id="adminCanteenCode" required class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+            <option value="GREEN_CANTEEN">โรงอาหารกรีนแคนทีน (Green Canteen)</option>
+            <option value="SCIENCE_FACULTY">โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">หมายเลขล็อค/ห้อง</label>
+            <input type="text" id="adminStallNumber" placeholder="เช่น ล็อค 9" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">หมวดหมู่อาหาร</label>
+            <select id="adminCategory" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+              <option value="ข้าวแกง">ข้าวแกง</option>
+              <option value="อาหารตามสั่ง">อาหารตามสั่ง</option>
+              <option value="ก๋วยเตี๋ยว / บะหมี่">ก๋วยเตี๋ยว / บะหมี่</option>
+              <option value="ข้าวมันไก่ / ข้าวหมูกรอบ">ข้าวมันไก่</option>
+              <option value="เครื่องดื่ม / ชา กาแฟ">เครื่องดื่ม</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">เวลาเปิด</label>
+            <input type="time" id="adminOpenTime" value="07:30" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">เวลาปิด</label>
+            <input type="time" id="adminCloseTime" value="16:00" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-3 space-y-2">
+          <p class="text-[11px] font-bold text-slate-600">ตั้งค่าบัญชีแม่ค้าสำหรับร้านนี้ (Option)</p>
+          <div class="grid grid-cols-2 gap-2.5">
+            <input type="tel" id="adminOwnerPhone" placeholder="เบอร์โทร 10 หลัก" maxlength="10" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+            <input type="password" id="adminOwnerPin" placeholder="PIN 4 หลัก" maxlength="6" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full h-11 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl text-xs shadow-md transition-all cursor-pointer">
+          + บันทึกเพิ่มร้านอาหาร
+        </button>
+      </form>
+    </div>
+
+    <!-- RESTAURANT DETAIL MODAL (With Menu, Sold Out & Non-login Review) -->
+    <div id="restaurantModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex flex-col justify-end hidden">
+      <div class="bg-white rounded-t-3xl max-w-md w-full mx-auto max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-slide-up">
+
+        <!-- Modal Header with Image -->
+        <div class="relative h-44 bg-slate-200 flex-shrink-0">
+          <img id="modalShopImg" src="" alt="ร้านอาหาร" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+          <button id="closeModalBtn" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center text-lg font-bold">
+            &times;
+          </button>
+          <div class="absolute bottom-3 left-4 right-4 text-white">
+            <div class="flex items-center gap-2 mb-1">
+              <span id="modalShopStatusBadge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500">เปิดอยู่</span>
+              <span id="modalShopCanteen" class="text-xs text-slate-200">โรงอาหารกรีนแคนทีน</span>
+            </div>
+            <h2 id="modalShopName" class="text-lg font-bold">ชื่อร้าน</h2>
+            <p id="modalShopHours" class="text-[11px] text-slate-300">⏰ เปิด 07:00 - 15:30</p>
+          </div>
+        </div>
+
+        <!-- Modal Body (Scrollable) -->
+        <div class="p-4 overflow-y-auto space-y-5 flex-1">
+
+          <!-- Section: Menu Items -->
+          <div>
+            <h3 class="font-bold text-sm text-slate-800 mb-2 flex items-center justify-between">
+              <span>📋 รายการอาหาร</span>
+              <span class="text-[11px] text-slate-400 font-normal">สถานะเมนูอัปเดต</span>
+            </h3>
+            <div id="modalProductList" class="space-y-2">
+              <!-- Dynamically populated products -->
+            </div>
+          </div>
+
+          <!-- Section: Reviews (No Login Required) -->
+          <div class="border-t border-slate-100 pt-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+                <span>⭐ รีวิวจากนักศึกษา</span>
+                <span id="modalReviewAvg" class="text-xs bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded-full">4.8</span>
+              </h3>
+            </div>
+
+            <!-- Review Input Form (No Login Required!) -->
+            <form id="addReviewForm" class="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-2.5">
+              <span class="text-xs font-bold text-slate-700 block">เขียนรีวิวร้านนี้ (ไม่ต้องล็อกอิน)</span>
+              <div class="flex items-center gap-2">
+                <input type="text" id="reviewAuthor" placeholder="ชื่อเล่น หรือ รหัสนักศึกษา (ไม่บังคับ)" class="flex-1 p-2 bg-white border border-slate-200 rounded-xl text-xs">
+                <select id="reviewRating" class="p-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-amber-600">
+                  <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                  <option value="4">⭐⭐⭐⭐ (4)</option>
+                  <option value="3">⭐⭐⭐ (3)</option>
+                  <option value="2">⭐⭐ (2)</option>
+                  <option value="1">⭐ (1)</option>
+                </select>
+              </div>
+              <textarea id="reviewComment" required rows="2" placeholder="รสชาติเป็นอย่างไร ปริมาณเป็นอย่างไร..." class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500"></textarea>
+              <button type="submit" class="w-full py-2 bg-emerald-700 hover:bg-emerald-800 active:scale-98 text-white rounded-xl text-xs font-bold shadow-xs">
+                ส่งรีวิว
+              </button>
+            </form>
+
+            <!-- Reviews List -->
+            <div id="modalReviewList" class="space-y-2.5 pt-1">
+              <!-- Dynamically populated reviews -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ADD PRODUCT MODAL (For Merchant) -->
+    <div id="addProductModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+          <h3 class="font-bold text-sm text-slate-800">+ เพิ่มเมนูอาหารใหม่</h3>
+          <button id="closeAddProductBtn" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+        </div>
+        <form id="newProductForm" class="space-y-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ชื่อเมนูอาหาร *</label>
+            <input type="text" id="newProdName" required placeholder="เช่น ข้าวผัดกุ้งสด" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ราคา (บาท) *</label>
+            <input type="number" id="newProdPrice" required placeholder="45" min="5" max="500" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono">
+          </div>
+          <button type="submit" class="w-full py-2.5 bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md">
+            บันทึกเมนู
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar (Mobile First) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 max-w-md mx-auto">
+      <div class="grid grid-cols-4 h-16">
+        <button class="nav-item active flex flex-col items-center justify-center text-emerald-700 gap-1 touch-press cursor-pointer" data-view="viewExplore">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span class="text-[10px] font-bold">ค้นหาร้าน</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center justify-center text-slate-400 hover:text-emerald-700 gap-1 touch-press cursor-pointer" data-view="viewCanteens">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span class="text-[10px] font-semibold">โรงอาหาร</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center justify-center text-slate-400 hover:text-emerald-700 gap-1 touch-press cursor-pointer" data-view="viewMerchant">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          <span class="text-[10px] font-semibold">จัดการร้าน</span>
+        </button>
+
+        <button class="nav-item flex flex-col items-center justify-center text-slate-400 hover:text-emerald-700 gap-1 touch-press cursor-pointer" data-view="viewAdmin">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span class="text-[10px] font-semibold">แอดมิน</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Global Toast Alert -->
+    <div id="globalToast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 transition-all opacity-0 pointer-events-none">
+      <span id="toastIcon">✨</span>
+      <span id="toastText">การดำเนินการสำเร็จ</span>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
