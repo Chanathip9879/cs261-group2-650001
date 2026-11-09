@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getMenusForShop } = require('../utils/menuHelper');
 
 const DB_PATH = path.join(__dirname, '../data/database.json');
 
@@ -89,7 +90,7 @@ exports.getMe = (req, res) => {
         isOpen: currentShop.isOpen,
         statusNote: currentShop.statusNote,
         openingHours: currentShop.openingHours,
-        menus: currentShop.menus
+        menus: getMenusForShop(db, currentShop.id)
       }
     });
   }
