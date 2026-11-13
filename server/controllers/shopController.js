@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { withMenus } = require('../utils/menuHelper');
 
 const DB_PATH = path.join(__dirname, '../data/database.json');
 
@@ -24,7 +25,8 @@ exports.getShops = (req, res) => {
   try {
     const { q, canteen, category, status } = req.query;
     const db = readDb();
-    let result = [...db.shops];
+    // Task26: ประกอบ menus จากตาราง menu_items ให้แต่ละร้าน
+    let result = db.shops.map(shop => withMenus(db, shop));
 
     // ฟิลเตอร์ตามโรงอาหาร (กรีนแคนทีน หรือ คณะวิทยาศาสตร์)
     if (canteen && canteen !== 'all') {
@@ -101,7 +103,7 @@ exports.getShopById = (req, res) => {
     return res.json({
       success: true,
       data: {
-        ...shop,
+        ...withMenus(db, shop),
         canteenInfo
       }
     });
@@ -188,7 +190,7 @@ exports.toggleShopStatus = (req, res) => {
     return res.json({
       success: true,
       message: `เปลี่ยนสถานะร้าน "${currentShop.name}" เป็น "${newStatus ? 'เปิด' : 'ปิด'}" เรียบร้อยแล้ว`,
-      data: currentShop
+      data: withMenus(db, currentShop)
     });
   } catch (err) {
     console.error('Error toggling shop status:', err);
@@ -225,7 +227,7 @@ exports.updateShopDetails = (req, res) => {
     return res.json({
       success: true,
       message: 'บันทึกข้อมูลเรียบร้อยแล้ว',
-      data: shop
+      data: withMenus(db, shop)
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
