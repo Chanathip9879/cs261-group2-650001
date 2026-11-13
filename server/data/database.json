@@ -490,5 +490,567 @@
       "name": "แอดมินกลาง มธ. รังสิต",
       "role": "admin"
     }
+  ],
+  "opening_hours": [
+    {
+      "id": "oh-001",
+      "shop_id": "shop-green-01",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-002",
+      "shop_id": "shop-green-01",
+      "day_of_week": 1,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-003",
+      "shop_id": "shop-green-01",
+      "day_of_week": 2,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-004",
+      "shop_id": "shop-green-01",
+      "day_of_week": 3,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-005",
+      "shop_id": "shop-green-01",
+      "day_of_week": 4,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-006",
+      "shop_id": "shop-green-01",
+      "day_of_week": 5,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-007",
+      "shop_id": "shop-green-01",
+      "day_of_week": 6,
+      "open_time": "07:00",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-008",
+      "shop_id": "shop-green-02",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-009",
+      "shop_id": "shop-green-02",
+      "day_of_week": 1,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-010",
+      "shop_id": "shop-green-02",
+      "day_of_week": 2,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-011",
+      "shop_id": "shop-green-02",
+      "day_of_week": 3,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-012",
+      "shop_id": "shop-green-02",
+      "day_of_week": 4,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-013",
+      "shop_id": "shop-green-02",
+      "day_of_week": 5,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-014",
+      "shop_id": "shop-green-02",
+      "day_of_week": 6,
+      "open_time": "08:00",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-015",
+      "shop_id": "shop-green-03",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-016",
+      "shop_id": "shop-green-03",
+      "day_of_week": 1,
+      "open_time": "08:30",
+      "close_time": "15:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-017",
+      "shop_id": "shop-green-03",
+      "day_of_week": 2,
+      "open_time": "08:30",
+      "close_time": "15:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-018",
+      "shop_id": "shop-green-03",
+      "day_of_week": 3,
+      "open_time": "08:30",
+      "close_time": "15:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-019",
+      "shop_id": "shop-green-03",
+      "day_of_week": 4,
+      "open_time": "08:30",
+      "close_time": "15:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-020",
+      "shop_id": "shop-green-03",
+      "day_of_week": 5,
+      "open_time": "08:30",
+      "close_time": "15:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-021",
+      "shop_id": "shop-green-03",
+      "day_of_week": 6,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-022",
+      "shop_id": "shop-green-04",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-023",
+      "shop_id": "shop-green-04",
+      "day_of_week": 1,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-024",
+      "shop_id": "shop-green-04",
+      "day_of_week": 2,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-025",
+      "shop_id": "shop-green-04",
+      "day_of_week": 3,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-026",
+      "shop_id": "shop-green-04",
+      "day_of_week": 4,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-027",
+      "shop_id": "shop-green-04",
+      "day_of_week": 5,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-028",
+      "shop_id": "shop-green-04",
+      "day_of_week": 6,
+      "open_time": "07:30",
+      "close_time": "18:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-029",
+      "shop_id": "shop-green-05",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-030",
+      "shop_id": "shop-green-05",
+      "day_of_week": 1,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-031",
+      "shop_id": "shop-green-05",
+      "day_of_week": 2,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-032",
+      "shop_id": "shop-green-05",
+      "day_of_week": 3,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-033",
+      "shop_id": "shop-green-05",
+      "day_of_week": 4,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-034",
+      "shop_id": "shop-green-05",
+      "day_of_week": 5,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-035",
+      "shop_id": "shop-green-05",
+      "day_of_week": 6,
+      "open_time": "09:00",
+      "close_time": "17:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-036",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-037",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 1,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-038",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 2,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-039",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 3,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-040",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 4,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-041",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 5,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-042",
+      "shop_id": "shop-sci-01",
+      "day_of_week": 6,
+      "open_time": "07:30",
+      "close_time": "15:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-043",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-044",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 1,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-045",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 2,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-046",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 3,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-047",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 4,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-048",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 5,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-049",
+      "shop_id": "shop-sci-02",
+      "day_of_week": 6,
+      "open_time": "08:00",
+      "close_time": "16:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-050",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-051",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 1,
+      "open_time": "07:30",
+      "close_time": "14:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-052",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 2,
+      "open_time": "07:30",
+      "close_time": "14:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-053",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 3,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-054",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 4,
+      "open_time": "07:30",
+      "close_time": "14:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-055",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 5,
+      "open_time": "07:30",
+      "close_time": "14:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-056",
+      "shop_id": "shop-sci-03",
+      "day_of_week": 6,
+      "open_time": "07:30",
+      "close_time": "14:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-057",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-058",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 1,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-059",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 2,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-060",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 3,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-061",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 4,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-062",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 5,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-063",
+      "shop_id": "shop-sci-04",
+      "day_of_week": 6,
+      "open_time": "09:30",
+      "close_time": "16:30",
+      "is_closed": false
+    },
+    {
+      "id": "oh-064",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 0,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    },
+    {
+      "id": "oh-065",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 1,
+      "open_time": "07:30",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-066",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 2,
+      "open_time": "07:30",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-067",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 3,
+      "open_time": "07:30",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-068",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 4,
+      "open_time": "07:30",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-069",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 5,
+      "open_time": "07:30",
+      "close_time": "17:00",
+      "is_closed": false
+    },
+    {
+      "id": "oh-070",
+      "shop_id": "shop-sci-05",
+      "day_of_week": 6,
+      "open_time": null,
+      "close_time": null,
+      "is_closed": true
+    }
   ]
 }
