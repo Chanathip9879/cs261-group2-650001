@@ -1,0 +1,54 @@
+services:
+  # 1. Web Application Container (Mobile-first UI + REST API)
+  app:
+    container_name: tu-canteen-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=sqlserver
+      - DB_PORT=1433
+      - DB_USER=sa
+      - DB_PASSWORD=TuCanteenStrongPass123!
+      - DB_NAME=tu_canteen_db
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - canteen-network
+    restart: unless-stopped
+
+  # 2. Microsoft SQL Server Container
+  sqlserver:
+    container_name: tu-canteen-sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=TuCanteenStrongPass123!
+      - MSSQL_PID=Developer
+    volumes:
+      - sqlserver_data:/var/opt/mssql/data
+      - ./init-sqlserver.sql:/docker-entrypoint-initdb.d/init-sqlserver.sql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'TuCanteenStrongPass123!' -C -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - canteen-network
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+    driver: local
+
+networks:
+  canteen-network:
+    driver: bridge
