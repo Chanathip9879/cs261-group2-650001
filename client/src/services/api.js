@@ -106,3 +106,11 @@ export async function updateShopStatus(shopId, isOpen, statusNote) {
   }
   return data;
 }
+
+// ดึงเวลาเปิด-ปิดรายวันของร้าน (U12) คืน array ของแถว opening_hours
+export async function getOpeningHours(shopId) {
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/opening-hours`);
+  if (!res.ok) throw new Error('ไม่สามารถโหลดเวลาเปิด-ปิดร้านได้');
+  const data = await res.json();
+  return data.data || [];
+}

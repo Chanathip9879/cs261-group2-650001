@@ -7,7 +7,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { withMenus } = require('../utils/menuHelper');
 
 const DB_PATH = path.join(__dirname, '../data/database.json');
 
@@ -20,107 +19,12 @@ function writeDb(data) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf-8');
 }
 
-// ==========================================
-// Helpers: opening_hours (Task47 / U13)
-// day_of_week: 0 = อาทิตย์ ... 6 = เสาร์ (ตรงกับ Date.getDay())
-// open_time / close_time: "HH:MM" แบบ 24 ชม. หรือ null เมื่อ is_closed = true
-// ==========================================
-const TIME_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
-
-function timeToMinutes(t) {
-  const [h, m] = t.split(':').map(Number);
-  return h * 60 + m;
-}
-
-// ตรวจแถว opening_hours 1 แถว คืนรายการ error (ว่าง = ผ่าน)
-function validateOpeningHour(row, db) {
-  const errors = [];
-  if (!row || typeof row !== 'object') return ['ข้อมูลไม่ถูกต้อง'];
-
-  if (typeof row.shop_id !== 'string' || !row.shop_id) {
-    errors.push('ต้องระบุ shop_id');
-  } else if (db && !(db.shops || []).some(s => s.id === row.shop_id)) {
-    errors.push(`ไม่พบร้าน shop_id "${row.shop_id}"`);
-  }
-
-  if (!Number.isInteger(row.day_of_week) || row.day_of_week < 0 || row.day_of_week > 6) {
-    errors.push('day_of_week ต้องเป็นจำนวนเต็ม 0-6 (0 = อาทิตย์)');
-  }
-
-  if (typeof row.is_closed !== 'boolean') {
-    errors.push('is_closed ต้องเป็น true/false');
-    return errors;
-  }
-
-  if (row.is_closed) {
-    if (row.open_time != null || row.close_time != null) {
-      errors.push('วันที่ปิด (is_closed = true) ต้องมี open_time และ close_time เป็น null');
-    }
-    return errors;
-  }
-
-  if (!TIME_PATTERN.test(row.open_time || '') || !TIME_PATTERN.test(row.close_time || '')) {
-    errors.push('open_time และ close_time ต้องเป็นรูปแบบ HH:MM (00:00-23:59)');
-  } else if (timeToMinutes(row.open_time) >= timeToMinutes(row.close_time)) {
-    errors.push('open_time ต้องน้อยกว่า close_time');
-  }
-  return errors;
-}
-
-// อ่านเวลาเปิด/ปิดของร้านหนึ่งร้าน เรียงตาม day_of_week
-function getOpeningHoursByShop(db, shopId) {
-  return (db.opening_hours || [])
-    .filter(r => r.shop_id === shopId)
-    .sort((a, b) => a.day_of_week - b.day_of_week);
-}
-
-// เขียน (แทนที่) เวลาเปิด/ปิดของร้านหนึ่งร้าน ตรวจทุกแถวก่อน ถ้ามี error จะไม่เขียนอะไรเลย
-// rows: [{ day_of_week, open_time, close_time, is_closed }, ...] (ห้ามซ้ำวัน)
-// คืน { ok: true, data } หรือ { ok: false, errors }
-function setOpeningHours(shopId, rows) {
-  const db = readDb();
-  if (!Array.isArray(rows)) return { ok: false, errors: ['rows ต้องเป็น array'] };
-
-  const errors = [];
-  const seenDays = new Set();
-  const normalized = rows.map((r, i) => {
-    const row = { shop_id: shopId, ...r };
-    validateOpeningHour(row, db).forEach(e => errors.push(`แถวที่ ${i + 1}: ${e}`));
-    if (seenDays.has(row.day_of_week)) errors.push(`แถวที่ ${i + 1}: day_of_week ซ้ำ`);
-    seenDays.add(row.day_of_week);
-    return row;
-  });
-  if (errors.length) return { ok: false, errors };
-
-  const others = (db.opening_hours || []).filter(r => r.shop_id !== shopId);
-  let nextId = (db.opening_hours || []).reduce((max, r) => {
-    const n = parseInt(String(r.id).replace('oh-', ''), 10);
-    return Number.isNaN(n) ? max : Math.max(max, n);
-  }, 0);
-  const saved = normalized.map(r => ({
-    id: `oh-${String(++nextId).padStart(3, '0')}`,
-    shop_id: shopId,
-    day_of_week: r.day_of_week,
-    open_time: r.is_closed ? null : r.open_time,
-    close_time: r.is_closed ? null : r.close_time,
-    is_closed: r.is_closed
-  }));
-  db.opening_hours = [...others, ...saved];
-  writeDb(db);
-  return { ok: true, data: getOpeningHoursByShop(db, shopId) };
-}
-
-exports.validateOpeningHour = validateOpeningHour;
-exports.getOpeningHoursByShop = getOpeningHoursByShop;
-exports.setOpeningHours = setOpeningHours;
-
 // 1. ดึงรายการร้านอาหารทั้งหมด พร้อมรองรับการค้นหาและฟิลเตอร์ (U1, U2, U3)
 exports.getShops = (req, res) => {
   try {
     const { q, canteen, category, status } = req.query;
     const db = readDb();
-    // Task26: ประกอบ menus จากตาราง menu_items ให้แต่ละร้าน
-    let result = db.shops.map(shop => withMenus(db, shop));
+    let result = [...db.shops];
 
     // ฟิลเตอร์ตามโรงอาหาร (กรีนแคนทีน หรือ คณะวิทยาศาสตร์)
     if (canteen && canteen !== 'all') {
@@ -197,7 +101,7 @@ exports.getShopById = (req, res) => {
     return res.json({
       success: true,
       data: {
-        ...withMenus(db, shop),
+        ...shop,
         canteenInfo
       }
     });
@@ -284,7 +188,7 @@ exports.toggleShopStatus = (req, res) => {
     return res.json({
       success: true,
       message: `เปลี่ยนสถานะร้าน "${currentShop.name}" เป็น "${newStatus ? 'เปิด' : 'ปิด'}" เรียบร้อยแล้ว`,
-      data: withMenus(db, currentShop)
+      data: currentShop
     });
   } catch (err) {
     console.error('Error toggling shop status:', err);
@@ -321,7 +225,7 @@ exports.updateShopDetails = (req, res) => {
     return res.json({
       success: true,
       message: 'บันทึกข้อมูลเรียบร้อยแล้ว',
-      data: withMenus(db, shop)
+      data: shop
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });

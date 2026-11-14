@@ -75,7 +75,33 @@
       "accentColor": "#10B981",
       "rating": 4.8,
       "reviewCount": 42,
-      "lastStatusUpdate": "2026-10-20T10:09:34.783Z"
+      "lastStatusUpdate": "2026-10-20T10:09:34.783Z",
+      "menus": [
+        {
+          "id": "m1",
+          "name": "ข้าวราดแกง 1 อย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "m2",
+          "name": "ข้าวราดแกง 2 อย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m3",
+          "name": "พะแนงหมูสูตรโบราณ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "m4",
+          "name": "ไข่พะโล้ยางมะตูม",
+          "price": 10,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-green-02",
@@ -95,7 +121,33 @@
       "accentColor": "#F59E0B",
       "rating": 4.6,
       "reviewCount": 38,
-      "lastStatusUpdate": "2026-10-19T08:45:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:45:00.000Z",
+      "menus": [
+        {
+          "id": "m5",
+          "name": "ข้าวกะเพราหมูกรอบไข่ดาว",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m6",
+          "name": "ข้าวผัดต้มยำทะเล",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "m7",
+          "name": "สุกี้แห้งไก่น้ำจิ้มเต้าหู้ยี้",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m8",
+          "name": "หมูกระเทียมพริกไทยไข่ข้น",
+          "price": 55,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-green-03",
@@ -115,7 +167,33 @@
       "accentColor": "#EF4444",
       "rating": 4.7,
       "reviewCount": 51,
-      "lastStatusUpdate": "2026-10-19T11:20:00.000Z"
+      "lastStatusUpdate": "2026-10-19T11:20:00.000Z",
+      "menus": [
+        {
+          "id": "m9",
+          "name": "ก๋วยเตี๋ยวเรือเนื้อน้ำตกชามเล็ก",
+          "price": 25,
+          "isAvailable": false
+        },
+        {
+          "id": "m10",
+          "name": "ก๋วยเตี๋ยวเรือหมูน้ำตกพิเศษ",
+          "price": 50,
+          "isAvailable": false
+        },
+        {
+          "id": "m11",
+          "name": "กากหมูเจียวกรอบ",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "m12",
+          "name": "แคบหมูโบราณ",
+          "price": 10,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-green-04",
@@ -135,7 +213,27 @@
       "accentColor": "#06B6D4",
       "rating": 4.9,
       "reviewCount": 65,
-      "lastStatusUpdate": "2026-10-19T09:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:00:00.000Z",
+      "menus": [
+        {
+          "id": "m13",
+          "name": "ชาไทยเย็นปั่น หวานน้อย",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "m14",
+          "name": "อะโวคาโดนมสดปั่น",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m15",
+          "name": "เฉาก๊วยนมสดภูเขาไฟ",
+          "price": 30,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-green-05",
@@ -155,7 +253,27 @@
       "accentColor": "#F97316",
       "rating": 4.5,
       "reviewCount": 29,
-      "lastStatusUpdate": "2026-10-19T09:15:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:15:00.000Z",
+      "menus": [
+        {
+          "id": "m16",
+          "name": "ข้าวไก่ทอดเกาหลีซอสการ์ลิค",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m17",
+          "name": "ข้าวเหนียวไก่ทอดหาดใหญ่หอมเจียว",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m18",
+          "name": "สะโพกไก่ทอดกรอบชิ้นใหญ่",
+          "price": 35,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-sci-01",
@@ -175,7 +293,33 @@
       "accentColor": "#10B981",
       "rating": 4.9,
       "reviewCount": 78,
-      "lastStatusUpdate": "2026-10-19T07:45:00.000Z"
+      "lastStatusUpdate": "2026-10-19T07:45:00.000Z",
+      "menus": [
+        {
+          "id": "m19",
+          "name": "ข้าวมันไก่ตอน เนื้อน่อง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m20",
+          "name": "ข้าวมันไก่ทอดกรอบ",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m21",
+          "name": "ข้าวมันไก่ผสม (ต้ม+ทอด)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m22",
+          "name": "ซุปต้มยำโครงไก่มะนาว",
+          "price": 20,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-sci-02",
@@ -195,7 +339,27 @@
       "accentColor": "#EC4899",
       "rating": 4.7,
       "reviewCount": 44,
-      "lastStatusUpdate": "2026-10-19T08:10:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:10:00.000Z",
+      "menus": [
+        {
+          "id": "m23",
+          "name": "เส้นเล็กต้มยำหมูมะนาวบะช่อ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "m24",
+          "name": "บะหมี่แห้งยำหมูกรอบ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "m25",
+          "name": "เกี๊ยวทอดกรอบไส้หมูแน่น",
+          "price": 20,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-sci-03",
@@ -215,7 +379,21 @@
       "accentColor": "#EF4444",
       "rating": 4.4,
       "reviewCount": 22,
-      "lastStatusUpdate": "2026-10-19T13:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T13:00:00.000Z",
+      "menus": [
+        {
+          "id": "m26",
+          "name": "ข้าวไข่เจียว 2 ฟอง ใส่เครื่อง 3 อย่าง",
+          "price": 35,
+          "isAvailable": false
+        },
+        {
+          "id": "m27",
+          "name": "ข้าวผัดโบราณหมูแดงซีอิ๊วดำ",
+          "price": 45,
+          "isAvailable": false
+        }
+      ]
     },
     {
       "id": "shop-sci-04",
@@ -235,7 +413,33 @@
       "accentColor": "#8B5CF6",
       "rating": 4.8,
       "reviewCount": 59,
-      "lastStatusUpdate": "2026-10-19T09:40:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:40:00.000Z",
+      "menus": [
+        {
+          "id": "m28",
+          "name": "ส้มตำไทยไข่เค็ม",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m29",
+          "name": "ตำป่าปลาร้าคอหมูย่าง",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "m30",
+          "name": "คอหมูย่างน้ำจิ้มแจ่วข้าวคั่ว",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "m31",
+          "name": "ต้มแซ่บกระดูกอ่อนหมู",
+          "price": 60,
+          "isAvailable": true
+        }
+      ]
     },
     {
       "id": "shop-sci-05",
@@ -255,7 +459,27 @@
       "accentColor": "#0EA5E9",
       "rating": 4.7,
       "reviewCount": 35,
-      "lastStatusUpdate": "2026-10-19T08:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:00:00.000Z",
+      "menus": [
+        {
+          "id": "m32",
+          "name": "เอสเปรสโซ่เย็นเข้มข้น",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "m33",
+          "name": "มัทฉะลาเต้แท้เข้มข้น",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "m34",
+          "name": "โกโก้ดาร์กช็อกโกแลต",
+          "price": 40,
+          "isAvailable": true
+        }
+      ]
     }
   ],
   "admins": [
@@ -265,809 +489,6 @@
       "pin": "9999",
       "name": "แอดมินกลาง มธ. รังสิต",
       "role": "admin"
-    }
-  ],
-
-  "opening_hours": [
-    {
-      "id": "oh-001",
-      "shop_id": "shop-green-01",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-002",
-      "shop_id": "shop-green-01",
-      "day_of_week": 1,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-003",
-      "shop_id": "shop-green-01",
-      "day_of_week": 2,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-004",
-      "shop_id": "shop-green-01",
-      "day_of_week": 3,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-005",
-      "shop_id": "shop-green-01",
-      "day_of_week": 4,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-006",
-      "shop_id": "shop-green-01",
-      "day_of_week": 5,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-007",
-      "shop_id": "shop-green-01",
-      "day_of_week": 6,
-      "open_time": "07:00",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-008",
-      "shop_id": "shop-green-02",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-009",
-      "shop_id": "shop-green-02",
-      "day_of_week": 1,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-010",
-      "shop_id": "shop-green-02",
-      "day_of_week": 2,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-011",
-      "shop_id": "shop-green-02",
-      "day_of_week": 3,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-012",
-      "shop_id": "shop-green-02",
-      "day_of_week": 4,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-013",
-      "shop_id": "shop-green-02",
-      "day_of_week": 5,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-014",
-      "shop_id": "shop-green-02",
-      "day_of_week": 6,
-      "open_time": "08:00",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-015",
-      "shop_id": "shop-green-03",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-016",
-      "shop_id": "shop-green-03",
-      "day_of_week": 1,
-      "open_time": "08:30",
-      "close_time": "15:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-017",
-      "shop_id": "shop-green-03",
-      "day_of_week": 2,
-      "open_time": "08:30",
-      "close_time": "15:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-018",
-      "shop_id": "shop-green-03",
-      "day_of_week": 3,
-      "open_time": "08:30",
-      "close_time": "15:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-019",
-      "shop_id": "shop-green-03",
-      "day_of_week": 4,
-      "open_time": "08:30",
-      "close_time": "15:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-020",
-      "shop_id": "shop-green-03",
-      "day_of_week": 5,
-      "open_time": "08:30",
-      "close_time": "15:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-021",
-      "shop_id": "shop-green-03",
-      "day_of_week": 6,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-022",
-      "shop_id": "shop-green-04",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-023",
-      "shop_id": "shop-green-04",
-      "day_of_week": 1,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-024",
-      "shop_id": "shop-green-04",
-      "day_of_week": 2,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-025",
-      "shop_id": "shop-green-04",
-      "day_of_week": 3,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-026",
-      "shop_id": "shop-green-04",
-      "day_of_week": 4,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-027",
-      "shop_id": "shop-green-04",
-      "day_of_week": 5,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-028",
-      "shop_id": "shop-green-04",
-      "day_of_week": 6,
-      "open_time": "07:30",
-      "close_time": "18:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-029",
-      "shop_id": "shop-green-05",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-030",
-      "shop_id": "shop-green-05",
-      "day_of_week": 1,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-031",
-      "shop_id": "shop-green-05",
-      "day_of_week": 2,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-032",
-      "shop_id": "shop-green-05",
-      "day_of_week": 3,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-033",
-      "shop_id": "shop-green-05",
-      "day_of_week": 4,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-034",
-      "shop_id": "shop-green-05",
-      "day_of_week": 5,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-035",
-      "shop_id": "shop-green-05",
-      "day_of_week": 6,
-      "open_time": "09:00",
-      "close_time": "17:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-036",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-037",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 1,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-038",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 2,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-039",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 3,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-040",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 4,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-041",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 5,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-042",
-      "shop_id": "shop-sci-01",
-      "day_of_week": 6,
-      "open_time": "07:30",
-      "close_time": "15:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-043",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-044",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 1,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-045",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 2,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-046",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 3,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-047",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 4,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-048",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 5,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-049",
-      "shop_id": "shop-sci-02",
-      "day_of_week": 6,
-      "open_time": "08:00",
-      "close_time": "16:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-050",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-051",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 1,
-      "open_time": "07:30",
-      "close_time": "14:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-052",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 2,
-      "open_time": "07:30",
-      "close_time": "14:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-053",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 3,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-054",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 4,
-      "open_time": "07:30",
-      "close_time": "14:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-055",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 5,
-      "open_time": "07:30",
-      "close_time": "14:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-056",
-      "shop_id": "shop-sci-03",
-      "day_of_week": 6,
-      "open_time": "07:30",
-      "close_time": "14:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-057",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-058",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 1,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-059",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 2,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-060",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 3,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-061",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 4,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-062",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 5,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-063",
-      "shop_id": "shop-sci-04",
-      "day_of_week": 6,
-      "open_time": "09:30",
-      "close_time": "16:30",
-      "is_closed": false
-    },
-    {
-      "id": "oh-064",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 0,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    },
-    {
-      "id": "oh-065",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 1,
-      "open_time": "07:30",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-066",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 2,
-      "open_time": "07:30",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-067",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 3,
-      "open_time": "07:30",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-068",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 4,
-      "open_time": "07:30",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-069",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 5,
-      "open_time": "07:30",
-      "close_time": "17:00",
-      "is_closed": false
-    },
-    {
-      "id": "oh-070",
-      "shop_id": "shop-sci-05",
-      "day_of_week": 6,
-      "open_time": null,
-      "close_time": null,
-      "is_closed": true
-    }
-  ],
-  "menu_items": [
-    {
-      "id": "m1",
-      "restaurant_id": "shop-green-01",
-      "name": "ข้าวราดแกง 1 อย่าง",
-      "price": 35,
-      "is_sold_out": false
-    },
-    {
-      "id": "m2",
-      "restaurant_id": "shop-green-01",
-      "name": "ข้าวราดแกง 2 อย่าง",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m3",
-      "restaurant_id": "shop-green-01",
-      "name": "พะแนงหมูสูตรโบราณ",
-      "price": 40,
-      "is_sold_out": false
-    },
-    {
-      "id": "m4",
-      "restaurant_id": "shop-green-01",
-      "name": "ไข่พะโล้ยางมะตูม",
-      "price": 10,
-      "is_sold_out": false
-    },
-    {
-      "id": "m5",
-      "restaurant_id": "shop-green-02",
-      "name": "ข้าวกะเพราหมูกรอบไข่ดาว",
-      "price": 55,
-      "is_sold_out": false
-    },
-    {
-      "id": "m6",
-      "restaurant_id": "shop-green-02",
-      "name": "ข้าวผัดต้มยำทะเล",
-      "price": 60,
-      "is_sold_out": false
-    },
-    {
-      "id": "m7",
-      "restaurant_id": "shop-green-02",
-      "name": "สุกี้แห้งไก่น้ำจิ้มเต้าหู้ยี้",
-      "price": 50,
-      "is_sold_out": false
-    },
-    {
-      "id": "m8",
-      "restaurant_id": "shop-green-02",
-      "name": "หมูกระเทียมพริกไทยไข่ข้น",
-      "price": 55,
-      "is_sold_out": false
-    },
-    {
-      "id": "m9",
-      "restaurant_id": "shop-green-03",
-      "name": "ก๋วยเตี๋ยวเรือเนื้อน้ำตกชามเล็ก",
-      "price": 25,
-      "is_sold_out": true
-    },
-    {
-      "id": "m10",
-      "restaurant_id": "shop-green-03",
-      "name": "ก๋วยเตี๋ยวเรือหมูน้ำตกพิเศษ",
-      "price": 50,
-      "is_sold_out": true
-    },
-    {
-      "id": "m11",
-      "restaurant_id": "shop-green-03",
-      "name": "กากหมูเจียวกรอบ",
-      "price": 15,
-      "is_sold_out": false
-    },
-    {
-      "id": "m12",
-      "restaurant_id": "shop-green-03",
-      "name": "แคบหมูโบราณ",
-      "price": 10,
-      "is_sold_out": false
-    },
-    {
-      "id": "m13",
-      "restaurant_id": "shop-green-04",
-      "name": "ชาไทยเย็นปั่น หวานน้อย",
-      "price": 35,
-      "is_sold_out": false
-    },
-    {
-      "id": "m14",
-      "restaurant_id": "shop-green-04",
-      "name": "อะโวคาโดนมสดปั่น",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m15",
-      "restaurant_id": "shop-green-04",
-      "name": "เฉาก๊วยนมสดภูเขาไฟ",
-      "price": 30,
-      "is_sold_out": false
-    },
-    {
-      "id": "m16",
-      "restaurant_id": "shop-green-05",
-      "name": "ข้าวไก่ทอดเกาหลีซอสการ์ลิค",
-      "price": 50,
-      "is_sold_out": false
-    },
-    {
-      "id": "m17",
-      "restaurant_id": "shop-green-05",
-      "name": "ข้าวเหนียวไก่ทอดหาดใหญ่หอมเจียว",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m18",
-      "restaurant_id": "shop-green-05",
-      "name": "สะโพกไก่ทอดกรอบชิ้นใหญ่",
-      "price": 35,
-      "is_sold_out": false
-    },
-    {
-      "id": "m19",
-      "restaurant_id": "shop-sci-01",
-      "name": "ข้าวมันไก่ตอน เนื้อน่อง",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m20",
-      "restaurant_id": "shop-sci-01",
-      "name": "ข้าวมันไก่ทอดกรอบ",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m21",
-      "restaurant_id": "shop-sci-01",
-      "name": "ข้าวมันไก่ผสม (ต้ม+ทอด)",
-      "price": 55,
-      "is_sold_out": false
-    },
-    {
-      "id": "m22",
-      "restaurant_id": "shop-sci-01",
-      "name": "ซุปต้มยำโครงไก่มะนาว",
-      "price": 20,
-      "is_sold_out": false
-    },
-    {
-      "id": "m23",
-      "restaurant_id": "shop-sci-02",
-      "name": "เส้นเล็กต้มยำหมูมะนาวบะช่อ",
-      "price": 50,
-      "is_sold_out": false
-    },
-    {
-      "id": "m24",
-      "restaurant_id": "shop-sci-02",
-      "name": "บะหมี่แห้งยำหมูกรอบ",
-      "price": 55,
-      "is_sold_out": false
-    },
-    {
-      "id": "m25",
-      "restaurant_id": "shop-sci-02",
-      "name": "เกี๊ยวทอดกรอบไส้หมูแน่น",
-      "price": 20,
-      "is_sold_out": false
-    },
-    {
-      "id": "m26",
-      "restaurant_id": "shop-sci-03",
-      "name": "ข้าวไข่เจียว 2 ฟอง ใส่เครื่อง 3 อย่าง",
-      "price": 35,
-      "is_sold_out": true
-    },
-    {
-      "id": "m27",
-      "restaurant_id": "shop-sci-03",
-      "name": "ข้าวผัดโบราณหมูแดงซีอิ๊วดำ",
-      "price": 45,
-      "is_sold_out": true
-    },
-    {
-      "id": "m28",
-      "restaurant_id": "shop-sci-04",
-      "name": "ส้มตำไทยไข่เค็ม",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m29",
-      "restaurant_id": "shop-sci-04",
-      "name": "ตำป่าปลาร้าคอหมูย่าง",
-      "price": 60,
-      "is_sold_out": false
-    },
-    {
-      "id": "m30",
-      "restaurant_id": "shop-sci-04",
-      "name": "คอหมูย่างน้ำจิ้มแจ่วข้าวคั่ว",
-      "price": 65,
-      "is_sold_out": false
-    },
-    {
-      "id": "m31",
-      "restaurant_id": "shop-sci-04",
-      "name": "ต้มแซ่บกระดูกอ่อนหมู",
-      "price": 60,
-      "is_sold_out": false
-    },
-    {
-      "id": "m32",
-      "restaurant_id": "shop-sci-05",
-      "name": "เอสเปรสโซ่เย็นเข้มข้น",
-      "price": 40,
-      "is_sold_out": false
-    },
-    {
-      "id": "m33",
-      "restaurant_id": "shop-sci-05",
-      "name": "มัทฉะลาเต้แท้เข้มข้น",
-      "price": 45,
-      "is_sold_out": false
-    },
-    {
-      "id": "m34",
-      "restaurant_id": "shop-sci-05",
-      "name": "โกโก้ดาร์กช็อกโกแลต",
-      "price": 40,
-      "is_sold_out": false
     }
   ]
 }
