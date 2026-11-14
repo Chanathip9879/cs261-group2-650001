@@ -45,7 +45,7 @@ export default function App() {
   const [vendor, setVendor] = useState(authStorage.getUser());
   const [adminShopId, setAdminShopId] = useState(null);
   const [customer, setCustomer] = useLocalState('hiwkhaw_customer', null);
-  const [reviews, setReviews] = useLocalState('hiwkhaw_reviews', {});
+  const [justPosted, setJustPosted] = useState(null); // U9: รีวิวที่เพิ่งส่ง { shopId, review } ให้หน้าร้านแสดงบนสุดทันที
   const { bookmarkedIds, isBookmarked, toggleBookmark } = useBookmarks();
 
   // UI
@@ -124,8 +124,8 @@ export default function App() {
     navigate(routes.home);
   };
 
-  const handleReviewSubmit = (shopId, review) => {
-    setReviews((prev) => ({ ...prev, [shopId]: [review, ...(prev[shopId] || [])] }));
+  const handleReviewSubmitted = (shopId, review) => {
+    setJustPosted(review ? { shopId, review } : null);
   };
 
   // ===== Merchant routes =====
@@ -218,7 +218,7 @@ export default function App() {
         shop={findShop(reviewMatch.id)}
         loading={!shopsLoaded}
         customer={customer}
-        onSubmit={handleReviewSubmit}
+        onSubmitted={handleReviewSubmitted}
         showToast={showToast}
       />
     );
@@ -232,7 +232,7 @@ export default function App() {
         canteens={canteens}
         isBookmarked={shop ? isBookmarked(shop.id) : false}
         onToggleBookmark={() => shop && handleToggleBookmark(shop)}
-        reviews={reviews[shopMatch.id]}
+        justPosted={justPosted?.shopId === shopMatch.id ? justPosted.review : null}
         showToast={showToast}
       />
     );

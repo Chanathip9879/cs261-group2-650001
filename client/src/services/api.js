@@ -204,3 +204,76 @@ export async function updateMenuAvailability(shopId, menuId, isAvailable) {
   }
   return data;
 }
+
+// ==========================================
+// U9: รีวิวร้านอาหาร (เชื่อมกับ API ของ Task37 — สเปกอยู่ที่ docs/API_SHOP_REVIEWS.md)
+// ==========================================
+
+// Error ของ API รีวิว: fieldErrors = ข้อความผิดรายช่อง เช่น { username: '...', comment: '...' }
+export class ReviewApiError extends Error {
+  constructor(message, { status = 0, fieldErrors = {}, network = false } = {}) {
+    super(message);
+    this.name = 'ReviewApiError';
+    this.status = status;
+    this.fieldErrors = fieldErrors;
+    this.network = network;
+  }
+}
+
+async function requestReviews(url, options, fallbackMessage) {
+  let res;
+  try {
+    res = await fetch(url, options);
+  } catch {
+    throw new ReviewApiError('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่อีกครั้ง', { network: true });
+  }
+
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    // response ไม่ใช่ JSON
+  }
+
+  if (!res.ok || !data.success) {
+    if (res.status === 429) {
+      throw new ReviewApiError(data.message || 'ส่งรีวิวถี่เกินไป กรุณารอสักครู่แล้วลองใหม่', { status: 429 });
+    }
+    if (res.status >= 500 || !data.message) {
+      throw new ReviewApiError(fallbackMessage, { status: res.status });
+    }
+    throw new ReviewApiError(data.message, {
+      status: res.status,
+      fieldErrors: data.errors && typeof data.errors === 'object' ? data.errors : {}
+    });
+  }
+  return data;
+}
+
+// ดึงรายการรีวิวของร้าน (ใหม่สุดก่อน)
+export async function getShopReviews(shopId) {
+  const data = await requestReviews(
+    `${BASE_URL}/shops/${encodeURIComponent(shopId)}/reviews`,
+    undefined,
+    'โหลดรายการรีวิวไม่สำเร็จ'
+  );
+  return Array.isArray(data.data) ? data.data : [];
+}
+
+// เขียนรีวิวใหม่ คืนรีวิวที่บันทึกแล้วจาก server
+// rating (1-5) และ tags เป็นข้อมูลเสริมจากหน้าเขียนรีวิว (ไม่บังคับ)
+export async function createShopReview(shopId, { username, comment, rating, tags }) {
+  const payload = { username, comment };
+  if (rating) payload.rating = rating;
+  if (tags && tags.length) payload.tags = tags;
+  const data = await requestReviews(
+    `${BASE_URL}/shops/${encodeURIComponent(shopId)}/reviews`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    },
+    'ส่งรีวิวไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'
+  );
+  return data.data;
+}
