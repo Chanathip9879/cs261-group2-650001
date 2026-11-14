@@ -1,0 +1,194 @@
+From d821dbc9d25521c0a821816a0e8c6f88f8665d41 Mon Sep 17 00:00:00 2001
+From: me <m@m>
+Date: Sat, 14 Nov 2026 05:43:15 +0000
+Subject: [PATCH 18/21] style(Task46/U12): align hours status card and weekly
+ list with Figma mobile design
+
+---
+ client/src/components/OpeningHoursTable.jsx | 106 ++++++++++++++------
+ client/src/components/ShopDetailModal.jsx   |   2 +-
+ client/src/utils/openingHours.js            |   8 ++
+ 3 files changed, 86 insertions(+), 30 deletions(-)
+
+diff --git a/client/src/components/OpeningHoursTable.jsx b/client/src/components/OpeningHoursTable.jsx
+index e5b62c9..4a8dd15 100644
+--- a/client/src/components/OpeningHoursTable.jsx
++++ b/client/src/components/OpeningHoursTable.jsx
+@@ -1,12 +1,19 @@
+ // client/src/components/OpeningHoursTable.jsx
+-// U12 / Task46: แสดงเวลาเปิด/ปิดของร้านในหน้าร้าน (สรุปวันนี้ + ตารางรายสัปดาห์)
++// U12 / Task46: แสดงเวลาเปิด/ปิดของร้านในหน้าร้าน (การ์ดสถานะวันนี้ + ตารางรายสัปดาห์)
++// หน้าตาอิงจาก Figma: Store Hours Schedule / Restaurant Detail
+ 
+ import React, { useState, useEffect } from 'react';
+-import { Clock, CalendarDays } from 'lucide-react';
++import { Clock, CalendarDays, Store } from 'lucide-react';
+ import { getOpeningHours } from '../services/api';
+-import { DAY_NAMES, DISPLAY_ORDER } from '../utils/openingHours';
++import {
++  DAY_NAMES,
++  DAY_NAMES_EN,
++  DAY_INITIALS,
++  DISPLAY_ORDER,
++  getTodayRow
++} from '../utils/openingHours';
+ 
+-export default function OpeningHoursTable({ shopId, fallbackText }) {
++export default function OpeningHoursTable({ shopId, fallbackText, isOpen = false }) {
+   const [rows, setRows] = useState(null); // null = กำลังโหลด
+   const [failed, setFailed] = useState(false);
+ 
+@@ -33,36 +40,63 @@ export default function OpeningHoursTable({ shopId, fallbackText }) {
+   }
+ 
+   if (rows === null) {
+-    return <div className="h-24 rounded-xl bg-slate-100 animate-pulse" aria-label="กำลังโหลดเวลาเปิด-ปิด" />;
++    return <div className="h-28 rounded-2xl bg-slate-100 animate-pulse" aria-label="กำลังโหลดเวลาเปิด-ปิด" />;
+   }
+ 
+   const today = new Date().getDay();
+-  const todayRow = rows.find((r) => r.day_of_week === today);
++  const todayRow = getTodayRow(rows);
+   const todayClosed = !todayRow || todayRow.is_closed;
+ 
+   return (
+     <div className="space-y-3">
+-      {/* สรุปเวลาของวันนี้ */}
++      {/* การ์ดสถานะวันนี้ */}
+       <div
+-        className={`flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm ${
+-          todayClosed ? 'bg-rose-50 text-rose-800' : 'bg-orange-50 text-orange-900'
++        className={`p-3.5 rounded-2xl border ${
++          isOpen && !todayClosed
++            ? 'bg-gradient-to-br from-emerald-50 to-white border-emerald-100'
++            : 'bg-slate-50 border-slate-200'
+         }`}
+       >
+-        <span className="flex items-center gap-2 font-medium">
+-          <Clock className="w-4 h-4" />
+-          วันนี้ ({DAY_NAMES[today]})
+-        </span>
+-        <strong className="font-bold">
+-          {todayClosed ? 'ร้านหยุด' : `${todayRow.open_time} - ${todayRow.close_time} น.`}
+-        </strong>
++        <div className="flex items-center gap-3">
++          <div
++            className={`relative w-10 h-10 rounded-2xl flex items-center justify-center ${
++              isOpen && !todayClosed ? 'bg-emerald-200 text-emerald-800' : 'bg-slate-200 text-slate-500'
++            }`}
++          >
++            <Store className="w-5 h-5" />
++            {isOpen && !todayClosed && (
++              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-600 border-2 border-white animate-live" />
++            )}
++          </div>
++          <div>
++            <p className={`text-base font-bold leading-tight ${isOpen && !todayClosed ? 'text-emerald-800' : 'text-slate-700'}`}>
++              {isOpen && !todayClosed ? 'กำลังเปิดให้บริการ' : todayClosed ? 'วันนี้ร้านหยุด' : 'ปิดให้บริการอยู่'}
++              {isOpen && !todayClosed && (
++                <span className="ml-2 text-xs font-medium text-slate-500">(ปิด {todayRow.close_time} น.)</span>
++              )}
++            </p>
++          </div>
++        </div>
++        <div className="mt-3 flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-indigo-50/60 text-xs text-slate-700">
++          <span className="flex items-center gap-1.5">
++            <Clock className="w-3.5 h-3.5 text-orange-700" />
++            {todayClosed ? 'วันนี้ร้านหยุดทำการ' : <>วันนี้เปิด: <strong>{todayRow.open_time} - {todayRow.close_time} น.</strong></>}
++          </span>
++          <span className="font-bold text-orange-800 text-right leading-tight">ตามตาราง<br />ประจำสัปดาห์</span>
++        </div>
+       </div>
+ 
+       {/* ตารางประจำสัปดาห์ จันทร์ - อาทิตย์ */}
+       <div>
+-        <p className="text-xs font-bold text-slate-400 mb-1.5 flex items-center gap-1.5">
+-          <CalendarDays className="w-3.5 h-3.5" /> ตารางเวลาประจำสัปดาห์
+-        </p>
+-        <ul className="divide-y divide-slate-100 border border-slate-100 rounded-xl bg-white overflow-hidden">
++        <div className="flex items-center justify-between mb-1.5">
++          <p className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
++            <CalendarDays className="w-4 h-4 text-orange-600" /> ตารางเวลาประจำสัปดาห์
++          </p>
++          <span className="text-xs text-slate-400">
++            {rows.filter((r) => !r.is_closed).length} วันทำการ
++          </span>
++        </div>
++        <ul className="space-y-2">
+           {DISPLAY_ORDER.map((day) => {
+             const row = rows.find((r) => r.day_of_week === day);
+             const closed = !row || row.is_closed;
+@@ -70,18 +104,32 @@ export default function OpeningHoursTable({ shopId, fallbackText }) {
+             return (
+               <li
+                 key={day}
+-                className={`flex items-center justify-between px-3.5 py-2 text-sm ${isToday ? 'bg-orange-50/60' : ''}`}
++                className={`flex items-center justify-between gap-3 p-3 rounded-2xl bg-white border ${
++                  isToday ? 'border-orange-300 ring-1 ring-orange-200' : 'border-slate-100'
++                }`}
+               >
+-                <span className={`flex items-center gap-2 ${isToday ? 'font-bold text-slate-900' : 'text-slate-600'}`}>
+-                  {DAY_NAMES[day]}
+-                  {isToday && (
+-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-500 text-white">วันนี้</span>
+-                  )}
+-                </span>
++                <div className="flex items-center gap-3 min-w-0">
++                  <span
++                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 ${
++                      closed ? 'bg-indigo-50 text-slate-700' : 'bg-orange-100 text-orange-900'
++                    }`}
++                  >
++                    {DAY_INITIALS[day]}
++                  </span>
++                  <div className="min-w-0">
++                    <p className="text-sm font-bold text-slate-900 leading-tight flex items-center gap-1.5">
++                      {DAY_NAMES[day]}
++                      {isToday && (
++                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-500 text-white">วันนี้</span>
++                      )}
++                    </p>
++                    <p className="text-[11px] text-slate-500">{DAY_NAMES_EN[day]}</p>
++                  </div>
++                </div>
+                 {closed ? (
+-                  <span className="text-xs font-semibold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">หยุด</span>
++                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-700">ปิดทำการ</span>
+                 ) : (
+-                  <span className="font-semibold text-slate-800">
++                  <span className="text-sm font-bold text-slate-800 whitespace-nowrap">
+                     {row.open_time} - {row.close_time} น.
+                   </span>
+                 )}
+diff --git a/client/src/components/ShopDetailModal.jsx b/client/src/components/ShopDetailModal.jsx
+index e7005a6..f68fa24 100644
+--- a/client/src/components/ShopDetailModal.jsx
++++ b/client/src/components/ShopDetailModal.jsx
+@@ -101,7 +101,7 @@ export default function ShopDetailModal({ shop, onClose, isBookmarked = false, o
+             </div>
+ 
+             {/* U12: เวลาเปิด-ปิดรายวัน */}
+-            <OpeningHoursTable shopId={shop.id} fallbackText={shop.openingHours} />
++            <OpeningHoursTable shopId={shop.id} fallbackText={shop.openingHours} isOpen={shop.isOpen} />
+ 
+             <div className="flex items-center gap-2.5 text-sm text-slate-700">
+               <Phone className="w-4 h-4 flex-shrink-0 text-slate-500" />
+diff --git a/client/src/utils/openingHours.js b/client/src/utils/openingHours.js
+index 19cfe0c..9e4f31d 100644
+--- a/client/src/utils/openingHours.js
++++ b/client/src/utils/openingHours.js
+@@ -64,3 +64,11 @@ export function weekToPayload(week) {
+     close_time: d.is_closed ? null : d.close_time
+   }));
+ }
++
++export const DAY_NAMES_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
++export const DAY_INITIALS = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
++
++// แถวเวลาของวันนี้ (หรือ null ถ้าไม่มีข้อมูล)
++export function getTodayRow(rows, now = new Date()) {
++  return (rows || []).find((r) => r.day_of_week === now.getDay()) || null;
++}
+-- 
+2.43.0
+
