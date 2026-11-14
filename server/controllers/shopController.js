@@ -327,3 +327,16 @@ exports.updateShopDetails = (req, res) => {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
   }
 };
+// GET /api/shops/:id/opening-hours  เวลาเปิด-ปิดรายวันของร้าน (U12)
+exports.getShopOpeningHours = (req, res) => {
+  try {
+    const db = readDb();
+    const shop = db.shops.find(s => s.id === req.params.id);
+    if (!shop) {
+      return res.status(404).json({ success: false, message: 'ไม่พบร้านอาหารที่ระบุ' });
+    }
+    return res.json({ success: true, data: getOpeningHoursByShop(db, shop.id) });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการดึงเวลาเปิด-ปิด' });
+  }
+};

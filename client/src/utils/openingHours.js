@@ -10,7 +10,6 @@ export const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
 const DEFAULT_OPEN = '07:00';
 const DEFAULT_CLOSE = '15:30';
 
-// แปลงข้อความเดิม เช่น "07:00 - 15:30" เป็น { open, close } ใช้เป็นค่าเริ่มต้น
 export function parseLegacyHours(text) {
   const m = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/.exec(text || '');
   if (!m) return { open: DEFAULT_OPEN, close: DEFAULT_CLOSE };
@@ -23,8 +22,6 @@ export function timeToMinutes(t) {
   return h * 60 + m;
 }
 
-// สร้างข้อมูลครบ 7 วัน (เรียงตาม day_of_week 0-6) จาก rows ที่ได้จาก API
-// วันที่ไม่มีข้อมูล จะใช้ค่าเริ่มต้นจากข้อความเวลาเดิมของร้าน
 export function buildFullWeek(rows, legacyText) {
   const fallback = parseLegacyHours(legacyText);
   return Array.from({ length: 7 }, (_, day) => {
@@ -39,4 +36,9 @@ export function buildFullWeek(rows, legacyText) {
     }
     return { day_of_week: day, is_closed: false, open_time: fallback.open, close_time: fallback.close };
   });
+}
+// หาแถวของวันนี้จาก rows ที่ได้จาก API (ไม่มีข้อมูลคืน null)
+export function getTodayRow(rows) {
+  const today = new Date().getDay();
+  return (rows || []).find((r) => r.day_of_week === today) || null;
 }

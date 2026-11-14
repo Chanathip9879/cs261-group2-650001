@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, CalendarDays } from 'lucide-react';
 import { getOpeningHours } from '../services/api';
-import { DAY_NAMES, DISPLAY_ORDER } from '../utils/openingHours';
+import { buildFullWeek, DAY_NAMES, DISPLAY_ORDER } from '../utils/openingHours';
 
 export default function OpeningHoursTable({ shopId, fallbackText }) {
   const [rows, setRows] = useState(null); // null = กำลังโหลด
@@ -14,8 +14,8 @@ export default function OpeningHoursTable({ shopId, fallbackText }) {
     let cancelled = false;
     setRows(null);
     setFailed(false);
-    getOpeningHours(shopId)
-      .then((data) => !cancelled && setRows(data))
+        getOpeningHours(shopId)
+      .then((data) => !cancelled && setRows(buildFullWeek(data, fallbackText)))
       .catch(() => !cancelled && setFailed(true));
     return () => {
       cancelled = true;
