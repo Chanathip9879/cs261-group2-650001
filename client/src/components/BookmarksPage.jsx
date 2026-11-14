@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Bookmark, HeartOff, ArrowLeft } from 'lucide-react';
-import ShopCard from './ShopCard';
+import BookmarkShopCard from './BookmarkShopCard';
 import { getShops } from '../services/api';
 
 const TABS = [
@@ -60,12 +60,12 @@ export default function BookmarksPage({ bookmarkedIds, isBookmarked, onToggleBoo
       </button>
 
       <div>
-        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <Bookmark className="w-5 h-5 text-orange-500" fill="currentColor" />
+        <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
           ร้านอาหารโปรด
+          <Bookmark className="w-5 h-5 text-orange-800" fill="currentColor" />
         </h2>
-        <p className="text-xs text-slate-500 mt-0.5">
-          คอลเลกชันความอร่อยที่คุณเลือกไว้ <strong className="text-orange-600">{saved.length} ร้านที่บันทึก</strong>
+        <p className="text-xs text-slate-600 mt-1">
+          Saved Bookmarks • <strong className="text-orange-800">{saved.length} ร้านที่บันทึกไว้</strong>
           {' '}• เก็บไว้ในเครื่องนี้เท่านั้น
         </p>
       </div>
@@ -119,13 +119,12 @@ export default function BookmarksPage({ bookmarkedIds, isBookmarked, onToggleBoo
           ตอนนี้ร้านโปรดของคุณยังไม่มีร้านที่เปิดอยู่
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="space-y-3">
           {visible.map((shop) => (
-            <ShopCard
+            <BookmarkShopCard
               key={shop.id}
               shop={shop}
               onSelect={onSelectShop}
-              isBookmarked={isBookmarked(shop.id)}
               onToggleBookmark={() => onToggleBookmark(shop)}
             />
           ))}
