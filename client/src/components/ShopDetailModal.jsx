@@ -2,13 +2,10 @@
 // U3: แสดงร้านอาหารและที่ตั้ง (แสดงรายละเอียดร้าน ผังโรงอาหาร และรายการเมนู)
 
 import React from 'react';
-<<<<<<< HEAD
 import { X, MapPin, Clock, Phone, Utensils, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
-=======
 import { X, MapPin, Phone, Utensils, AlertCircle } from 'lucide-react';
 import OpeningHoursTable from './OpeningHoursTable';
 import BookmarkButton from './BookmarkButton';
->>>>>>> feat(Task51/US14): add bookmark button in shop detail modal
 
 export default function ShopDetailModal({ shop, onClose, isBookmarked = false, onToggleBookmark }) {
   if (!shop) return null;
