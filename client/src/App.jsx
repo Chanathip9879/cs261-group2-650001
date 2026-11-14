@@ -1,374 +1,284 @@
 // client/src/App.jsx
 // Main Application Component - HiwKhaw TU Rangsit (หิวข้าว มธ. รังสิต)
-// Covers Sprint 1: U1, U2, U3, U4, U5
+// UI ตามดีไซน์ Figma "Group2-CS261" — ใช้ hash router (ดู router.js)
+//   #/                 หน้าแรก & ค้นหา (+ สถานะค้นหาไม่พบ)
+//   #/shop/:id         รายละเอียดร้าน & เมนู
+//   #/shop/:id/review  เขียนรีวิว
+//   #/bookmarks        ร้านอาหารโปรด
+//   #/login            เข้าสู่ระบบลูกค้า
+//   #/merchant/login   เข้าสู่ระบบร้านค้า
+//   #/merchant         แดชบอร์ดจัดการร้าน
+//   #/merchant/hours   ตั้งเวลาเปิด-ปิด
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Header from './components/Header';
-import SearchAndFilter from './components/SearchAndFilter';
-import ShopCard from './components/ShopCard';
-import ShopDetailModal from './components/ShopDetailModal';
-import VendorLoginModal from './components/VendorLoginModal';
-import VendorDashboard from './components/VendorDashboard';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import SiteHeader from './components/layout/SiteHeader';
+import SiteFooter from './components/layout/SiteFooter';
+import MobileNav from './components/layout/MobileNav';
+import MerchantLayout from './components/layout/MerchantLayout';
 import Toast from './components/Toast';
-import BookmarksPage from './components/BookmarksPage';
+import HomePage from './pages/HomePage';
+import ShopDetailPage from './pages/ShopDetailPage';
+import FavoritesPage from './pages/FavoritesPage';
+import WriteReviewPage from './pages/WriteReviewPage';
+import CustomerLoginPage from './pages/CustomerLoginPage';
+import MerchantLoginPage from './pages/MerchantLoginPage';
+import MerchantDashboardPage from './pages/MerchantDashboardPage';
+import StoreHoursPage from './pages/StoreHoursPage';
 import useBookmarks from './hooks/useBookmarks';
-import {
-  getShops,
-  getCanteens,
-  getCategories,
-  getMe,
-  authStorage
-} from './services/api';
-import { Store, Utensils, RefreshCw, AlertCircle, Info, Sparkles } from 'lucide-react';
+import useLocalState from './hooks/useLocalList';
+import { getShops, getCanteens, getCategories, getMe, authStorage, updateShopStatus } from './services/api';
+import { useHashPath, matchRoute, navigate, routes } from './router';
+
+const POLL_MS = 6000; // U1: อัปเดตสถานะร้านแบบ real-time ทุก 6 วินาที
 
 export default function App() {
-  // State ข้อมูลหลัก
-  const [shops, setShops] = useState([]);
+  const path = useHashPath();
+
+  // ข้อมูลหลัก
+  const [allShops, setAllShops] = useState([]);
+  const [shopsLoaded, setShopsLoaded] = useState(false);
   const [canteens, setCanteens] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [meta, setMeta] = useState({ total: 0, openCount: 0, closedCount: 0, filteredCount: 0 });
-
-  // State ฟิลเตอร์และการค้นหา (U2)
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCanteen, setSelectedCanteen] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [onlyOpen, setOnlyOpen] = useState(false);
 
-  // State การทำงานและ Modals
-  const [selectedShop, setSelectedShop] = useState(null);
-  const [currentUser, setCurrentUser] = useState(authStorage.getUser());
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isDashboardOpen, setIsDashboardOpen] = useState(false);
-
-  // US14: ร้านโปรด (เก็บใน localStorage) และหน้าที่แสดงอยู่ ('home' | 'bookmarks')
+  // ผู้ใช้
+  const [vendor, setVendor] = useState(authStorage.getUser());
+  const [adminShopId, setAdminShopId] = useState(null);
+  const [customer, setCustomer] = useLocalState('hiwkhaw_customer', null);
+  const [reviews, setReviews] = useLocalState('hiwkhaw_reviews', {});
   const { bookmarkedIds, isBookmarked, toggleBookmark } = useBookmarks();
-  const [view, setView] = useState('home');
 
-  // State UI
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  // UI
   const [toast, setToast] = useState(null);
+  const [statusBusy, setStatusBusy] = useState(false);
+  const toastTimer = useRef(null);
 
-  const showToast = (message, type = 'info') => {
-    setToast({ message, type });
-  };
-
-  // ดึงข้อมูลร้านอาหารตามเงื่อนไขฟิลเตอร์ (U1, U2, U3)
-  const loadShops = useCallback(async (isSilent = false) => {
-    try {
-      if (!isSilent) setIsRefreshing(true);
-      const res = await getShops({
-        q: searchQuery,
-        canteen: selectedCanteen,
-        category: selectedCategory,
-        status: onlyOpen ? 'open' : 'all'
-      });
-      if (res.success) {
-        setShops(res.data);
-        setMeta(res.meta);
-      }
-    } catch (err) {
-      console.error('Failed to load shops:', err);
-      if (!isSilent) showToast('ไม่สามารถดึงข้อมูลร้านได้ กรุณาลองใหม่', 'error');
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [searchQuery, selectedCanteen, selectedCategory, onlyOpen]);
-
-  // ดึงข้อมูลภาพรวมโรงอาหารและหมวดหมู่
-  const loadMeta = async () => {
-    try {
-      const [canteensRes, categoriesRes] = await Promise.all([
-        getCanteens(),
-        getCategories()
-      ]);
-      if (canteensRes.success) setCanteens(canteensRes.data);
-      if (categoriesRes.success) setCategories(categoriesRes.data);
-    } catch (err) {
-      console.error('Failed to load metadata:', err);
-    }
-  };
-
-  // ตรวจสอบเซสชันผู้ใช้ (U4)
-  useEffect(() => {
-    const verifyUser = async () => {
-      const token = authStorage.getToken();
-      if (token) {
-        try {
-          const res = await getMe();
-          if (res && res.user) {
-            setCurrentUser(res.user);
-            authStorage.setUser(res.user);
-          }
-        } catch {
-          authStorage.clear();
-          setCurrentUser(null);
-        }
-      }
-    };
-    verifyUser();
-    loadMeta();
+  const showToast = useCallback((message, type = 'info') => {
+    setToast({ message, type, id: Date.now() });
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 3500);
   }, []);
 
-  // โหลดข้อมูลร้านเมื่อฟิลเตอร์เปลี่ยน
-  useEffect(() => {
-    loadShops();
-  }, [loadShops]);
-
-  // U1: Polling สถานะแบบ Real-time ทุก 6 วินาที (ให้เหมือน Grab)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      loadShops(true);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [loadShops]);
-
-  // ผู้ใช้กด Refresh เอง
-  const handleManualRefresh = () => {
-    loadShops();
-    loadMeta();
-    showToast('อัปเดตสถานะร้านเรียบร้อยแล้ว', 'success');
-  };
-
-  // แม่ค้าล็อกอินสำเร็จ (U4)
-  const handleLoginSuccess = (user, message) => {
-    setCurrentUser(user);
-    showToast(message || 'เข้าสู่ระบบสำเร็จ', 'success');
-    setIsDashboardOpen(true);
-    loadShops();
-  };
-
-  // ออกจากระบบ
-  const handleLogout = () => {
-    authStorage.clear();
-    setCurrentUser(null);
-    setIsDashboardOpen(false);
-    showToast('ออกจากระบบเรียบร้อย', 'info');
-  };
-
-  // เมื่อแม่ค้าเปลี่ยนสถานะร้าน (U5)
-  const handleStatusUpdated = (updatedShop, message) => {
-    // อัปเดตใน state ทันที
-    setShops(prev => prev.map(s => (s.id === updatedShop.id ? updatedShop : s)));
-    if (selectedShop && selectedShop.id === updatedShop.id) {
-      setSelectedShop(updatedShop);
+  const loadShops = useCallback(async () => {
+    try {
+      const res = await getShops();
+      if (res.success) setAllShops(res.data);
+    } catch (err) {
+      console.error('Failed to load shops:', err);
+    } finally {
+      setShopsLoaded(true);
     }
-    showToast(message || 'อัปเดตสถานะร้านเรียบร้อย', 'success');
-    loadMeta();
-  };
+  }, []);
 
-  // US14: กดหัวใจบันทึก/เอาออกจากร้านโปรด
+  useEffect(() => {
+    loadShops();
+    Promise.all([getCanteens(), getCategories()])
+      .then(([c, k]) => {
+        if (c.success) setCanteens(c.data);
+        if (k.success) setCategories(k.data);
+      })
+      .catch((err) => console.error('Failed to load metadata:', err));
+
+    // U4: ตรวจสอบเซสชันร้านค้าที่ค้างไว้
+    if (authStorage.getToken()) {
+      getMe()
+        .then((res) => {
+          if (res?.user) {
+            setVendor(res.user);
+            authStorage.setUser(res.user);
+          } else {
+            setVendor(null);
+          }
+        })
+        .catch(() => {
+          authStorage.clear();
+          setVendor(null);
+        });
+    }
+  }, [loadShops]);
+
+  useEffect(() => {
+    const t = setInterval(loadShops, POLL_MS);
+    return () => clearInterval(t);
+  }, [loadShops]);
+
+  const replaceShop = useCallback((updated) => {
+    setAllShops((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
+  }, []);
+
   const handleToggleBookmark = (shop) => {
     const saved = toggleBookmark(shop.id);
-    showToast(
-      saved ? `บันทึก "${shop.name}" เป็นร้านโปรดแล้ว` : `เอา "${shop.name}" ออกจากร้านโปรดแล้ว`,
-      saved ? 'success' : 'info'
-    );
+    showToast(saved ? `บันทึก "${shop.name}" เป็นร้านโปรดแล้ว` : `เอา "${shop.name}" ออกจากร้านโปรดแล้ว`, saved ? 'success' : 'info');
   };
 
-  // ค้นหาร้านของแม่ค้าที่กำลังล็อกอินอยู่
-  const currentLoggedInShop = currentUser && currentUser.shopId
-    ? shops.find(s => s.id === currentUser.shopId)
+  const handleVendorLogin = (user, message) => {
+    setVendor(user);
+    showToast(message || 'เข้าสู่ระบบสำเร็จ', 'success');
+    loadShops();
+  };
+
+  const handleVendorLogout = () => {
+    authStorage.clear();
+    setVendor(null);
+    showToast('ออกจากระบบร้านค้าเรียบร้อย', 'info');
+    navigate(routes.home);
+  };
+
+  const handleReviewSubmit = (shopId, review) => {
+    setReviews((prev) => ({ ...prev, [shopId]: [review, ...(prev[shopId] || [])] }));
+  };
+
+  // ===== Merchant routes =====
+  const isMerchantRoute = path === routes.merchant || path === routes.merchantHours || path.startsWith(`${routes.merchant}?`);
+  const merchantShop = vendor
+    ? allShops.find((s) => s.id === (vendor.shopId || adminShopId)) || (vendor.role === 'admin' ? allShops[0] : null)
     : null;
 
+  // U5: เปลี่ยนสถานะร้าน (ใช้ทั้ง sidebar และการ์ดสถานะ)
+  const setShopStatus = async (isOpen, note) => {
+    if (!merchantShop) return;
+    setStatusBusy(true);
+    try {
+      const statusNote = typeof note === 'string' && note.trim()
+        ? note.trim()
+        : isOpen === merchantShop.isOpen ? merchantShop.statusNote : isOpen ? 'เปิดให้บริการตามปกติ' : 'ปิดให้บริการชั่วคราว';
+      const res = await updateShopStatus(merchantShop.id, isOpen, statusNote);
+      replaceShop(res.data);
+      showToast(res.message || 'อัปเดตสถานะร้านเรียบร้อย', 'success');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setStatusBusy(false);
+    }
+  };
+
+  const toastEl = toast && <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => setToast(null)} />;
+
+  if (path === routes.login) {
+    return (
+      <>
+        {toastEl}
+        <CustomerLoginPage onLogin={setCustomer} showToast={showToast} />
+      </>
+    );
+  }
+
+  if (path === routes.merchantLogin || (isMerchantRoute && !vendor)) {
+    return (
+      <>
+        {toastEl}
+        <MerchantLoginPage onLoginSuccess={handleVendorLogin} />
+      </>
+    );
+  }
+
+  if (isMerchantRoute) {
+    const page = path === routes.merchantHours ? (
+      <StoreHoursPage key={merchantShop?.id} shop={merchantShop} showToast={showToast} />
+    ) : (
+      <MerchantDashboardPage
+        shop={merchantShop}
+        onSetStatus={setShopStatus}
+        statusBusy={statusBusy}
+        onShopUpdated={replaceShop}
+        showToast={showToast}
+      />
+    );
+    return (
+      <>
+        {toastEl}
+        <MerchantLayout
+          path={path.split('?')[0]}
+          user={vendor}
+          shop={merchantShop}
+          shops={allShops}
+          onSelectShop={setAdminShopId}
+          onToggleOpen={(next) => setShopStatus(next)}
+          statusBusy={statusBusy}
+          onLogout={handleVendorLogout}
+          subtitle={path === routes.merchantHours ? 'ตั้งเวลาเปิด-ปิดร้าน (Store Hours)' : 'Store Dashboard'}
+        >
+          {!shopsLoaded ? <p className="py-24 text-center text-sm text-ink-muted">กำลังโหลดข้อมูลร้าน...</p> : page}
+        </MerchantLayout>
+      </>
+    );
+  }
+
+  // ===== Customer routes =====
+  const reviewMatch = matchRoute(path, '/shop/:id/review');
+  const shopMatch = matchRoute(path, '/shop/:id');
+  const findShop = (id) => allShops.find((s) => s.id === id) || null;
+
+  let page;
+  let headerProps = {};
+  if (reviewMatch) {
+    page = (
+      <WriteReviewPage
+        key={reviewMatch.id}
+        shop={findShop(reviewMatch.id)}
+        loading={!shopsLoaded}
+        customer={customer}
+        onSubmit={handleReviewSubmit}
+        showToast={showToast}
+      />
+    );
+    headerProps = { mobileTitle: 'เขียนรีวิว', mobileSubtitle: 'Hiwkaw • หิวข้าว', showBack: true };
+  } else if (shopMatch) {
+    const shop = findShop(shopMatch.id);
+    page = (
+      <ShopDetailPage
+        shop={shop}
+        loading={!shopsLoaded}
+        canteens={canteens}
+        isBookmarked={shop ? isBookmarked(shop.id) : false}
+        onToggleBookmark={() => shop && handleToggleBookmark(shop)}
+        reviews={reviews[shopMatch.id]}
+        showToast={showToast}
+      />
+    );
+    headerProps = { mobileTitle: 'Restaurant Detail', mobileSubtitle: 'Hiwkaw • หิวข้าว', showBack: true };
+  } else if (path === routes.bookmarks) {
+    page = (
+      <FavoritesPage
+        allShops={allShops}
+        loading={!shopsLoaded}
+        bookmarkedIds={bookmarkedIds}
+        onToggleBookmark={handleToggleBookmark}
+      />
+    );
+    headerProps = { mobileSubtitle: 'ร้านอาหารโปรด' };
+  } else {
+    page = (
+      <HomePage
+        allShops={allShops}
+        canteens={canteens}
+        categories={categories}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        isBookmarked={isBookmarked}
+        onToggleBookmark={handleToggleBookmark}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans pb-safe">
-      {/* Toast Notification */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
-
-      {/* 1. Header บาร์ด้านบน */}
-      <Header
-        currentUser={currentUser}
-        onOpenLogin={() => setIsLoginModalOpen(true)}
-        onOpenDashboard={() => setIsDashboardOpen(true)}
-        onRefresh={handleManualRefresh}
-        isRefreshing={isRefreshing}
-        activeShopStatus={currentLoggedInShop ? currentLoggedInShop.isOpen : false}
+    <div className="flex min-h-screen flex-col bg-surface">
+      {toastEl}
+      <SiteHeader
+        path={path}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
+        customer={customer}
+        onCustomerLogout={() => {
+          setCustomer(null);
+          showToast('ออกจากระบบแล้ว', 'info');
+        }}
         bookmarkCount={bookmarkedIds.length}
-        onOpenBookmarks={() => setView(view === 'bookmarks' ? 'home' : 'bookmarks')}
-        isBookmarksActive={view === 'bookmarks'}
+        {...headerProps}
       />
-
-      {/* Container หลัก (Mobile First Container) */}
-      <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12 space-y-4">
-        {view === 'bookmarks' ? (
-          <BookmarksPage
-            bookmarkedIds={bookmarkedIds}
-            isBookmarked={isBookmarked}
-            onToggleBookmark={handleToggleBookmark}
-            onSelectShop={(s) => setSelectedShop(s)}
-            onBack={() => setView('home')}
-          />
-        ) : (
-        <>
-        {/* Banner สรุปสถานะ 2 โรงอาหารหลัก (กรีนแคนทีน & คณะวิทย์) */}
-        <section className="pt-2">
-          <div className="grid grid-cols-2 gap-2.5">
-            {/* กรีนแคนทีน Card */}
-            <div
-              onClick={() => setSelectedCanteen(selectedCanteen === 'green' ? 'all' : 'green')}
-              role="button"
-              tabIndex={0}
-              className={`p-3.5 rounded-2xl border transition cursor-pointer active:scale-98 ${
-                selectedCanteen === 'green'
-                  ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-500/20'
-                  : 'bg-white border-slate-200/90 hover:border-emerald-300 shadow-2xs'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
-                  กรีนแคนทีน
-                </span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-live"></span>
-              </div>
-              <h4 className="text-xs font-semibold text-slate-800 mt-2 truncate">Green Canteen</h4>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                เปิด{' '}
-                <strong className="text-emerald-700 font-bold">
-                  {canteens.find(c => c.id === 'green')?.openShops ?? 4}
-                </strong>
-                /{canteens.find(c => c.id === 'green')?.totalShops ?? 5} ร้าน
-              </p>
-            </div>
-
-            {/* คณะวิทยาศาสตร์ Card */}
-            <div
-              onClick={() => setSelectedCanteen(selectedCanteen === 'sci' ? 'all' : 'sci')}
-              role="button"
-              tabIndex={0}
-              className={`p-3.5 rounded-2xl border transition cursor-pointer active:scale-98 ${
-                selectedCanteen === 'sci'
-                  ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-500/20'
-                  : 'bg-white border-slate-200/90 hover:border-sky-300 shadow-2xs'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-sky-800 bg-sky-100 px-2 py-0.5 rounded-md">
-                  คณะวิทยาศาสตร์
-                </span>
-                <span className="w-2 h-2 rounded-full bg-sky-500 animate-live"></span>
-              </div>
-              <h4 className="text-xs font-semibold text-slate-800 mt-2 truncate">Science Canteen</h4>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                เปิด{' '}
-                <strong className="text-sky-700 font-bold">
-                  {canteens.find(c => c.id === 'sci')?.openShops ?? 4}
-                </strong>
-                /{canteens.find(c => c.id === 'sci')?.totalShops ?? 5} ร้าน
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* 2. U2: ระบบค้นหาและตัวกรอง */}
-        <section>
-          <SearchAndFilter
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            selectedCanteen={selectedCanteen}
-            onCanteenChange={setSelectedCanteen}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-            onlyOpen={onlyOpen}
-            onToggleOnlyOpen={() => setOnlyOpen(!onlyOpen)}
-            categories={categories}
-            canteens={canteens}
-            totalFound={meta.filteredCount}
-          />
-        </section>
-
-        {/* 3. U1 & U3: รายการร้านอาหาร */}
-        <section className="space-y-3 pt-1">
-          {isLoading ? (
-            <div className="py-16 text-center text-slate-400 space-y-3">
-              <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-              <p className="text-xs">กำลังโหลดสถานะร้านอาหาร...</p>
-            </div>
-          ) : shops.length === 0 ? (
-            <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 space-y-3">
-              <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto">
-                <Utensils className="w-6 h-6" />
-              </div>
-              <h4 className="text-sm font-bold text-slate-800">ไม่พบร้านอาหารที่ตรงกับเงื่อนไข</h4>
-              <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                ลองเปลี่ยนคำค้นหา หรือกดเคลียร์ตัวกรองเพื่อดูร้านอาหารทั้งหมดใน มธ. รังสิต
-              </p>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCanteen('all');
-                  setSelectedCategory('all');
-                  setOnlyOpen(false);
-                }}
-                className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-semibold hover:bg-slate-800 transition"
-              >
-                ล้างตัวกรองทั้งหมด
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {shops.map((shop) => (
-                <ShopCard
-                  key={shop.id}
-                  shop={shop}
-                  onSelect={(s) => setSelectedShop(s)}
-                  isBookmarked={isBookmarked(shop.id)}
-                  onToggleBookmark={() => handleToggleBookmark(shop)}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-        </>
-        )}
-      </main>
-
-      {/* Footer ประจำเว็บ */}
-      <footer className="mt-auto border-t border-slate-200/80 bg-white py-6 text-center text-xs text-slate-400">
-        <div className="max-w-2xl mx-auto px-4 space-y-1.5">
-          <p className="font-semibold text-slate-600">
-            HiwKhaw (หิวข้าว) • โครงการวิชา CS261 มหาวิทยาลัยธรรมศาสตร์ ศูนย์รังสิต
-          </p>
-          <p className="text-[11px]">
-            โรงอาหารกรีนแคนทีน & โรงอาหารคณะวิทยาศาสตร์ • Sprint 1 Release
-          </p>
-        </div>
-      </footer>
-
-      {/* U3: Modal แสดงรายละเอียดร้าน */}
-      {selectedShop && (
-        <ShopDetailModal
-          shop={selectedShop}
-          onClose={() => setSelectedShop(null)}
-          isBookmarked={isBookmarked(selectedShop.id)}
-          onToggleBookmark={() => handleToggleBookmark(selectedShop)}
-        />
-      )}
-
-      {/* U4: Modal เข้าสู่ระบบแม่ค้า */}
-      <VendorLoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        onLoginSuccess={handleLoginSuccess}
-      />
-
-      {/* U5: Dashboard จัดการเปิด/ปิดร้านของแม่ค้า */}
-      {isDashboardOpen && currentLoggedInShop && (
-        <VendorDashboard
-          currentUser={currentUser}
-          currentShop={currentLoggedInShop}
-          onStatusUpdated={handleStatusUpdated}
-          onLogout={handleLogout}
-          onClose={() => setIsDashboardOpen(false)}
-        />
-      )}
+      <main className="flex-1">{page}</main>
+      <SiteFooter />
+      <MobileNav path={path} />
     </div>
   );
 }
