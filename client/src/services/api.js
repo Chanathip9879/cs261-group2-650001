@@ -57,16 +57,63 @@ export async function getCategories() {
   return res.json();
 }
 
-// ล็อกอินแม่ค้า/แอดมินด้วยเบอร์โทร + PIN (U4)
+// Error ของการล็อกอิน แยกกรณีบัญชีถูกล็อก (U7) และเชื่อมต่อเซิร์ฟเวอร์ไม่ได้
+export class LoginError extends Error {
+  constructor(message, { status = 0, locked = false, unlockAt = null, network = false } = {}) {
+    super(message);
+    this.name = 'LoginError';
+    this.status = status;     // HTTP status (0 = ไม่ได้รับ response)
+    this.locked = locked;     // true = บัญชีถูกล็อกชั่วคราว
+    this.unlockAt = unlockAt; // เวลาปลดล็อก (ms since epoch) หรือ null ถ้าไม่ได้รับเวลา
+    this.network = network;   // true = เชื่อมต่อเซิร์ฟเวอร์ไม่ได้
+  }
+}
+
+// U7: อ่านเวลาปลดล็อกจาก response
+// รูปแบบที่ตกลงกับ backend: HTTP 423 + { locked: true, lockedUntil: ISO string, retryAfterSeconds: number }
+// ใช้ retryAfterSeconds ก่อน (ไม่ขึ้นกับนาฬิกาเครื่องผู้ใช้) แล้วค่อย lockedUntil และ header Retry-After
+function parseUnlockAt(res, data) {
+  const now = Date.now();
+  const seconds = Number(data.retryAfterSeconds ?? res.headers.get('Retry-After'));
+  if (Number.isFinite(seconds) && seconds > 0) return now + seconds * 1000;
+  const until = Date.parse(data.lockedUntil);
+  if (Number.isFinite(until) && until > now) return until;
+  return null;
+}
+
+// ล็อกอินแม่ค้า/แอดมินด้วยเบอร์โทร + PIN (U4) และรองรับสถานะบัญชีถูกล็อก (U7)
 export async function loginVendor(phone, pin) {
-  const res = await fetch(`${BASE_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone, pin })
-  });
-  const data = await res.json();
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, pin })
+    });
+  } catch {
+    throw new LoginError('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่ภายหลัง', { network: true });
+  }
+
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    // response ไม่ใช่ JSON (เช่น proxy error) ใช้ข้อความกลางแทน
+  }
+
+  if (res.status === 423 || data.locked === true) {
+    throw new LoginError(data.message || 'บัญชีถูกล็อกชั่วคราว', {
+      status: res.status,
+      locked: true,
+      unlockAt: parseUnlockAt(res, data)
+    });
+  }
+
   if (!res.ok || !data.success) {
-    throw new Error(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
+    if (res.status >= 500 || !data.message) {
+      throw new LoginError('เกิดข้อผิดพลาดที่เซิร์ฟเวอร์ กรุณาลองใหม่ภายหลัง', { status: res.status, network: res.status >= 500 });
+    }
+    throw new LoginError(data.message, { status: res.status });
   }
   return data;
 }
