@@ -135,4 +135,4 @@ export async function saveOpeningHours(shopId, hours) {
   }
   return data;
 }
->>>>>>> 1373800 (feat(Task49/U13): add saveOpeningHours to client api service)
+
