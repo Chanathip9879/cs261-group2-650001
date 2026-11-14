@@ -330,6 +330,8 @@ export default function App() {
         <ShopDetailModal
           shop={selectedShop}
           onClose={() => setSelectedShop(null)}
+          isBookmarked={isBookmarked(selectedShop.id)}
+          onToggleBookmark={() => handleToggleBookmark(selectedShop)}
         />
       )}
 
