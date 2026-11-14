@@ -136,3 +136,24 @@ export async function saveOpeningHours(shopId, hours) {
   return data;
 }
 
+
+// แจ้งเมนูหมด / เปิดขายอีกครั้ง (หน้า Merchant Dashboard)
+export async function updateMenuAvailability(shopId, menuId, isAvailable) {
+  const token = authStorage.getToken();
+  if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนแก้ไขเมนู');
+
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/menus/${menuId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ isAvailable })
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || 'ไม่สามารถอัปเดตเมนูได้');
+  }
+  return data;
+}
