@@ -366,3 +366,44 @@ exports.updateShopOpeningHours = (req, res) => {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกเวลาเปิด-ปิดร้าน' });
   }
 };
+
+// PUT /api/shops/:id/menus/:menuId (ต้อง Login) — body: { isAvailable: boolean }
+// แจ้งเมนูหมด / เปิดรับสต็อกใหม่ (หน้า Merchant Dashboard)
+exports.updateMenuAvailability = (req, res) => {
+  try {
+    const { id, menuId } = req.params;
+    const { isAvailable } = req.body || {};
+    const user = req.user;
+
+    if (typeof isAvailable !== 'boolean') {
+      return res.status(400).json({ success: false, message: 'กรุณาระบุสถานะเมนู (isAvailable)' });
+    }
+
+    const db = readDb();
+    const shop = db.shops.find(s => s.id === id);
+    if (!shop) {
+      return res.status(404).json({ success: false, message: 'ไม่พบร้านอาหาร' });
+    }
+    if (user.role !== 'admin' && user.shopId !== id) {
+      return res.status(403).json({ success: false, message: 'ท่านไม่มีสิทธิ์แก้ไขเมนูของร้านนี้' });
+    }
+
+    const menu = (shop.menus || []).find(m => m.id === menuId);
+    if (!menu) {
+      return res.status(404).json({ success: false, message: 'ไม่พบเมนูนี้' });
+    }
+
+    menu.isAvailable = isAvailable;
+    shop.lastStatusUpdate = new Date().toISOString();
+    writeDb(db);
+
+    return res.json({
+      success: true,
+      message: isAvailable ? `เปิดขาย "${menu.name}" แล้ว` : `แจ้ง "${menu.name}" หมดแล้ว`,
+      data: shop
+    });
+  } catch (err) {
+    console.error('Error updating menu availability:', err);
+    return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการอัปเดตเมนู' });
+  }
+};
