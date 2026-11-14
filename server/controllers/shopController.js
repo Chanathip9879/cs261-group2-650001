@@ -114,6 +114,33 @@ exports.validateOpeningHour = validateOpeningHour;
 exports.getOpeningHoursByShop = getOpeningHoursByShop;
 exports.setOpeningHours = setOpeningHours;
 
+// ==========================================
+// Helpers: latitude / longitude ของร้าน (Task32 / U8)
+// ค่าเป็น number หรือ null ได้ (null = ร้านยังไม่มีพิกัด)
+// lat: -90 ถึง 90, lng: -180 ถึง 180
+// ==========================================
+function validateCoordinates(latitude, longitude) {
+  const errors = [];
+  const isNum = v => typeof v === 'number' && Number.isFinite(v);
+
+  // ต้องเป็น null ทั้งคู่ หรือมีค่าทั้งคู่ (ห้ามมีแค่ค่าเดียว)
+  if ((latitude == null) !== (longitude == null)) {
+    errors.push('latitude และ longitude ต้องมีค่าพร้อมกัน หรือเป็น null ทั้งคู่');
+    return errors;
+  }
+  if (latitude == null) return errors;
+
+  if (!isNum(latitude) || latitude < -90 || latitude > 90) {
+    errors.push('latitude ต้องเป็นตัวเลขระหว่าง -90 ถึง 90');
+  }
+  if (!isNum(longitude) || longitude < -180 || longitude > 180) {
+    errors.push('longitude ต้องเป็นตัวเลขระหว่าง -180 ถึง 180');
+  }
+  return errors;
+}
+
+exports.validateCoordinates = validateCoordinates;
+
 // 1. ดึงรายการร้านอาหารทั้งหมด พร้อมรองรับการค้นหาและฟิลเตอร์ (U1, U2, U3)
 exports.getShops = (req, res) => {
   try {
