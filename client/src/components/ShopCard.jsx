@@ -4,8 +4,9 @@
 
 import React from 'react';
 import { MapPin, Clock, ChevronRight, UtensilsCrossed } from 'lucide-react';
+import BookmarkButton from './BookmarkButton';
 
-export default function ShopCard({ shop, onSelect }) {
+export default function ShopCard({ shop, onSelect, isBookmarked = false, onToggleBookmark }) {
   const isOpen = shop.isOpen;
 
   // สีและสไตล์ตามโรงอาหาร
@@ -62,19 +63,24 @@ export default function ShopCard({ shop, onSelect }) {
           </div>
         </div>
 
-        {/* แถวที่ 2: ชื่อร้านและหมวดหมู่อาหาร */}
-        <div>
-          <h3 className={`text-base font-bold leading-tight ${isOpen ? 'text-slate-900 group-hover:text-emerald-700 transition' : 'text-slate-600'}`}>
-            {shop.name}
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
-            <span>{shop.categoryName}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3 text-slate-400" />
-              {shop.openingHours} น.
-            </span>
-          </p>
+        {/* แถวที่ 2: ชื่อร้านและหมวดหมู่อาหาร + ปุ่มบันทึกร้านโปรด (US14) */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className={`text-base font-bold leading-tight ${isOpen ? 'text-slate-900 group-hover:text-emerald-700 transition' : 'text-slate-600'}`}>
+              {shop.name}
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
+              <span>{shop.categoryName}</span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3 text-slate-400" />
+                {shop.openingHours} น.
+              </span>
+            </p>
+          </div>
+          {onToggleBookmark && (
+            <BookmarkButton active={isBookmarked} onToggle={onToggleBookmark} shopName={shop.name} />
+          )}
         </div>
 
         {/* สถานะเพิ่มเติมจากแม่ค้า (ถ้ามี) */}

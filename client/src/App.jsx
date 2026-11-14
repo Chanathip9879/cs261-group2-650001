@@ -10,6 +10,7 @@ import ShopDetailModal from './components/ShopDetailModal';
 import VendorLoginModal from './components/VendorLoginModal';
 import VendorDashboard from './components/VendorDashboard';
 import Toast from './components/Toast';
+import useBookmarks from './hooks/useBookmarks';
 import {
   getShops,
   getCanteens,
@@ -37,6 +38,9 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(authStorage.getUser());
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+
+  // US14: ร้านโปรด (เก็บใน localStorage)
+  const { bookmarkedIds, isBookmarked, toggleBookmark } = useBookmarks();
 
   // State UI
   const [isLoading, setIsLoading] = useState(true);
@@ -150,6 +154,15 @@ export default function App() {
     }
     showToast(message || 'อัปเดตสถานะร้านเรียบร้อย', 'success');
     loadMeta();
+  };
+
+  // US14: กดหัวใจบันทึก/เอาออกจากร้านโปรด
+  const handleToggleBookmark = (shop) => {
+    const saved = toggleBookmark(shop.id);
+    showToast(
+      saved ? `บันทึก "${shop.name}" เป็นร้านโปรดแล้ว` : `เอา "${shop.name}" ออกจากร้านโปรดแล้ว`,
+      saved ? 'success' : 'info'
+    );
   };
 
   // ค้นหาร้านของแม่ค้าที่กำลังล็อกอินอยู่
@@ -291,6 +304,8 @@ export default function App() {
                   key={shop.id}
                   shop={shop}
                   onSelect={(s) => setSelectedShop(s)}
+                  isBookmarked={isBookmarked(shop.id)}
+                  onToggleBookmark={() => handleToggleBookmark(shop)}
                 />
               ))}
             </div>
