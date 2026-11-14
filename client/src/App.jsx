@@ -10,6 +10,7 @@ import ShopDetailModal from './components/ShopDetailModal';
 import VendorLoginModal from './components/VendorLoginModal';
 import VendorDashboard from './components/VendorDashboard';
 import Toast from './components/Toast';
+import BookmarksPage from './components/BookmarksPage';
 import useBookmarks from './hooks/useBookmarks';
 import {
   getShops,
@@ -39,8 +40,9 @@ export default function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
 
-  // US14: ร้านโปรด (เก็บใน localStorage)
+  // US14: ร้านโปรด (เก็บใน localStorage) และหน้าที่แสดงอยู่ ('home' | 'bookmarks')
   const { bookmarkedIds, isBookmarked, toggleBookmark } = useBookmarks();
+  const [view, setView] = useState('home');
 
   // State UI
   const [isLoading, setIsLoading] = useState(true);
@@ -189,10 +191,23 @@ export default function App() {
         onRefresh={handleManualRefresh}
         isRefreshing={isRefreshing}
         activeShopStatus={currentLoggedInShop ? currentLoggedInShop.isOpen : false}
+        bookmarkCount={bookmarkedIds.length}
+        onOpenBookmarks={() => setView(view === 'bookmarks' ? 'home' : 'bookmarks')}
+        isBookmarksActive={view === 'bookmarks'}
       />
 
       {/* Container หลัก (Mobile First Container) */}
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12 space-y-4">
+        {view === 'bookmarks' ? (
+          <BookmarksPage
+            bookmarkedIds={bookmarkedIds}
+            isBookmarked={isBookmarked}
+            onToggleBookmark={handleToggleBookmark}
+            onSelectShop={(s) => setSelectedShop(s)}
+            onBack={() => setView('home')}
+          />
+        ) : (
+        <>
         {/* Banner สรุปสถานะ 2 โรงอาหารหลัก (กรีนแคนทีน & คณะวิทย์) */}
         <section className="pt-2">
           <div className="grid grid-cols-2 gap-2.5">
@@ -311,6 +326,8 @@ export default function App() {
             </div>
           )}
         </section>
+        </>
+        )}
       </main>
 
       {/* Footer ประจำเว็บ */}
