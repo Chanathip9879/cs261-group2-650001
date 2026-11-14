@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>กินไหนดี มธ.</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="brand">
+                <div class="brand-icon">🍜</div>
+                <div>
+                    <h1>กินไหนดี มธ.</h1>
+                    <p>ค้นหาร้านอร่อยในรั้วมหาวิทยาลัย</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+
+        <!-- Welcome -->
+        <section class="welcome">
+            <h2>วันนี้กินอะไรดี?</h2>
+            <p>ค้นหาร้านโปรดของคุณได้ที่นี่ 🍽️</p>
+        </section>
+
+        <!-- Search -->
+        <section class="search-section">
+            <label for="searchInput" class="section-label">
+                ค้นหาร้านอาหาร
+            </label>
+
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="ชื่อร้าน เมนูอาหาร หรือสถานที่..."
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="clearSearch"
+                    class="clear-button"
+                    aria-label="ล้างคำค้นหา"
+                >
+                    ✕
+                </button>
+            </div>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="filter-section">
+            <h3 class="section-label">หมวดหมู่อาหาร</h3>
+
+            <div class="category-list" id="categoryFilters">
+                <button
+                    type="button"
+                    class="category-button active"
+                    data-category="all"
+                >
+                    ทั้งหมด
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="อาหารตามสั่ง"
+                >
+                    🍳 อาหารตามสั่ง
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="ก๋วยเตี๋ยว"
+                >
+                    🍜 ก๋วยเตี๋ยว
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="ข้าว"
+                >
+                    🍚 ข้าว
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="เครื่องดื่ม"
+                >
+                    🧋 เครื่องดื่ม
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="ของหวาน"
+                >
+                    🍰 ของหวาน
+                </button>
+
+                <button
+                    type="button"
+                    class="category-button"
+                    data-category="อื่น ๆ"
+                >
+                    🍽️ อื่น ๆ
+                </button>
+            </div>
+        </section>
+
+        <!-- Open / Closed Filter -->
+        <section class="status-section">
+            <h3 class="section-label">สถานะร้าน</h3>
+
+            <div class="status-filters" id="statusFilters">
+                <button
+                    type="button"
+                    class="status-button active"
+                    data-status="all"
+                >
+                    ทั้งหมด
+                </button>
+
+                <button
+                    type="button"
+                    class="status-button"
+                    data-status="open"
+                >
+                    🟢 เปิดอยู่
+                </button>
+
+                <button
+                    type="button"
+                    class="status-button"
+                    data-status="closed"
+                >
+                    🔴 ปิดแล้ว
+                </button>
+            </div>
+        </section>
+
+        <!-- Restaurant Results -->
+        <section class="restaurant-section">
+
+            <div class="results-header">
+                <div>
+                    <h2>ร้านอาหาร</h2>
+                    <p>เลือกร้านที่อยากไปได้เลย</p>
+                </div>
+
+                <span id="resultCount" class="result-count">
+                    กำลังโหลด...
+                </span>
+            </div>
+
+            <!-- JavaScript will render restaurant cards here -->
+            <div id="restaurantList" class="restaurant-list"></div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" hidden>
+                <div class="empty-icon">🔎</div>
+                <h3>ไม่พบร้านอาหาร</h3>
+                <p>ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่นดูนะ</p>
+
+                <button
+                    type="button"
+                    id="resetFilters"
+                    class="reset-button"
+                >
+                    ล้างตัวกรอง
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" aria-label="เมนูหลัก">
+        <a href="#" class="nav-item active">
+            <span class="nav-icon">🏠</span>
+            <span>หน้าแรก</span>
+        </a>
+
+        <a href="#restaurantList" class="nav-item">
+            <span class="nav-icon">🍽️</span>
+            <span>ร้านอาหาร</span>
+        </a>
+
+        <a href="#searchInput" class="nav-item">
+            <span class="nav-icon">🔍</span>
+            <span>ค้นหา</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script src="js/search-filter.js" defer></script>
+
+</body>
+</html>

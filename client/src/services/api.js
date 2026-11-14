@@ -114,3 +114,46 @@ export async function getOpeningHours(shopId) {
   const data = await res.json();
   return data.data || [];
 }
+
+// บันทึกเวลาเปิด-ปิดรายวันของร้าน (U13) ต้องล็อกอินเป็นเจ้าของร้านหรือแอดมิน
+export async function saveOpeningHours(shopId, hours) {
+  const token = authStorage.getToken();
+  if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนตั้งเวลาเปิด-ปิดร้าน');
+
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/opening-hours`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ hours })
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || 'ไม่สามารถบันทึกเวลาเปิด-ปิดร้านได้');
+  }
+  return data;
+}
+
+
+// แจ้งเมนูหมด / เปิดขายอีกครั้ง (หน้า Merchant Dashboard)
+export async function updateMenuAvailability(shopId, menuId, isAvailable) {
+  const token = authStorage.getToken();
+  if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนแก้ไขเมนู');
+
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/menus/${menuId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ isAvailable })
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || 'ไม่สามารถอัปเดตเมนูได้');
+  }
+  return data;
+}

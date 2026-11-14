@@ -1,0 +1,27 @@
+### 1. ค้นหาทั้งหมด
+GET http://localhost:3000/api/restaurants/search
+Accept: application/json
+
+### 2. ค้นหาตามชื่อร้าน
+GET http://localhost:3000/api/restaurants/search?q=ป้าศรี
+Accept: application/json
+
+### 3. ค้นหาตามชื่ออาหาร
+GET http://localhost:3000/api/restaurants/search?q=กะเพรา
+Accept: application/json
+
+### 4. กรองเฉพาะโรงอาหารกรีนแคนทีน
+GET http://localhost:3000/api/restaurants/search?canteen=GREEN_CANTEEN
+Accept: application/json
+
+### 5. กรองเฉพาะโรงอาหารคณะวิทยาศาสตร์
+GET http://localhost:3000/api/restaurants/search?canteen=SCIENCE_FACULTY
+Accept: application/json
+
+### 6. กรองเฉพาะร้านที่เปิดอยู่ (is_open = true)
+GET http://localhost:3000/api/restaurants/search?status=OPEN
+Accept: application/json
+
+### 7. กรองผสม: กรีนแคนทีน + ร้านที่เปิด + หมวดก๋วยเตี๋ยว
+GET http://localhost:3000/api/restaurants/search?canteen=GREEN_CANTEEN&status=OPEN&category=ก๋วยเตี๋ยว
+Accept: application/json

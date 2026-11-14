@@ -2,7 +2,7 @@
 // ส่วนหัวของเว็บ Mobile-First แสดงชื่อแอป สถานะ Real-time และปุ่มสลับไปยังโหมดแม่ค้า (U4)
 
 import React, { useState, useEffect } from 'react';
-import { Store, RefreshCw, UserCheck, LogIn, Clock } from 'lucide-react';
+import { Store, RefreshCw, UserCheck, LogIn, Clock, Heart } from 'lucide-react';
 
 export default function Header({
   currentUser,
@@ -10,7 +10,10 @@ export default function Header({
   onOpenDashboard,
   onRefresh,
   isRefreshing,
-  activeShopStatus
+  activeShopStatus,
+  bookmarkCount = 0,
+  onOpenBookmarks,
+  isBookmarksActive = false
 }) {
   const [currentTime, setCurrentTime] = useState('');
 
@@ -70,6 +73,25 @@ export default function Header({
             >
               <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-emerald-600' : ''}`} />
             </button>
+
+            {/* ปุ่มร้านโปรด (US14) */}
+            {onOpenBookmarks && (
+              <button
+                onClick={onOpenBookmarks}
+                aria-label={`ร้านอาหารโปรด ${bookmarkCount} ร้าน`}
+                title="ร้านอาหารโปรด"
+                className={`relative p-2 rounded-xl active:scale-95 transition ${
+                  isBookmarksActive ? 'text-rose-500 bg-rose-50' : 'text-slate-600 hover:text-rose-500 hover:bg-slate-100'
+                }`}
+              >
+                <Heart className="w-4 h-4" fill={isBookmarksActive ? 'currentColor' : 'none'} />
+                {bookmarkCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    {bookmarkCount}
+                  </span>
+                )}
+              </button>
+            )}
 
             {/* ปุ่มสำหรับแม่ค้า/แอดมิน */}
             {currentUser ? (

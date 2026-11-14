@@ -3,6 +3,8 @@
 // day_of_week: 0 = อาทิตย์ ... 6 = เสาร์ (ตรงกับ Date.getDay() และตาราง opening_hours)
 
 export const DAY_NAMES = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+export const DAY_NAMES_EN = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+export const DAY_INITIALS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 // ลำดับการแสดงผล จันทร์ -> อาทิตย์ (ตามดีไซน์ Figma)
 export const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -39,4 +41,33 @@ export function buildFullWeek(rows, legacyText) {
     }
     return { day_of_week: day, is_closed: false, open_time: fallback.open, close_time: fallback.close };
   });
+}
+// หาแถวของวันนี้จาก rows ที่ได้จาก API (ไม่มีข้อมูลคืน null)
+export function getTodayRow(rows) {
+  const today = new Date().getDay();
+  return (rows || []).find((r) => r.day_of_week === today) || null;
+}
+
+// ตรวจความถูกต้อง คืน { [day_of_week]: ข้อความ error }
+export function validateWeek(week) {
+  const errors = {};
+  week.forEach((d) => {
+    if (d.is_closed) return;
+    if (!d.open_time || !d.close_time) {
+      errors[d.day_of_week] = 'กรุณาระบุเวลาเปิดและเวลาปิด';
+    } else if (timeToMinutes(d.open_time) >= timeToMinutes(d.close_time)) {
+      errors[d.day_of_week] = 'เวลาเปิดต้องน้อยกว่าเวลาปิด';
+    }
+  });
+  return errors;
+}
+
+// แปลงเป็นรูปแบบที่ API รับ (ส่งทั้ง 7 วัน)
+export function weekToPayload(week) {
+  return week.map((d) => ({
+    day_of_week: d.day_of_week,
+    is_closed: d.is_closed,
+    open_time: d.is_closed ? null : d.open_time,
+    close_time: d.is_closed ? null : d.close_time
+  }));
 }

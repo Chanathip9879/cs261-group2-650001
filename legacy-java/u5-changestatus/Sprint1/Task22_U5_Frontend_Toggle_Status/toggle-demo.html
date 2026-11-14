@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ทดสอบปุ่ม Toggle เปิด/ปิดร้าน - Task 22</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="toggle-switch.css">
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white p-6 rounded-3xl shadow-lg max-w-sm w-full text-center space-y-4">
+    <h2 class="text-lg font-bold text-slate-800">ทดสอบปุ่ม Toggle สถานะร้าน</h2>
+    <div class="flex items-center justify-center gap-4 py-4">
+      <span id="demoStatusLabel" class="font-bold text-emerald-600 text-lg">เปิดร้าน</span>
+      <label class="canteen-switch">
+        <input type="checkbox" id="demoToggleInput" checked>
+        <span class="canteen-slider"></span>
+      </label>
+    </div>
+    <p id="demoFeedback" class="text-xs text-slate-500">แตะเพื่อทดสอบสลับสถานะ</p>
+  </div>
+
+  <script src="toggle-status.js"></script>
+  <script>
+    const toggleInput = document.getElementById('demoToggleInput');
+    const label = document.getElementById('demoStatusLabel');
+    const feedback = document.getElementById('demoFeedback');
+
+    new RestaurantStatusToggle({
+      restaurantId: 1,
+      toggleElement: toggleInput,
+      onStatusChange: (success, status) => {
+        if (status === 'OPEN') {
+          label.textContent = 'เปิดร้าน';
+          label.className = 'font-bold text-emerald-600 text-lg';
+          feedback.textContent = 'ลูกค้าสามารถเห็นและสั่งอาหารได้';
+        } else {
+          label.textContent = 'ปิดร้าน';
+          label.className = 'font-bold text-rose-600 text-lg';
+          feedback.textContent = 'ร้านปิดทำการชั่วคราว';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

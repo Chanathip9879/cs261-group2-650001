@@ -1,0 +1,25 @@
+### 1. เปลี่ยนสถานะร้านเป็น CLOSED
+PATCH http://localhost:3000/api/restaurants/1/status
+Content-Type: application/json
+Authorization: Bearer mock_token_for_owner_1
+
+{
+  "status": "CLOSED"
+}
+
+### 2. เปลี่ยนสถานะร้านกลับเป็น OPEN
+PATCH http://localhost:3000/api/restaurants/1/status
+Content-Type: application/json
+Authorization: Bearer mock_token_for_owner_1
+
+{
+  "status": "OPEN"
+}
+
+### 3. พยายามส่งสถานะผิด (Bad Request)
+PATCH http://localhost:3000/api/restaurants/1/status
+Content-Type: application/json
+
+{
+  "status": "INVALID_STATUS"
+}

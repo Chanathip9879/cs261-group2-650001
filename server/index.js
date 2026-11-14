@@ -47,12 +47,18 @@ app.get('/api/auth/me', authMiddleware, authController.getMe);
 // U3: แสดงร้านอาหารและที่ตั้ง
 app.get('/api/shops', shopController.getShops);
 app.get('/api/shops/:id', shopController.getShopById);
+app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
 app.get('/api/canteens', shopController.getCanteens);
 app.get('/api/categories', shopController.getCategories);
 
 // U5: เปลี่ยนสถานะร้าน (Toggle Open/Closed) - ต้อง Login ก่อน
 app.put('/api/shops/:id/status', authMiddleware, shopController.toggleShopStatus);
 app.put('/api/shops/:id/details', authMiddleware, shopController.updateShopDetails);
+app.put('/api/shops/:id/menus/:menuId', authMiddleware, shopController.updateMenuAvailability);
+
+// เวลาเปิด-ปิดรายวัน (U12 ดู / U13 ตั้งเวลา)
+app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
+app.put('/api/shops/:id/opening-hours', authMiddleware, shopController.updateShopOpeningHours);
 
 // ==========================================
 // Serve Static Frontend (Production Build)
