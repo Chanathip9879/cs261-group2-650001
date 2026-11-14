@@ -75,7 +75,9 @@
       "accentColor": "#10B981",
       "rating": 4.8,
       "reviewCount": 42,
-      "lastStatusUpdate": "2026-10-20T10:09:34.783Z"
+      "lastStatusUpdate": "2026-10-20T10:09:34.783Z",
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-02",
@@ -95,7 +97,9 @@
       "accentColor": "#F59E0B",
       "rating": 4.6,
       "reviewCount": 38,
-      "lastStatusUpdate": "2026-10-19T08:45:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:45:00.000Z",
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-03",
@@ -115,7 +119,9 @@
       "accentColor": "#EF4444",
       "rating": 4.7,
       "reviewCount": 51,
-      "lastStatusUpdate": "2026-10-19T11:20:00.000Z"
+      "lastStatusUpdate": "2026-10-19T11:20:00.000Z",
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-04",
@@ -135,7 +141,9 @@
       "accentColor": "#06B6D4",
       "rating": 4.9,
       "reviewCount": 65,
-      "lastStatusUpdate": "2026-10-19T09:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:00:00.000Z",
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-05",
@@ -155,7 +163,9 @@
       "accentColor": "#F97316",
       "rating": 4.5,
       "reviewCount": 29,
-      "lastStatusUpdate": "2026-10-19T09:15:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:15:00.000Z",
+      "latitude": null,
+      "longitude": null
     },
     {
       "id": "shop-sci-01",
@@ -175,7 +185,9 @@
       "accentColor": "#10B981",
       "rating": 4.9,
       "reviewCount": 78,
-      "lastStatusUpdate": "2026-10-19T07:45:00.000Z"
+      "lastStatusUpdate": "2026-10-19T07:45:00.000Z",
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-02",
@@ -195,7 +207,9 @@
       "accentColor": "#EC4899",
       "rating": 4.7,
       "reviewCount": 44,
-      "lastStatusUpdate": "2026-10-19T08:10:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:10:00.000Z",
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-03",
@@ -215,7 +229,9 @@
       "accentColor": "#EF4444",
       "rating": 4.4,
       "reviewCount": 22,
-      "lastStatusUpdate": "2026-10-19T13:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T13:00:00.000Z",
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-04",
@@ -235,7 +251,9 @@
       "accentColor": "#8B5CF6",
       "rating": 4.8,
       "reviewCount": 59,
-      "lastStatusUpdate": "2026-10-19T09:40:00.000Z"
+      "lastStatusUpdate": "2026-10-19T09:40:00.000Z",
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-05",
@@ -255,7 +273,9 @@
       "accentColor": "#0EA5E9",
       "rating": 4.7,
       "reviewCount": 35,
-      "lastStatusUpdate": "2026-10-19T08:00:00.000Z"
+      "lastStatusUpdate": "2026-10-19T08:00:00.000Z",
+      "latitude": null,
+      "longitude": null
     }
   ],
   "admins": [
@@ -267,7 +287,6 @@
       "role": "admin"
     }
   ],
-
   "opening_hours": [
     {
       "id": "oh-001",
