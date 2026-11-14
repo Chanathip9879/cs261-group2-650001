@@ -1,12 +1,14 @@
 // client/src/pages/MerchantLoginPage.jsx
 // เข้าสู่ระบบร้านค้า (Merchant Secure Login) — U4
 // Step 1 = เบอร์โทรศัพท์ร้าน (Merchant ID), Step 2 = รหัส PIN 4-6 หลัก แล้วเรียก /api/auth/login
+// U7: แสดงข้อความเมื่อบัญชีถูกล็อก พร้อมนับถอยหลัง และปิดการกรอก PIN / ปุ่ม Login ระหว่างล็อก
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Store, Lock, ShieldCheck, ShieldPlus, Contact, KeyRound, Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, Loader2, Zap,
+  Store, Lock, ShieldCheck, ShieldPlus, ShieldAlert, Timer, Contact, KeyRound, Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, Loader2, Zap,
 } from 'lucide-react';
 import { loginVendor, authStorage } from '../services/api';
+import useLoginLock, { formatCountdown } from '../hooks/useLoginLock';
 import { navigate, routes } from '../router';
 import merchantHero from '../assets/images/merchant-hero.jpg';
 
@@ -20,12 +22,29 @@ export default function MerchantLoginPage({ onLoginSuccess }) {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
+  const [info, setInfo] = useState('');
+
   const digits = phone.replace(/\D/g, '');
   const phoneValid = /^0\d{9}$/.test(digits);
+  const { isLocked, remainingMs, lock } = useLoginLock(digits);
+  const lastLock = useRef({ digits, isLocked });
+
+  // U7: หมดเวลาล็อก -> เปิดให้ Login ได้อีกครั้งอัตโนมัติ (แจ้งเฉพาะเมื่อเบอร์เดิมหมดเวลาล็อก)
+  useEffect(() => {
+    const prev = lastLock.current;
+    if (prev.digits === digits && prev.isLocked && !isLocked) {
+      setError('');
+      setInfo('ปลดล็อกแล้ว สามารถเข้าสู่ระบบได้อีกครั้ง');
+    } else if (prev.digits !== digits) {
+      setInfo('');
+    }
+    lastLock.current = { digits, isLocked };
+  }, [digits, isLocked]);
 
   const doLogin = async (p, code) => {
     setBusy(true);
     setError('');
+    setInfo('');
     try {
       const res = await loginVendor(p, code);
       authStorage.setToken(res.token);
@@ -33,7 +52,17 @@ export default function MerchantLoginPage({ onLoginSuccess }) {
       onLoginSuccess(res.user, res.message);
       navigate(routes.merchant);
     } catch (err) {
-      setError(err.message || 'เข้าสู่ระบบไม่สำเร็จ');
+      if (err.locked) {
+        // แสดงสถานะล็อกของเบอร์ที่เพิ่งลอง (รวมกรณีกดบัญชีตัวอย่าง)
+        setPhone(p);
+        setStep(2);
+        setPin('');
+        if (err.unlockAt) lock(p, err.unlockAt);
+        // Failure: ถูกล็อกแต่ไม่ได้รับเวลาปลดล็อก -> ไม่นับถอยหลัง ให้ลองใหม่ภายหลัง
+        else setError('บัญชีถูกล็อกชั่วคราว กรุณาลองใหม่ภายหลัง');
+      } else {
+        setError(err.message || 'เข้าสู่ระบบไม่สำเร็จ');
+      }
     } finally {
       setBusy(false);
     }
@@ -41,7 +70,9 @@ export default function MerchantLoginPage({ onLoginSuccess }) {
 
   const submit = (e) => {
     e.preventDefault();
+    if (isLocked) return;
     setError('');
+    setInfo('');
     if (step === 1) {
       if (!phoneValid) return setError('กรุณากรอกเบอร์โทรศัพท์ร้าน 10 หลัก (เช่น 0811111111)');
       setStep(2);
@@ -171,8 +202,9 @@ export default function MerchantLoginPage({ onLoginSuccess }) {
                     maxLength={6}
                     value={pin}
                     onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                    placeholder="••••"
-                    className="h-12 flex-1 bg-transparent text-sm tracking-widest text-ink outline-none"
+                    placeholder={isLocked ? 'ถูกล็อกชั่วคราว' : '••••'}
+                    disabled={isLocked}
+                    className="h-12 flex-1 bg-transparent text-sm tracking-widest text-ink outline-none disabled:cursor-not-allowed disabled:tracking-normal disabled:opacity-60"
                     autoFocus
                   />
                   <button type="button" onClick={() => setShowPin((v) => !v)} aria-label={showPin ? 'ซ่อน PIN' : 'แสดง PIN'} className="text-ink-muted">
@@ -190,20 +222,56 @@ export default function MerchantLoginPage({ onLoginSuccess }) {
               </span>
             </div>
 
-            {error && <p className="rounded-lg bg-danger-soft/60 px-3 py-2 text-xs text-danger">{error}</p>}
+            {/* U7: Lockout alert + countdown */}
+            {isLocked && (
+              <div role="alert" aria-live="polite" className="space-y-2 rounded-lg border border-brand-accent/40 bg-brand-peach/40 p-4">
+                <p className="flex items-center gap-2 text-sm font-semibold text-brand-deep">
+                  <ShieldAlert className="size-5 shrink-0 text-brand-accent" /> บัญชีถูกล็อกชั่วคราว
+                </p>
+                <p className="text-xs leading-5 text-ink-muted">
+                  กรอกรหัส PIN ผิดเกินจำนวนครั้งที่กำหนด เพื่อความปลอดภัยของร้าน กรุณารอจนครบเวลาแล้วลองใหม่อีกครั้ง
+                </p>
+                <div className="flex items-center justify-between rounded-lg bg-white px-3 py-2">
+                  <span className="flex items-center gap-1.5 text-xs font-semibold text-brand">
+                    <Timer className="size-4" /> ลองใหม่ได้ในอีก
+                  </span>
+                  <span className="font-mono text-xl font-bold tabular-nums text-ink" aria-label="เวลาที่เหลือก่อนปลดล็อก">
+                    {formatCountdown(remainingMs)}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {!isLocked && info && (
+              <p className="flex items-center gap-2 rounded-lg bg-ok-soft/40 px-3 py-2 text-xs text-ok">
+                <CheckCircle2 className="size-4 shrink-0" /> {info}
+              </p>
+            )}
+
+            {!isLocked && error && (
+              <p data-testid="login-error" className="rounded-lg bg-danger-soft/60 px-3 py-2 text-xs text-danger">{error}</p>
+            )}
 
             <button
               type="submit"
-              disabled={busy}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-accent py-3.5 text-sm font-semibold text-white shadow-lift transition hover:bg-brand-accent/90 disabled:opacity-60"
+              disabled={busy || isLocked}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-accent py-3.5 text-sm font-semibold text-white shadow-lift transition hover:bg-brand-accent/90 disabled:cursor-not-allowed disabled:bg-surface-high disabled:text-ink-muted disabled:shadow-none"
             >
-              {busy && <Loader2 className="size-4 animate-spin" />}
-              {step === 1 ? 'ตรวจสอบความปลอดภัย & ขั้นตอน 2FA' : 'เข้าสู่แดชบอร์ดร้านค้า'} <ArrowRight className="size-4" />
+              {isLocked ? (
+                <>
+                  <Lock className="size-4" /> ล็อกอยู่ ลองใหม่ใน {formatCountdown(remainingMs)}
+                </>
+              ) : (
+                <>
+                  {busy && <Loader2 className="size-4 animate-spin" />}
+                  {step === 1 ? 'ตรวจสอบความปลอดภัย & ขั้นตอน 2FA' : 'เข้าสู่แดชบอร์ดร้านค้า'} <ArrowRight className="size-4" />
+                </>
+              )}
             </button>
 
             <button
               type="button"
-              disabled={busy}
+              disabled={busy || (isLocked && digits === DEMO.phone)}
               onClick={() => doLogin(DEMO.phone, DEMO.pin)}
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-surface-high py-2.5 text-xs font-semibold text-ink-muted hover:bg-surface-low"
             >
