@@ -2,7 +2,8 @@
 // U3: แสดงร้านอาหารและที่ตั้ง (แสดงรายละเอียดร้าน ผังโรงอาหาร และรายการเมนู)
 
 import React from 'react';
-import { X, MapPin, Clock, Phone, Utensils, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { X, MapPin, Phone, Utensils, AlertCircle } from 'lucide-react';
+import OpeningHoursTable from './OpeningHoursTable';
 
 export default function ShopDetailModal({ shop, onClose }) {
   if (!shop) return null;
@@ -93,10 +94,8 @@ export default function ShopDetailModal({ shop, onClose }) {
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 text-sm text-slate-700">
-              <Clock className="w-4 h-4 flex-shrink-0 text-slate-500" />
-              <span>เวลาเปิด-ปิด: <strong className="font-semibold">{shop.openingHours} น.</strong></span>
-            </div>
+            {/* U12: เวลาเปิด-ปิดรายวัน */}
+            <OpeningHoursTable shopId={shop.id} fallbackText={shop.openingHours} />
 
             <div className="flex items-center gap-2.5 text-sm text-slate-700">
               <Phone className="w-4 h-4 flex-shrink-0 text-slate-500" />

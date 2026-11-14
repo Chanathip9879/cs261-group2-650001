@@ -106,3 +106,33 @@ export async function updateShopStatus(shopId, isOpen, statusNote) {
   }
   return data;
 }
+
+// ดึงเวลาเปิด-ปิดรายวันของร้าน (U12) คืน array ของแถว opening_hours
+export async function getOpeningHours(shopId) {
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/opening-hours`);
+  if (!res.ok) throw new Error('ไม่สามารถโหลดเวลาเปิด-ปิดร้านได้');
+  const data = await res.json();
+  return data.data || [];
+}
+
+// บันทึกเวลาเปิด-ปิดรายวันของร้าน (U13) ต้องล็อกอินเป็นเจ้าของร้านหรือแอดมิน
+export async function saveOpeningHours(shopId, hours) {
+  const token = authStorage.getToken();
+  if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนตั้งเวลาเปิด-ปิดร้าน');
+
+  const res = await fetch(`${BASE_URL}/shops/${shopId}/opening-hours`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ hours })
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || 'ไม่สามารถบันทึกเวลาเปิด-ปิดร้านได้');
+  }
+  return data;
+}
+
