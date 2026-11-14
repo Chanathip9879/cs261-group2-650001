@@ -231,3 +231,46 @@ exports.updateShopDetails = (req, res) => {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
   }
 };
+
+
+// ==========================================
+// Opening hours API (เชื่อมกับ helper ของ Task47) — ใช้กับ Frontend Task46 / Task49
+// ==========================================
+
+// GET /api/shops/:id/opening-hours (สาธารณะ) — เวลาเปิด-ปิดรายวันของร้าน
+exports.getShopOpeningHours = (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = readDb();
+    if (!db.shops.some(s => s.id === id)) {
+      return res.status(404).json({ success: false, message: 'ไม่พบร้านอาหาร' });
+    }
+    return res.json({ success: true, data: getOpeningHoursByShop(db, id) });
+  } catch (err) {
+    console.error('Error reading opening hours:', err);
+    return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการอ่านเวลาเปิด-ปิดร้าน' });
+  }
+};
+
+// PUT /api/shops/:id/opening-hours (ต้อง Login) — body: { hours: [{ day_of_week, open_time, close_time, is_closed }] }
+exports.updateShopOpeningHours = (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = req.user;
+    const db = readDb();
+    if (!db.shops.some(s => s.id === id)) {
+      return res.status(404).json({ success: false, message: 'ไม่พบร้านอาหาร' });
+    }
+    if (user.role !== 'admin' && user.shopId !== id) {
+      return res.status(403).json({ success: false, message: 'ท่านไม่มีสิทธิ์แก้ไขเวลาของร้านอาหารนี้' });
+    }
+    const result = setOpeningHours(id, req.body && req.body.hours);
+    if (!result.ok) {
+      return res.status(400).json({ success: false, message: result.errors.join(', '), errors: result.errors });
+    }
+    return res.json({ success: true, message: 'บันทึกเวลาเปิด-ปิดร้านเรียบร้อยแล้ว', data: result.data });
+  } catch (err) {
+    console.error('Error saving opening hours:', err);
+    return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกเวลาเปิด-ปิดร้าน' });
+  }
+};

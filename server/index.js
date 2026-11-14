@@ -54,6 +54,10 @@ app.get('/api/categories', shopController.getCategories);
 app.put('/api/shops/:id/status', authMiddleware, shopController.toggleShopStatus);
 app.put('/api/shops/:id/details', authMiddleware, shopController.updateShopDetails);
 
+// เวลาเปิด-ปิดรายวัน (U12 ดู / U13 ตั้งเวลา)
+app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
+app.put('/api/shops/:id/opening-hours', authMiddleware, shopController.updateShopOpeningHours);
+
 // ==========================================
 // Serve Static Frontend (Production Build)
 // ==========================================
