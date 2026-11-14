@@ -40,3 +40,27 @@ export function buildFullWeek(rows, legacyText) {
     return { day_of_week: day, is_closed: false, open_time: fallback.open, close_time: fallback.close };
   });
 }
+
+// ตรวจความถูกต้อง คืน { [day_of_week]: ข้อความ error }
+export function validateWeek(week) {
+  const errors = {};
+  week.forEach((d) => {
+    if (d.is_closed) return;
+    if (!d.open_time || !d.close_time) {
+      errors[d.day_of_week] = 'กรุณาระบุเวลาเปิดและเวลาปิด';
+    } else if (timeToMinutes(d.open_time) >= timeToMinutes(d.close_time)) {
+      errors[d.day_of_week] = 'เวลาเปิดต้องน้อยกว่าเวลาปิด';
+    }
+  });
+  return errors;
+}
+
+// แปลงเป็นรูปแบบที่ API รับ (ส่งทั้ง 7 วัน)
+export function weekToPayload(week) {
+  return week.map((d) => ({
+    day_of_week: d.day_of_week,
+    is_closed: d.is_closed,
+    open_time: d.is_closed ? null : d.open_time,
+    close_time: d.is_closed ? null : d.close_time
+  }));
+}
