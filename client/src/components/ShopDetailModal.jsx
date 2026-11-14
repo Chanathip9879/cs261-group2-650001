@@ -100,10 +100,8 @@ export default function ShopDetailModal({ shop, onClose, isBookmarked = false, o
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 text-sm text-slate-700">
-              <Clock className="w-4 h-4 flex-shrink-0 text-slate-500" />
-              <span>เวลาเปิด-ปิด: <strong className="font-semibold">{shop.openingHours} น.</strong></span>
-            </div>
+            {/* U12: เวลาเปิด-ปิดรายวัน */}
+            <OpeningHoursTable shopId={shop.id} fallbackText={shop.openingHours} />
 
             <div className="flex items-center gap-2.5 text-sm text-slate-700">
               <Phone className="w-4 h-4 flex-shrink-0 text-slate-500" />

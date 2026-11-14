@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { Power, Check, AlertCircle, LogOut, Store, Clock, MapPin, Save } from 'lucide-react';
 import { updateShopStatus } from '../services/api';
+import OpeningHoursForm from './OpeningHoursForm';
 
 export default function VendorDashboard({
   currentUser,
@@ -156,6 +157,12 @@ export default function VendorDashboard({
             </button>
           </div>
         </div>
+
+        {/* U13: ฟอร์มตั้งเวลาเปิด/ปิดร้านรายวัน */}
+        <OpeningHoursForm
+          shop={currentShop}
+          onSaved={(msg) => onStatusUpdated(currentShop, msg)}
+        />
 
         {/* ข้อมูลทั่วไปของร้าน */}
         <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-slate-600 space-y-2">
