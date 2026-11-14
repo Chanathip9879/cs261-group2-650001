@@ -47,6 +47,7 @@ app.get('/api/auth/me', authMiddleware, authController.getMe);
 // U3: แสดงร้านอาหารและที่ตั้ง
 app.get('/api/shops', shopController.getShops);
 app.get('/api/shops/:id', shopController.getShopById);
+app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
 app.get('/api/canteens', shopController.getCanteens);
 app.get('/api/categories', shopController.getCategories);
 

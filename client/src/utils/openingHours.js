@@ -40,6 +40,11 @@ export function buildFullWeek(rows, legacyText) {
     return { day_of_week: day, is_closed: false, open_time: fallback.open, close_time: fallback.close };
   });
 }
+// หาแถวของวันนี้จาก rows ที่ได้จาก API (ไม่มีข้อมูลคืน null)
+export function getTodayRow(rows) {
+  const today = new Date().getDay();
+  return (rows || []).find((r) => r.day_of_week === today) || null;
+}
 
 // ตรวจความถูกต้อง คืน { [day_of_week]: ข้อความ error }
 export function validateWeek(week) {

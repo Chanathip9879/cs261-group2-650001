@@ -10,6 +10,8 @@ import ShopDetailModal from './components/ShopDetailModal';
 import VendorLoginModal from './components/VendorLoginModal';
 import VendorDashboard from './components/VendorDashboard';
 import Toast from './components/Toast';
+import BookmarksPage from './components/BookmarksPage';
+import useBookmarks from './hooks/useBookmarks';
 import {
   getShops,
   getCanteens,
@@ -37,6 +39,10 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(authStorage.getUser());
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
+
+  // US14: ร้านโปรด (เก็บใน localStorage) และหน้าที่แสดงอยู่ ('home' | 'bookmarks')
+  const { bookmarkedIds, isBookmarked, toggleBookmark } = useBookmarks();
+  const [view, setView] = useState('home');
 
   // State UI
   const [isLoading, setIsLoading] = useState(true);
@@ -152,6 +158,15 @@ export default function App() {
     loadMeta();
   };
 
+  // US14: กดหัวใจบันทึก/เอาออกจากร้านโปรด
+  const handleToggleBookmark = (shop) => {
+    const saved = toggleBookmark(shop.id);
+    showToast(
+      saved ? `บันทึก "${shop.name}" เป็นร้านโปรดแล้ว` : `เอา "${shop.name}" ออกจากร้านโปรดแล้ว`,
+      saved ? 'success' : 'info'
+    );
+  };
+
   // ค้นหาร้านของแม่ค้าที่กำลังล็อกอินอยู่
   const currentLoggedInShop = currentUser && currentUser.shopId
     ? shops.find(s => s.id === currentUser.shopId)
@@ -176,10 +191,23 @@ export default function App() {
         onRefresh={handleManualRefresh}
         isRefreshing={isRefreshing}
         activeShopStatus={currentLoggedInShop ? currentLoggedInShop.isOpen : false}
+        bookmarkCount={bookmarkedIds.length}
+        onOpenBookmarks={() => setView(view === 'bookmarks' ? 'home' : 'bookmarks')}
+        isBookmarksActive={view === 'bookmarks'}
       />
 
       {/* Container หลัก (Mobile First Container) */}
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-12 space-y-4">
+        {view === 'bookmarks' ? (
+          <BookmarksPage
+            bookmarkedIds={bookmarkedIds}
+            isBookmarked={isBookmarked}
+            onToggleBookmark={handleToggleBookmark}
+            onSelectShop={(s) => setSelectedShop(s)}
+            onBack={() => setView('home')}
+          />
+        ) : (
+        <>
         {/* Banner สรุปสถานะ 2 โรงอาหารหลัก (กรีนแคนทีน & คณะวิทย์) */}
         <section className="pt-2">
           <div className="grid grid-cols-2 gap-2.5">
@@ -291,11 +319,15 @@ export default function App() {
                   key={shop.id}
                   shop={shop}
                   onSelect={(s) => setSelectedShop(s)}
+                  isBookmarked={isBookmarked(shop.id)}
+                  onToggleBookmark={() => handleToggleBookmark(shop)}
                 />
               ))}
             </div>
           )}
         </section>
+        </>
+        )}
       </main>
 
       {/* Footer ประจำเว็บ */}
@@ -315,6 +347,8 @@ export default function App() {
         <ShopDetailModal
           shop={selectedShop}
           onClose={() => setSelectedShop(null)}
+          isBookmarked={isBookmarked(selectedShop.id)}
+          onToggleBookmark={() => handleToggleBookmark(selectedShop)}
         />
       )}
 
