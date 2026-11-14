@@ -3,6 +3,8 @@
 // day_of_week: 0 = อาทิตย์ ... 6 = เสาร์ (ตรงกับ Date.getDay() และตาราง opening_hours)
 
 export const DAY_NAMES = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+export const DAY_NAMES_EN = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+export const DAY_INITIALS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 // ลำดับการแสดงผล จันทร์ -> อาทิตย์ (ตามดีไซน์ Figma)
 export const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
