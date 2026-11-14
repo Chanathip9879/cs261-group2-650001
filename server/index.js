@@ -54,6 +54,7 @@ app.get('/api/categories', shopController.getCategories);
 // U5: เปลี่ยนสถานะร้าน (Toggle Open/Closed) - ต้อง Login ก่อน
 app.put('/api/shops/:id/status', authMiddleware, shopController.toggleShopStatus);
 app.put('/api/shops/:id/details', authMiddleware, shopController.updateShopDetails);
+app.put('/api/shops/:id/menus/:menuId', authMiddleware, shopController.updateMenuAvailability);
 
 // เวลาเปิด-ปิดรายวัน (U12 ดู / U13 ตั้งเวลา)
 app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
