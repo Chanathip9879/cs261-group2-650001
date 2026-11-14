@@ -3,7 +3,6 @@
 
 import React from 'react';
 import { X, MapPin, Clock, Phone, Utensils, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
-import { X, MapPin, Phone, Utensils, AlertCircle } from 'lucide-react';
 import OpeningHoursTable from './OpeningHoursTable';
 import BookmarkButton from './BookmarkButton';
 
