@@ -1,9 +1,11 @@
 // client/src/components/VendorLoginModal.jsx
 // U4: Log in จัดการร้านอาหาร (เข้าสู่ระบบด้วยเบอร์โทรศัพท์ + รหัส PIN 4-6 หลัก)
+// U7: แสดงข้อความเมื่อบัญชีถูกล็อก พร้อมนับถอยหลังเวลาที่เหลือ และปิดการ Login ระหว่างล็อก
 
-import React, { useState } from 'react';
-import { X, Lock, Phone, Eye, EyeOff, Sparkles, AlertCircle, ArrowRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, Lock, Phone, Eye, EyeOff, Sparkles, AlertCircle, ArrowRight, ShieldAlert, Timer, CheckCircle2 } from 'lucide-react';
 import { loginVendor, authStorage } from '../services/api';
+import useLoginLock, { formatCountdown } from '../hooks/useLoginLock';
 
 export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [phone, setPhone] = useState('');
@@ -11,12 +13,30 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
   const [showPin, setShowPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
+  const { isLocked, remainingMs, lock } = useLoginLock(phone);
+  const lastLock = useRef({ phone, isLocked });
+
+  // U7: หมดเวลาล็อก -> เปิดให้ Login ได้อีกครั้งอัตโนมัติ พร้อมแจ้งผู้ใช้
+  // (แจ้งเฉพาะเมื่อเบอร์เดิมหมดเวลาล็อก ไม่ใช่ตอนผู้ใช้เปลี่ยนไปพิมพ์เบอร์อื่น)
+  useEffect(() => {
+    const prev = lastLock.current;
+    if (prev.phone === phone && prev.isLocked && !isLocked) {
+      setErrorMessage('');
+      setInfoMessage('ปลดล็อกแล้ว สามารถเข้าสู่ระบบได้อีกครั้ง');
+    } else if (prev.phone !== phone) {
+      setInfoMessage('');
+    }
+    lastLock.current = { phone, isLocked };
+  }, [phone, isLocked]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLocked) return;
     setErrorMessage('');
+    setInfoMessage('');
 
     if (!phone || !pin) {
       setErrorMessage('กรุณากรอกทั้งเบอร์โทรศัพท์และรหัส PIN');
@@ -33,7 +53,17 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
         onClose();
       }
     } catch (err) {
-      setErrorMessage(err.message || 'เข้าสู่ระบบไม่สำเร็จ ตรวจสอบเบอร์และ PIN');
+      if (err.locked && err.unlockAt) {
+        // ถูกล็อกและรู้เวลาปลดล็อก -> แสดงกล่องนับถอยหลังแทนข้อความ error
+        lock(phone, err.unlockAt);
+        setPin('');
+      } else if (err.locked) {
+        // Failure: ถูกล็อกแต่ไม่ได้รับเวลาปลดล็อก -> ไม่นับถอยหลัง ให้ลองใหม่ภายหลัง
+        setPin('');
+        setErrorMessage('บัญชีถูกล็อกชั่วคราว กรุณาลองใหม่ภายหลัง');
+      } else {
+        setErrorMessage(err.message || 'เข้าสู่ระบบไม่สำเร็จ ตรวจสอบเบอร์และ PIN');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -44,6 +74,7 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
     setPhone(demoPhone);
     setPin(demoPin);
     setErrorMessage('');
+    setInfoMessage('');
   };
 
   return (
@@ -72,9 +103,42 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
           </button>
         </div>
 
+        {/* U7: Lockout Alert + Countdown */}
+        {isLocked && (
+          <div
+            role="alert"
+            aria-live="polite"
+            className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 space-y-2"
+          >
+            <div className="flex items-center gap-2 text-sm font-bold">
+              <ShieldAlert className="w-5 h-5 flex-shrink-0 text-amber-600" />
+              บัญชีถูกล็อกชั่วคราว
+            </div>
+            <p className="text-xs leading-relaxed">
+              กรอกรหัส PIN ผิดเกินจำนวนครั้งที่กำหนด เพื่อความปลอดภัยของร้าน กรุณารอจนครบเวลาแล้วลองใหม่อีกครั้ง
+            </p>
+            <div className="flex items-center justify-between rounded-xl bg-white/80 px-3 py-2">
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-800">
+                <Timer className="w-4 h-4" /> ลองใหม่ได้ในอีก
+              </span>
+              <span className="font-mono text-xl font-bold tabular-nums text-amber-900" aria-label="เวลาที่เหลือก่อนปลดล็อก">
+                {formatCountdown(remainingMs)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Unlock notice */}
+        {!isLocked && infoMessage && (
+          <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-600" />
+            <span>{infoMessage}</span>
+          </div>
+        )}
+
         {/* Error Alert */}
-        {errorMessage && (
-          <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+        {!isLocked && errorMessage && (
+          <div data-testid="login-error" className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-600" />
             <span>{errorMessage}</span>
           </div>
@@ -113,9 +177,10 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
                 type={showPin ? 'text' : 'password'}
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                placeholder="••••"
+                placeholder={isLocked ? 'ถูกล็อกชั่วคราว' : '••••'}
                 maxLength={6}
-                className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium tracking-widest text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition"
+                disabled={isLocked}
+                className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium tracking-widest text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 focus:bg-white transition disabled:cursor-not-allowed disabled:opacity-60 disabled:tracking-normal"
               />
               <button
                 type="button"
@@ -129,10 +194,15 @@ export default function VendorLoginModal({ isOpen, onClose, onLoginSuccess }) {
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-2xl text-sm transition shadow-md shadow-emerald-600/20 active:scale-[0.99] flex items-center justify-center gap-2"
+            disabled={isLoading || isLocked}
+            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-2xl text-sm transition shadow-md shadow-emerald-600/20 active:scale-[0.99] flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none disabled:active:scale-100"
           >
-            {isLoading ? (
+            {isLocked ? (
+              <>
+                <Lock className="w-4 h-4" />
+                <span>ล็อกอยู่ ลองใหม่ใน {formatCountdown(remainingMs)}</span>
+              </>
+            ) : isLoading ? (
               <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
             ) : (
               <>
