@@ -284,7 +284,7 @@
       "accentColor": "#F97316",
       "rating": 4.5,
       "reviewCount": 29,
-      "lastStatusUpdate": "2026-10-19T09:15:00.000Z",
+      "lastStatusUpdate": "2026-11-15T15:19:53.734Z",
       "menus": [
         {
           "id": "m16",
@@ -302,7 +302,8 @@
           "id": "m18",
           "name": "สะโพกไก่ทอดกรอบชิ้นใหญ่",
           "price": 35,
-          "isAvailable": true
+          "isAvailable": false,
+          "is_sold_out": true
         }
       ],
       "latitude": null,
