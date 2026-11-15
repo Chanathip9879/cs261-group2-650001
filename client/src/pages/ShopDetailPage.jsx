@@ -10,6 +10,7 @@ import { StatusPill, HeartButton, Stars, Spinner, LiveDot } from '../components/
 import { getOpeningHours } from '../services/api';
 import { getTodayRow } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
+import ShopContactCard from '../components/ShopContactCard';
 import {
   getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone, isSoldOut,
 } from '../utils/shopDisplay';
@@ -214,6 +215,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
               </span>
             </div>
             <WeeklyHours rows={hoursRows} fallbackText={shop.openingHours} />
+            <ShopContactCard shopId={shop.id} />
             <div className="hidden space-y-3 lg:block">
               <a
                 href={telHref(shop.phone)}
