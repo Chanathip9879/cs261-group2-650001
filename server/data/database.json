@@ -62,53 +62,842 @@
       "id": "drinks_dessert",
       "name": "เครื่องดื่ม/ของหวาน",
       "icon": "CupSoda"
+    },
+    {
+      "id": "other",
+      "name": "อื่น ๆ",
+      "icon": "Utensils"
     }
   ],
   "shops": [
     {
-      "id": "shop-green-01",
-      "name": "ร้านป้าณี ข้าวราดแกงรสเด็ด",
-      "canteen": "green",
-      "canteenName": "โรงอาหารกรีนแคนทีน",
-      "boothNumber": "ล็อค G-01",
-      "locationDetails": "โซนปีกซ้าย ติดประตูทางเข้าฝั่งลานกิจกรรม",
-      "category": "rice_curry",
-      "categoryName": "ข้าวราดแกง",
+      "id": "shop-sc-01",
+      "name": "ร้านยำยูป้า",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "papaya_salad",
+      "categoryName": "ส้มตำ/ยำรสเด็ด",
       "isOpen": true,
-      "statusNote": "เปิดให้บริการตามปกติ",
-      "openingHours": "07:00 - 15:30",
-      "phone": "0811111111",
-      "line_id": "@sample-g01",
-      "facebook": "SAMPLE Shop G01",
-      "other_contact": "IG: sample_g01",
-      "pin": "1111",
-      "vendorName": "ป้าณี ศรีรังสิต",
-      "accentColor": "#10B981",
-      "rating": 4.8,
-      "reviewCount": 42,
-      "lastStatusUpdate": "2026-10-20T10:09:34.783Z",
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
-          "id": "m1",
-          "name": "ข้าวราดแกง 1 อย่าง",
+          "id": "shop-sc-01-m1",
+          "name": "ยำ (หมูสับ)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m2",
+          "name": "ยำ (ธรรมดา)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m3",
+          "name": "ยำ (ปลากระป๋อง)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m4",
+          "name": "ยำ (ธรรมดา ปลากระป๋อง)",
           "price": 35,
           "isAvailable": true
         },
         {
-          "id": "m2",
-          "name": "ข้าวราดแกง 2 อย่าง",
-          "price": 45,
+          "id": "shop-sc-01-m5",
+          "name": "ยำ (รวมมิตร)",
+          "price": 35,
           "isAvailable": true
         },
         {
-          "id": "m3",
-          "name": "พะแนงหมูสูตรโบราณ",
+          "id": "shop-sc-01-m6",
+          "name": "ยำ (ทะเล)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m7",
+          "name": "ยำ (รวมมิตรปลากระป๋อง)",
           "price": 40,
           "isAvailable": true
         },
         {
-          "id": "m4",
-          "name": "ไข่พะโล้ยางมะตูม",
+          "id": "shop-sc-01-m8",
+          "name": "ยำ (ทะเล ปลากระป๋อง)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m9",
+          "name": "เพิ่มท็อปปิ้งยำ (ไส้กรอกชีส)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m10",
+          "name": "เพิ่มท็อปปิ้งยำ (ไส้กรอกหนังกรอบ)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m11",
+          "name": "เพิ่มท็อปปิ้งยำ (นักเก็ต)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m12",
+          "name": "เพิ่มท็อปปิ้งยำ (ไข่)",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m13",
+          "name": "เพิ่มท็อปปิ้งยำ (เกี๊ยว)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-01-m14",
+          "name": "เพิ่มท็อปปิ้งยำ (เพิ่มหมูสับ)",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-02",
+      "name": "นิติกาญจน์",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-02-m1",
+          "name": "ข้าวราดผัดกะเพราหมูสับ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m2",
+          "name": "ข้าวราดผัดพริกแกงไก่",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m3",
+          "name": "ข้าวราดหมูกระเทียม",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m4",
+          "name": "ข้าวราดกะเพราหมูกรอบ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m5",
+          "name": "ข้าวผัดอเมริกัน",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m6",
+          "name": "ผัดมาม่าหมูสับ",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m7",
+          "name": "สุกี้น้ำ/สุกี้แห้ง",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m8",
+          "name": "ไข่ดาว/ไข่เจียว",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m9",
+          "name": "ข้าวไข่เจียวหมูสับ",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m10",
+          "name": "ข้าวไข่เจียวเห็ดเข็มทอง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m11",
+          "name": "ข้าวไข่เจียวกุ้ง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m12",
+          "name": "ข้าวไข่เจียวแหนม",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m13",
+          "name": "ข้าวไข่ข้นหมูสับ",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m14",
+          "name": "ข้าวไข่ข้นกุ้ง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-02-m15",
+          "name": "อาหารชุด (ข้าว+ไข่เจียว+ต้มยำน้ำใส)",
+          "price": 69,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m16",
+          "name": "อาหารชุด (ข้าว+ไข่เจียว+ต้มข่าไก่)",
+          "price": 69,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m17",
+          "name": "อาหารชุด (ข้าว+ไข่เจียว+ต้มจืดเต้าหู้)",
+          "price": 69,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-02-m18",
+          "name": "อาหารชุด (ข้าว+ไข่เจียว+แกงเขียวหวาน)",
+          "price": 69,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-03",
+      "name": "ร้าน Healthy",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-03-m1",
+          "name": "กาแฟสด (ร้อน)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m2",
+          "name": "กาแฟสด (เย็น)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m3",
+          "name": "กาแฟสด (ส้ม-มะพร้าว)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m4",
+          "name": "ชาไทยสด/ชาเขียว",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m5",
+          "name": "ไวท์มอลต์ (เย็น)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m6",
+          "name": "ไวท์มอลต์ (ปั่น)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m7",
+          "name": "แดง - เขียว โซดา",
+          "price": 23,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m8",
+          "name": "นมสด/โกโก้โอริโอ",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m9",
+          "name": "ชาไต้หวัน/ไข่มุก",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        },
+        {
+          "id": "shop-sc-03-m10",
+          "name": "ชามะลิ",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m11",
+          "name": "ผลไม้สดปั่น",
+          "price": 25,
+          "isAvailable": true,
+          "note": "ราคา 25-30 บาท"
+        },
+        {
+          "id": "shop-sc-03-m12",
+          "name": "น้ำเปล่า",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-03-m13",
+          "name": "น้ำดื่มสิงห์",
+          "price": 7,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-04",
+      "name": "ร้านน้ำยูป้า",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-04-m1",
+          "name": "กาแฟ",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m2",
+          "name": "ชาไทย",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m3",
+          "name": "ชามะนาว",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m4",
+          "name": "ชามะลิ",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m5",
+          "name": "น้ำเก๊กฮวย",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m6",
+          "name": "โอเลี้ยง",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m7",
+          "name": "น้ำใบเตย",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-04-m8",
+          "name": "น้ำกระเจี๊ยบ",
+          "price": 15,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-05",
+      "name": "น้องแอม",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-05-m1",
+          "name": "ข้าวราด 1 อย่าง",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-05-m2",
+          "name": "ราดเพิ่ม 1 อย่าง",
+          "price": 8,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-05-m3",
+          "name": "ต้มจืด ต้มยำถ้วยเล็ก",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-05-m4",
+          "name": "กับข้าวถุง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-05-m5",
+          "name": "ไข่ดาว",
+          "price": 7,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-06",
+      "name": "ก๋วยเตี๋ยว บุ๊คเบ๊บ",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-06-m1",
+          "name": "บะหมี่หมูแดง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-06-m2",
+          "name": "บะหมี่เกี๊ยวหมูแดง",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45-55 บาท"
+        },
+        {
+          "id": "shop-sc-06-m3",
+          "name": "ก๋วยเตี๋ยวหมูตุ๋น",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-06-m4",
+          "name": "ก๋วยเตี๋ยวไก่ตุ๋น",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-06-m5",
+          "name": "ต้มเลือดหมู",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-06-m6",
+          "name": "โจ๊ก-ข้าวต้มหมู",
+          "price": 30,
+          "isAvailable": true,
+          "note": "ราคา 30-40 บาท"
+        },
+        {
+          "id": "shop-sc-06-m7",
+          "name": "ราดหน้า",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-sc-06-m8",
+          "name": "ก๋วยเตี๋ยวไก่ฉีก",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-45 บาท"
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-07",
+      "name": "ออนเซ็น เอ็กซ์เพลส (Onsen Express)",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-07-m1",
+          "name": "1. ข้าวหน้า หมู / ปลา / ไก่ ทอดแกงกะหรี่ไข่",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m2",
+          "name": "2. ข้าวหมูทอดทงคัตสึ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m3",
+          "name": "3. ข้าวหน้าไข่หมูทอด (คัตสึด้ง)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m4",
+          "name": "4. ข้าวหน้าไก่เกาหลีไข่ข้น",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m5",
+          "name": "5. ข้าวหน้าหมูไข่ออนเซ็น",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m6",
+          "name": "6. รามยอนชีส",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m7",
+          "name": "7. ข้าวหมูผัดกิมจิ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-07-m8",
+          "name": "8. ข้าวสะโพกไก่เทอริยากิ",
+          "price": 60,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-08",
+      "name": "สมใจกินเส้น",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-08-m1",
+          "name": "ก๋วยเตี๋ยวไก่ตุ๋นธรรมดา",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-08-m2",
+          "name": "ก๋วยเตี๋ยวไก่ตุ๋นพิเศษ",
+          "price": 60,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-sc-09",
+      "name": "อิสลามดาวกะเดือน",
+      "canteen": "sc",
+      "canteenName": "โรงอาหารสังคมศาสตร์",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-sc-09-m1",
+          "name": "ข้าวราดแกง 1 อย่าง",
+          "price": 30,
+          "isAvailable": true,
+          "note": "ราคา 30-35 บาท"
+        },
+        {
+          "id": "shop-sc-09-m2",
+          "name": "ข้าวราดแกง 2 อย่าง",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-40 บาท"
+        },
+        {
+          "id": "shop-sc-09-m3",
+          "name": "กับข้าว",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-40-50 บาท"
+        },
+        {
+          "id": "shop-sc-09-m4",
+          "name": "ไข่ดาว",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-09-m5",
+          "name": "ไข่เจียว",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-09-m6",
+          "name": "ไข่ต้ม",
+          "price": 7,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-sc-09-m7",
+          "name": "ข้าวเปล่า",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.069659910100585,
+      "longitude": 100.60455215576046
+    },
+    {
+      "id": "shop-green-01",
+      "name": "ข้าวแกงอัมพวา",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-01-m1",
+          "name": "ข้าวราดแกงกับข้าว 1 อย่าง",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m2",
+          "name": "ข้าวราดแกงกับข้าว 2 อย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m3",
+          "name": "อาหารทอด",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m4",
+          "name": "ไข่ต้ม ไข่ดาว ไข่เจียว",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m5",
+          "name": "ปลาทอด",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m6",
+          "name": "ชุดน้ำพริก + ผัก",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m7",
+          "name": "กับข้าวใส่ถ้วย",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-01-m8",
+          "name": "ข้าวเปล่า",
           "price": 10,
           "isAvailable": true
         }
@@ -118,99 +907,115 @@
     },
     {
       "id": "shop-green-02",
-      "name": "ครัวคุณยาย อาหารตามสั่งกระทะร้อน",
+      "name": "อาโช้ย",
       "canteen": "green",
-      "canteenName": "โรงอาหารกรีนแคนทีน",
-      "boothNumber": "ล็อค G-02",
-      "locationDetails": "โซนกลาง ติดกับร้านข้าวแกงป้าณี",
-      "category": "made_to_order",
-      "categoryName": "อาหารตามสั่ง",
-      "isOpen": true,
-      "statusNote": "รับออเดอร์เรื่อยๆ ผัดใหม่จานต่อจาน",
-      "openingHours": "08:00 - 17:00",
-      "phone": "0822222222",
-      "line_id": "@sample-g02",
-      "facebook": null,
-      "other_contact": null,
-      "pin": "2222",
-      "vendorName": "คุณยายสมศรี",
-      "accentColor": "#F59E0B",
-      "rating": 4.6,
-      "reviewCount": 38,
-      "lastStatusUpdate": "2026-10-19T08:45:00.000Z",
-      "menus": [
-        {
-          "id": "m5",
-          "name": "ข้าวกะเพราหมูกรอบไข่ดาว",
-          "price": 55,
-          "isAvailable": true
-        },
-        {
-          "id": "m6",
-          "name": "ข้าวผัดต้มยำทะเล",
-          "price": 60,
-          "isAvailable": true
-        },
-        {
-          "id": "m7",
-          "name": "สุกี้แห้งไก่น้ำจิ้มเต้าหู้ยี้",
-          "price": 50,
-          "isAvailable": true
-        },
-        {
-          "id": "m8",
-          "name": "หมูกระเทียมพริกไทยไข่ข้น",
-          "price": 55,
-          "isAvailable": true
-        }
-      ],
-      "latitude": 14.073359122970857,
-      "longitude": 100.60113944112857
-    },
-    {
-      "id": "shop-green-03",
-      "name": "ก๋วยเตี๋ยวเรืออยุธยา กรีนแคนทีน",
-      "canteen": "green",
-      "canteenName": "โรงอาหารกรีนแคนทีน",
-      "boothNumber": "ล็อค G-03",
-      "locationDetails": "โซนปีกขวา โต๊ะอาหารหลัก",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
       "category": "noodles",
       "categoryName": "ก๋วยเตี๋ยว",
-      "isOpen": false,
-      "statusNote": "น้ำซุปหมด กำลังเตรียมวัตถุดิบช่วงบ่าย",
-      "openingHours": "08:30 - 15:00",
-      "phone": "0833333333",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
       "line_id": null,
       "facebook": null,
       "other_contact": null,
-      "pin": "3333",
-      "vendorName": "พี่ชาติ เตี๋ยวเรือ",
-      "accentColor": "#EF4444",
-      "rating": 4.7,
-      "reviewCount": 51,
-      "lastStatusUpdate": "2026-10-19T11:20:00.000Z",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
-          "id": "m9",
-          "name": "ก๋วยเตี๋ยวเรือเนื้อน้ำตกชามเล็ก",
-          "price": 25,
-          "isAvailable": false
-        },
-        {
-          "id": "m10",
-          "name": "ก๋วยเตี๋ยวเรือหมูน้ำตกพิเศษ",
-          "price": 50,
-          "isAvailable": false
-        },
-        {
-          "id": "m11",
-          "name": "กากหมูเจียวกรอบ",
-          "price": 15,
+          "id": "shop-green-02-m1",
+          "name": "เกี๊ยวน้ำหมูแดง",
+          "price": 40,
           "isAvailable": true
         },
         {
-          "id": "m12",
-          "name": "แคบหมูโบราณ",
+          "id": "shop-green-02-m2",
+          "name": "บะหมี่หมูแดง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m3",
+          "name": "บะหมี่ไก่ย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m4",
+          "name": "บะหมี่เป็ดย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m5",
+          "name": "บะหมี่หมูกรอบ",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m6",
+          "name": "เย็นตาโฟทะเล",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-02-m7",
+          "name": "ก๋วยเตี๋ยวต้มยำ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m8",
+          "name": "ก๋วยเตี๋ยวต้มยำทะเลน้ำข้น",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m9",
+          "name": "ก๋วยเตี๋ยวลูกชิ้นหมู",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m10",
+          "name": "ก๋วยเตี๋ยวลูกชิ้นปลา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m11",
+          "name": "ข้าวต้มหมู",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m12",
+          "name": "ข้าวต้มทะเล",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m13",
+          "name": "ต้มเลือดหมู",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m14",
+          "name": "เพิ่มเกี๊ยวหมู",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-02-m15",
+          "name": "ข้าวเปล่า",
           "price": 10,
           "isAvailable": true
         }
@@ -219,43 +1024,1038 @@
       "longitude": 100.60113944112857
     },
     {
-      "id": "shop-green-04",
-      "name": "เฮลตี้ สมูทตี้ & ขนมหวานกรีน",
+      "id": "shop-green-03",
+      "name": "ขาหมูพันล้าน คลองสาม",
       "canteen": "green",
-      "canteenName": "โรงอาหารกรีนแคนทีน",
-      "boothNumber": "ล็อค G-04",
-      "locationDetails": "ตรงข้ามทางออกโรงอาหาร",
-      "category": "drinks_dessert",
-      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
       "isOpen": true,
-      "statusNote": "เปิดพร้อมเสิร์ฟ น้ำปั่นสดชื่น",
-      "openingHours": "07:30 - 18:00",
-      "phone": "0844444444",
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0655626350",
       "line_id": null,
       "facebook": null,
       "other_contact": null,
-      "pin": "4444",
-      "vendorName": "น้องมายด์",
-      "accentColor": "#06B6D4",
-      "rating": 4.9,
-      "reviewCount": 65,
-      "lastStatusUpdate": "2026-10-19T09:00:00.000Z",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
-          "id": "m13",
-          "name": "ชาไทยเย็นปั่น หวานน้อย",
-          "price": 35,
+          "id": "shop-green-03-m1",
+          "name": "ข้าวขาหมู (ธรรมดา)",
+          "price": 40,
           "isAvailable": true
         },
         {
-          "id": "m14",
-          "name": "อะโวคาโดนมสดปั่น",
+          "id": "shop-green-03-m2",
+          "name": "ข้าวขาหมูพิเศษ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-03-m3",
+          "name": "ขาหมูล้วน",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-03-m4",
+          "name": "เพิ่มไข่",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-03-m5",
+          "name": "ข้าวคากิ",
           "price": 45,
           "isAvailable": true
         },
         {
-          "id": "m15",
-          "name": "เฉาก๊วยนมสดภูเขาไฟ",
+          "id": "shop-green-03-m6",
+          "name": "คากิล้วน",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-03-m7",
+          "name": "ขาหมูล้วน",
+          "price": 80,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-04",
+      "name": "Golden Fork (ข้าวแกง)",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-04-m1",
+          "name": "ข้าวราดแกงกับข้าว 1 อย่าง",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-04-m2",
+          "name": "ข้าวราดแกงกับข้าว 2 อย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-04-m3",
+          "name": "ข้าวเปล่า",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-04-m4",
+          "name": "กับข้าวใส่ถ้วย",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-30 บาท"
+        },
+        {
+          "id": "shop-green-04-m5",
+          "name": "กับข้าวใส่ถุง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-04-m6",
+          "name": "ไข่ดาว",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-04-m7",
+          "name": "ปลาทอด",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-04-m8",
+          "name": "ของทอด",
+          "price": 5,
+          "isAvailable": true,
+          "note": "ราคา 5-20 บาท"
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-05",
+      "name": "ตามสั่ง",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0922705332",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": "โทรเพิ่ม: 0876845750",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-05-m1",
+          "name": "สปาเก็ตตี้ / สุกี้ (ไก่, หมู, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m2",
+          "name": "ข้าวราดกะเพรา (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m3",
+          "name": "ข้าวราด ผัดผักน้ำมันหอย (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m4",
+          "name": "ข้าวผัดพริกแกง / ผัดฉ่า (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m5",
+          "name": "ข้าวผัดผงกะหรี่ (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m6",
+          "name": "ข้าวกระเทียมพริกไทย (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m7",
+          "name": "คั่วพริกเกลือ / พริกสด ราดข้าว (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m8",
+          "name": "ผัดพริกไทยดำ / น้ำมันหอย (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m9",
+          "name": "ผัดเห็ดสามอย่าง (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m10",
+          "name": "ผัดเปรี้ยวหวาน (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m11",
+          "name": "แกงจืดเต้าหู้สาหร่าย (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        },
+        {
+          "id": "shop-green-05-m12",
+          "name": "ต้มยำน้ำข้น / น้ำใส (ไก่, หมู, เนื้อ, เต้าหู้, เห็ด, หมูกรอบ, กุ้ง, หมึก, ปลา, เบคอน, แฮม, รวมมิตร)",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-50 บาท"
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-06",
+      "name": "น้องเจี๊ยบ",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0827815484",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": "โทรเพิ่ม: 0814942462",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-06-m1",
+          "name": "ข้าวหมูแดง หมูกรอบ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m2",
+          "name": "ข้าวหมูกรอบ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m3",
+          "name": "ข้าวหมูแดง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m4",
+          "name": "ข้าวหมูอบ",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m5",
+          "name": "ข้าวไก่อบ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m6",
+          "name": "ข้าวหมูย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m7",
+          "name": "ข้าวไก่ย่าง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m8",
+          "name": "ข้าวยำไก่แซ่บ @ หมูแซ่บ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-06-m9",
+          "name": "ข้าวหน้าเป็ด",
+          "price": 50,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-07",
+      "name": "My Omelet Style",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-07-m1",
+          "name": "ข้าวไข่ข้นแฮม",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m2",
+          "name": "ข้าวไข่ข้นแฮมชีส",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m3",
+          "name": "เพิ่มชีส",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m4",
+          "name": "ข้าวไข่เจียวธรรมดา (ไข่ 1 ฟอง)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m5",
+          "name": "ข้าวไข่เจียวธรรมดา (ไข่ 2 ฟอง)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m6",
+          "name": "ข้าวไข่เจียว ไข่ 1 ฟอง (เครื่อง 1 อย่าง)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m7",
+          "name": "ข้าวไข่เจียว ไข่ 1 ฟอง (เครื่อง 2 อย่าง)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m8",
+          "name": "ข้าวไข่เจียว ไข่ 1 ฟอง (เครื่อง 3 อย่าง)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m9",
+          "name": "ข้าวไข่เจียว ไข่ 2 ฟอง (เครื่อง 1 อย่าง)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m10",
+          "name": "ข้าวไข่เจียว ไข่ 2 ฟอง (เครื่อง 3 อย่าง)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m11",
+          "name": "ข้าวไข่เจียว ไข่ 3 ฟอง (เครื่อง 4 อย่าง)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-07-m12",
+          "name": "ไข่กะทะ",
+          "price": 40,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-08",
+      "name": "เมนูข้าวมันไก่",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "chicken_rice",
+      "categoryName": "ข้าวมันไก่/อาหารจานเดียว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-08-m1",
+          "name": "ข้าวมันไก่ต้ม",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-45 บาท"
+        },
+        {
+          "id": "shop-green-08-m2",
+          "name": "ข้าวมันไก่ทอด",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-45 บาท"
+        },
+        {
+          "id": "shop-green-08-m3",
+          "name": "ข้าวมันไก่ย่าง",
+          "price": 35,
+          "isAvailable": true,
+          "note": "ราคา 35-45 บาท"
+        },
+        {
+          "id": "shop-green-08-m4",
+          "name": "ข้าวมันไก่ผสม",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m5",
+          "name": "ข้าวมันยำไก่ต้ม",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m6",
+          "name": "ข้าวมันยำไก่ย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m7",
+          "name": "ข้าวมันยำไก่ทอด",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m8",
+          "name": "ข้าวมันไก่สวรรค์",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-08-m9",
+          "name": "ข้าวมันไก่คาราอาเกะ",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-08-m10",
+          "name": "ข้าวมันไก่ต้มน้ำปลา",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-08-m11",
+          "name": "ไก่ทอด",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m12",
+          "name": "ไส้กรอก",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m13",
+          "name": "ปลาม้วนชีส",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m14",
+          "name": "เกี๊ยวซ่า",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m15",
+          "name": "ไก่ห่อสาหร่าย",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m16",
+          "name": "ข้าวไก่ย่างบางตาล",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m17",
+          "name": "ข้าวไก่ทอดเกลือ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m18",
+          "name": "ข้าวไก่ย่างพริกไทยดำ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-08-m19",
+          "name": "ไก่ย่าง",
+          "price": 130,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-09",
+      "name": "Onsen Express ออนเซ็น เอ็กซ์เพลส",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-09-m1",
+          "name": "ข้าวหน้าหมูไข่ออนเซ็น",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m2",
+          "name": "ข้าวหน้าหมูทอดแกงกะหรี่",
+          "price": 55,
+          "isAvailable": true,
+          "note": "ราคา 55-60 บาท"
+        },
+        {
+          "id": "shop-green-09-m3",
+          "name": "ข้าวหน้าไข่หมูทอด",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m4",
+          "name": "ข้าวหน้าไก่ย่างเทริยากิ",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m5",
+          "name": "ฟิชแอนด์ชิพ",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m6",
+          "name": "ราเมน คาราเกะ",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m7",
+          "name": "สเต็ก ไก่ / หมู",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-09-m8",
+          "name": "ข้าวหน้าไก่ทอดอิตาเลียนพิซซ่า",
+          "price": 60,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-10",
+      "name": "ส้มตำ บ้านนา",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "papaya_salad",
+      "categoryName": "ส้มตำ/ยำรสเด็ด",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-10-m1",
+          "name": "ตำปลาร้า",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m2",
+          "name": "ตำปูปลาร้า",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m3",
+          "name": "ตำไทย",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m4",
+          "name": "ตำข้าวโพด",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m5",
+          "name": "ตำมะม่วง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m6",
+          "name": "ไข่เค็ม",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m7",
+          "name": "หมูยอ",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m8",
+          "name": "ลาบไก่",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m9",
+          "name": "ลาบหมู",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m10",
+          "name": "น้ำตกหมู",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m11",
+          "name": "ตับหวาน",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m12",
+          "name": "ต้มแซ่บกระดูกหมู",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m13",
+          "name": "ขนมจีน",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m14",
+          "name": "เส้นเล็ก",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m15",
+          "name": "แคปหมู",
+          "price": 12,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m16",
+          "name": "ไก่ย่าง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m17",
+          "name": "คอหมูย่าง",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m18",
+          "name": "ข้าวไก่ย่างน้ำจิ้มแจ่ว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m19",
+          "name": "ข้าวคอหมูย่างน้ำจิ้มแจ่ว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m20",
+          "name": "ยำหมูยอปลาร้า",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m21",
+          "name": "ข้าวเหนียว",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-10-m22",
+          "name": "ข้าวหอมมะลิ",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-11",
+      "name": "เมนูผัดไทย / อาหารตามสั่ง",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-11-m1",
+          "name": "ผัดไทย ธรรมดา (เส้นจันท์/วุ้นเส้น)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-11-m2",
+          "name": "ผัดไทย (เส้นจันท์/วุ้นเส้น)",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m3",
+          "name": "ผัดไทย เกี๊ยวกรอบ",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m4",
+          "name": "สุกี้ (แห้ง/น้ำ)",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m5",
+          "name": "จูบน้ำดำ",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45-60 บาท"
+        },
+        {
+          "id": "shop-green-11-m6",
+          "name": "ราดหน้า",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m7",
+          "name": "ข้าวผัด",
+          "price": 30,
+          "isAvailable": true,
+          "note": "ราคา 30-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m8",
+          "name": "ข้าวกระเทียม",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m9",
+          "name": "ข้าวกระเพรา",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m10",
+          "name": "ผัดซีอิ๊ว",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        },
+        {
+          "id": "shop-green-11-m11",
+          "name": "ผัดพริกแกง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-55 บาท"
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-12",
+      "name": "ข้าวคลุกน้ำพริก by ปูปลา",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0984946978",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-12-m1",
+          "name": "ข้าวคลุกน้ำพริก+ผักต้ม",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m2",
+          "name": "ข้าวหมูทอด น้ำจิ้มแจ่ว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m3",
+          "name": "ข้าวไก่ย่าง น้ำจิ้มแจ่ว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m4",
+          "name": "ท็อปปิ้งเพิ่ม (ผักทอด)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m5",
+          "name": "ท็อปปิ้งเพิ่ม (ไข่ต้ม)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m6",
+          "name": "ท็อปปิ้งเพิ่ม (กุนเชียง)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m7",
+          "name": "ท็อปปิ้งเพิ่ม (ไข่เค็ม)",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m8",
+          "name": "ท็อปปิ้งเพิ่ม (ไข่เจียว/ไข่ข้น)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m9",
+          "name": "ท็อปปิ้งเพิ่ม (หมูยอ)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m10",
+          "name": "ท็อปปิ้งเพิ่ม (ปลาทู)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m11",
+          "name": "ท็อปปิ้งเพิ่ม (หมูทอด 30 บาท)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m12",
+          "name": "ท็อปปิ้งเพิ่ม (ไก่ทอด 30 บาท)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m13",
+          "name": "ท็อปปิ้งเพิ่ม (ไก่ย่าง 30 บาท)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m14",
+          "name": "ท็อปปิ้งเพิ่ม (หมูหวาน 30 บาท)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-12-m15",
+          "name": "ท็อปปิ้งเพิ่ม (หมูแม็กกี้ 30 บาท)",
           "price": 30,
           "isAvailable": true
         }
@@ -264,281 +2064,2845 @@
       "longitude": 100.60113944112857
     },
     {
-      "id": "shop-green-05",
-      "name": "ไก่ทอด ปังปัง สไตล์เกาหลี-หาดใหญ่",
+      "id": "shop-green-13",
+      "name": "เครปกรอบหน้าสั่น",
       "canteen": "green",
-      "canteenName": "โรงอาหารกรีนแคนทีน",
-      "boothNumber": "ล็อค G-05",
-      "locationDetails": "หัวมุมทางเดินกลาง",
-      "category": "chicken_rice",
-      "categoryName": "ข้าวมันไก่/อาหารจานเดียว",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
       "isOpen": true,
-      "statusNote": "ไก่ทอดร้อนๆ ทอดใหม่ทุก 15 นาที",
-      "openingHours": "09:00 - 17:30",
-      "phone": "0855555555",
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
       "line_id": null,
       "facebook": null,
       "other_contact": null,
-      "pin": "5555",
-      "vendorName": "พี่ตั้ม ปังปัง",
+      "pin": null,
+      "vendorName": null,
       "accentColor": "#F97316",
-      "rating": 4.5,
-      "reviewCount": 29,
-      "lastStatusUpdate": "2026-11-15T15:19:53.734Z",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
-          "id": "m16",
-          "name": "ข้าวไก่ทอดเกาหลีซอสการ์ลิค",
-          "price": 50,
+          "id": "shop-green-13-m1",
+          "name": "เครปเย็น (สตรอว์เบอร์รี่/ช็อกโกแลต)",
+          "price": 15,
           "isAvailable": true
         },
         {
-          "id": "m17",
-          "name": "ข้าวเหนียวไก่ทอดหาดใหญ่หอมเจียว",
-          "price": 45,
+          "id": "shop-green-13-m2",
+          "name": "เครปเย็น",
+          "price": 15,
           "isAvailable": true
         },
         {
-          "id": "m18",
-          "name": "สะโพกไก่ทอดกรอบชิ้นใหญ่",
+          "id": "shop-green-13-m3",
+          "name": "เครปเย็น (กล้วย)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m4",
+          "name": "เครปเย็น (ฝอยทอง)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m5",
+          "name": "เครปเย็น (นูเทลล่า)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m6",
+          "name": "เครปเย็น (กล้วยนูเทลล่า)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m7",
+          "name": "เครปเย็น (โอรีโอ้)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m8",
+          "name": "เครปเย็น",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m9",
+          "name": "เครปเย็น (กล้วยฝอยทอง)",
           "price": 35,
-          "isAvailable": false,
-          "is_sold_out": true
-        }
-      ],
-      "latitude": null,
-      "longitude": null
-    },
-    {
-      "id": "shop-sci-01",
-      "name": "ลุงหนุ่ม ข้าวมันไก่ตอน & ไก่ทอด คณะวิทย์",
-      "canteen": "sci",
-      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
-      "boothNumber": "ล็อค SC-01",
-      "locationDetails": "ใต้ตึก บร.4 ฝั่งบันไดขึ้นชั้น 2",
-      "category": "chicken_rice",
-      "categoryName": "ข้าวมันไก่/อาหารจานเดียว",
-      "isOpen": true,
-      "statusNote": "เปิดบริการ ข้าวมันหอมนุ่ม น้ำจิ้มรสเด็ด",
-      "openingHours": "07:30 - 15:30",
-      "phone": "0866666666",
-      "line_id": null,
-      "facebook": "SAMPLE Shop S01",
-      "other_contact": "โทรสั่งล่วงหน้าได้ (ข้อมูลตัวอย่าง)",
-      "pin": "6666",
-      "vendorName": "ลุงหนุ่ม มธ.",
-      "accentColor": "#10B981",
-      "rating": 4.9,
-      "reviewCount": 78,
-      "lastStatusUpdate": "2026-10-19T07:45:00.000Z",
-      "menus": [
-        {
-          "id": "m19",
-          "name": "ข้าวมันไก่ตอน เนื้อน่อง",
-          "price": 45,
           "isAvailable": true
         },
         {
-          "id": "m20",
-          "name": "ข้าวมันไก่ทอดกรอบ",
-          "price": 45,
+          "id": "shop-green-13-m10",
+          "name": "บราวนี่เข้มข้น",
+          "price": 25,
           "isAvailable": true
         },
         {
-          "id": "m21",
-          "name": "ข้าวมันไก่ผสม (ต้ม+ทอด)",
+          "id": "shop-green-13-m11",
+          "name": "แพนเค้กครีมข้น",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m12",
+          "name": "เครปกรอบหน้าสั่น (พริกเผา-หมูหยอง)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m13",
+          "name": "เครปกรอบหน้าสั่น (นูเทลล่า-กล้วย)",
           "price": 55,
           "isAvailable": true
         },
         {
-          "id": "m22",
-          "name": "ซุปต้มยำโครงไก่มะนาว",
-          "price": 20,
-          "isAvailable": true
-        }
-      ],
-      "latitude": 14.07259451627268,
-      "longitude": 100.60859730370368
-    },
-    {
-      "id": "shop-sci-02",
-      "name": "ก๋วยเตี๋ยวต้มยำหมูมะนาว คณะวิทย์",
-      "canteen": "sci",
-      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
-      "boothNumber": "ล็อค SC-02",
-      "locationDetails": "ข้างร้านข้าวมันไก่ลุงหนุ่ม แถวหน้าห้องน้ำ",
-      "category": "noodles",
-      "categoryName": "ก๋วยเตี๋ยว",
-      "isOpen": true,
-      "statusNote": "เปิดปกติ มะนาวแท้ 100% หมูบะช่อแผ่นโต",
-      "openingHours": "08:00 - 16:00",
-      "phone": "0877777777",
-      "line_id": null,
-      "facebook": null,
-      "other_contact": null,
-      "pin": "7777",
-      "vendorName": "ป้าแหวว",
-      "accentColor": "#EC4899",
-      "rating": 4.7,
-      "reviewCount": 44,
-      "lastStatusUpdate": "2026-10-19T08:10:00.000Z",
-      "menus": [
-        {
-          "id": "m23",
-          "name": "เส้นเล็กต้มยำหมูมะนาวบะช่อ",
-          "price": 50,
+          "id": "shop-green-13-m14",
+          "name": "เครปกรอบหน้าสั่น (เนย-นมข้น)",
+          "price": 28,
           "isAvailable": true
         },
         {
-          "id": "m24",
-          "name": "บะหมี่แห้งยำหมูกรอบ",
-          "price": 55,
-          "isAvailable": true
-        },
-        {
-          "id": "m25",
-          "name": "เกี๊ยวทอดกรอบไส้หมูแน่น",
-          "price": 20,
-          "isAvailable": true
-        }
-      ],
-      "latitude": 14.07259451627268,
-      "longitude": 100.60859730370368
-    },
-    {
-      "id": "shop-sci-03",
-      "name": "ข้าวไข่เจียวทรงเครื่อง & ข้าวผัดโบราณ",
-      "canteen": "sci",
-      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
-      "boothNumber": "ล็อค SC-03",
-      "locationDetails": "ฝั่งทางเดินออกไปตึกฟิสิกส์",
-      "category": "made_to_order",
-      "categoryName": "อาหารตามสั่ง",
-      "isOpen": false,
-      "statusNote": "ปิดชั่วคราว วัตถุดิบหมด เปิดอีกทีพรุ่งนี้",
-      "openingHours": "07:30 - 14:00",
-      "phone": "0888888888",
-      "line_id": null,
-      "facebook": null,
-      "other_contact": null,
-      "pin": "8888",
-      "vendorName": "พี่เอส ไข่เจียว",
-      "accentColor": "#EF4444",
-      "rating": 4.4,
-      "reviewCount": 22,
-      "lastStatusUpdate": "2026-10-19T13:00:00.000Z",
-      "menus": [
-        {
-          "id": "m26",
-          "name": "ข้าวไข่เจียว 2 ฟอง ใส่เครื่อง 3 อย่าง",
-          "price": 35,
-          "isAvailable": false
-        },
-        {
-          "id": "m27",
-          "name": "ข้าวผัดโบราณหมูแดงซีอิ๊วดำ",
-          "price": 45,
-          "isAvailable": false
-        }
-      ],
-      "latitude": 14.07259451627268,
-      "longitude": 100.60859730370368
-    },
-    {
-      "id": "shop-sci-04",
-      "name": "ส้มตำ ยำแซ่บ อินเตอร์ SC",
-      "canteen": "sci",
-      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
-      "boothNumber": "ล็อค SC-04",
-      "locationDetails": "โซนด้านใน ใกล้โต๊ะนั่งรวม",
-      "category": "papaya_salad",
-      "categoryName": "ส้มตำ/ยำรสเด็ด",
-      "isOpen": true,
-      "statusNote": "เปิดตำความแซ่บ ปลาร้านัวต้มสุก",
-      "openingHours": "09:30 - 16:30",
-      "phone": "0812345678",
-      "line_id": null,
-      "facebook": null,
-      "other_contact": null,
-      "pin": "1234",
-      "vendorName": "เจ๊หน่อย แซ่บเวอร์",
-      "accentColor": "#8B5CF6",
-      "rating": 4.8,
-      "reviewCount": 59,
-      "lastStatusUpdate": "2026-10-19T09:40:00.000Z",
-      "menus": [
-        {
-          "id": "m28",
-          "name": "ส้มตำไทยไข่เค็ม",
-          "price": 45,
-          "isAvailable": true
-        },
-        {
-          "id": "m29",
-          "name": "ตำป่าปลาร้าคอหมูย่าง",
+          "id": "shop-green-13-m15",
+          "name": "เครปกรอบหน้าสั่น (แฮม-ไข่-ชีส)",
           "price": 60,
           "isAvailable": true
         },
         {
-          "id": "m30",
-          "name": "คอหมูย่างน้ำจิ้มแจ่วข้าวคั่ว",
+          "id": "shop-green-13-m16",
+          "name": "เครปกรอบหน้าสั่น (แฮม-ปูอัด-ไส้กรอก-ชีส)",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m17",
+          "name": "เครปกรอบหน้าสั่น (ซอสพิซซ่า-แฮม-ชีส)",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m18",
+          "name": "เครปกรอบหน้าสั่น (ฝอยทอง-ลูกเกด)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m19",
+          "name": "เครปกรอบหน้าสั่น (พริกเผา-หมูหยอง-ไส้กรอก)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m20",
+          "name": "เครปกรอบหน้าสั่น (แยมสตรอว์เบอร์รี่-เยลลี่)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m21",
+          "name": "เครปกรอบหน้าสั่น (นูเทลล่า-ฝอยทอง)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m22",
+          "name": "เครปกรอบหน้าสั่น (นูเทลล่า-คอนเฟลก)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-13-m23",
+          "name": "เครปกรอบหน้าสั่น (วนิลา-บราวนี่-อัลมอนด์)",
+          "price": 65,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-14",
+      "name": "ลุงยักษ์ปากหม้อ",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-14-m1",
+          "name": "ข้าวเกรียบปากหม้อ",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-14-m2",
+          "name": "สาคูไส้หมู",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-14-m3",
+          "name": "ขนมกุ้ยช่าย",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-14-m4",
+          "name": "ขนมจาก",
+          "price": 30,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-15",
+      "name": "หนุ่มน้อยซาลาเปา",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-15-m1",
+          "name": "ซาลาเปา ไส้ครีม",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m2",
+          "name": "ซาลาเปา หมูสับ",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m3",
+          "name": "ซาลาเปา หมูแดง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m4",
+          "name": "ซาลาเปา ถั่วดำ",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m5",
+          "name": "ซาลาเปา สามสหาย",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m6",
+          "name": "ซาลาเปา ไส้มันม่วง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m7",
+          "name": "หมั่นโถว",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m8",
+          "name": "หมั่นโถว ฟักทอง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m9",
+          "name": "หมั่นโถว ชาเขียว",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m10",
+          "name": "ขนมจีบ จีบหมู",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m11",
+          "name": "ขนมจีบ จีบกุ้ง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-15-m12",
+          "name": "ขนมจีบ หมูพันสาหร่าย",
+          "price": 20,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-16",
+      "name": "ป้าเล็ก ลูกชิ้นทอด/ย่าง",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0815587703",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-16-m1",
+          "name": "ลูกชิ้นทอด/ย่าง",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-17",
+      "name": "ป้ารัตน์ เครื่องดื่มเพื่อสุขภาพ",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-17-m1",
+          "name": "น้ำดื่ม",
+          "price": 8,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-18",
+      "name": "จำเริญ (อ้าว! ผลไม้)",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-18-m1",
+          "name": "ผลไม้ตัดแต่ง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-18-m2",
+          "name": "ผลไม้แช่อิ่ม - ผลไม้ดอง",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-18-m3",
+          "name": "ผลไม้แปรรูป",
+          "price": 20,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-19",
+      "name": "สินค้าคุณภาพ (ไก่ย่างห้าดาว)",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-19-m1",
+          "name": "วิงซ์แซ่บ",
+          "price": 13,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m2",
+          "name": "ไก่ทอดสันในตำรับ",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m3",
+          "name": "ไก่กรอบ",
+          "price": 29,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m4",
+          "name": "ไก่จ๊อห้าดาว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m5",
+          "name": "เซต ไก่กรอบ",
+          "price": 59,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m6",
+          "name": "ไก่ทอดน้ำปลาเทอริยากิ",
+          "price": 59,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m7",
+          "name": "ชุดข้าวไก่ทอดน้ำปลา",
+          "price": 59,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m8",
+          "name": "ไก่ทอดเกลือ",
+          "price": 75,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m9",
+          "name": "ไก่ต้มน้ำปลาทอด",
+          "price": 99,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m10",
+          "name": "ไก่ซี้ดห้าดาว",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m11",
+          "name": "เกี๊ยวพริกสด",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m12",
+          "name": "ไส้กรอกไก่ต้มยำ",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m13",
+          "name": "ไส้กรอกชีส",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m14",
+          "name": "ไก่สวรรค์",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m15",
+          "name": "ปลาม้วนชีส",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m16",
+          "name": "ลูกชิ้นจัมโบ้",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m17",
+          "name": "เกี๊ยวซ่าไก่",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m18",
+          "name": "เกี๊ยวซ่ากุ้งย่าง",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m19",
+          "name": "เฟรนช์ฟรายส์",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m20",
+          "name": "ไก่ทอดคาราเกะ",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m21",
+          "name": "นักเก็ตไก่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m22",
+          "name": "ไก่ห่อสาหร่าย",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m23",
+          "name": "อกไก่รมควัน",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m24",
+          "name": "ข้าวเหนียว",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m25",
+          "name": "น้ำจิ้มห้าดาว",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-19-m26",
+          "name": "น้ำพริกห้าดาว",
+          "price": 25,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-20",
+      "name": "บรรทัดทอง THE NOODLE BAR",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-20-m1",
+          "name": "บะหมี่กึ่งสำเร็จรูป DIY",
+          "price": 15,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-21",
+      "name": "BAVERA เครื่องดื่ม (Food World)",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-21-m1",
+          "name": "HAPPY REFILL (เติมไม่อั้น)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-21-m2",
+          "name": "ลิปตันไอซ์ที",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-21-m3",
+          "name": "น้ำดื่ม อควาฟิน่า",
+          "price": 8,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-21-m4",
+          "name": "อควาฟิน่า มิเนเรล",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-21-m5",
+          "name": "น้ำผึ้งมะนาวโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-21-m6",
+          "name": "เครื่องดื่มชง/โซดา",
+          "price": 30,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-22",
+      "name": "ขะ-หนม-เส้น น้ำยารสเด็ด",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-22-m1",
+          "name": "ขนมจีนน้ำพริก",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m2",
+          "name": "ขนมจีนแกงไก่",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m3",
+          "name": "ขนมจีนแกงไตปลา",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m4",
+          "name": "ขนมจีนน้ำเงี้ยว",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m5",
+          "name": "ขนมจีนน้ำยาปู",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m6",
+          "name": "ขนมจีนน้ำยากะทิ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m7",
+          "name": "ขนมจีนน้ำยาป่าตีนไก่",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-22-m8",
+          "name": "ข้าวซอยไก่",
+          "price": 50,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-23",
+      "name": "นิ อาหารอิสลาม",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "rice_curry",
+      "categoryName": "ข้าวราดแกง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-23-m1",
+          "name": "ข้าวราดแกงกับข้าว 1 อย่าง",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m2",
+          "name": "ข้าวราดแกงกับข้าว 2 อย่าง",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m3",
+          "name": "กับข้าวใส่ถ้วย",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m4",
+          "name": "ข้าวราดมัสมั่นไก่",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m5",
+          "name": "ข้าวหมกไก่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m6",
+          "name": "กับข้าวใส่ถ้วย(เนื้อ)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-23-m7",
+          "name": "ผัดมักกะโรนีไก่",
+          "price": 40,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-24",
+      "name": "ส.กะเพราถาดยักษ์",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-24-m1",
+          "name": "กะเพราหอยแมลงภู่",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m2",
+          "name": "กะเพราปลาหมึก",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m3",
+          "name": "กะเพราปลาดุก",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m4",
+          "name": "กะเพราไข่เยี่ยวม้า",
           "price": 65,
           "isAvailable": true
         },
         {
-          "id": "m31",
-          "name": "ต้มแซ่บกระดูกอ่อนหมู",
+          "id": "shop-green-24-m5",
+          "name": "กะเพราเนื้อ",
           "price": 60,
-          "isAvailable": true
-        }
-      ],
-      "latitude": 14.07259451627268,
-      "longitude": 100.60859730370368
-    },
-    {
-      "id": "shop-sci-05",
-      "name": "SC Cafe & Bakery กาแฟสดชาเขียว",
-      "canteen": "sci",
-      "canteenName": "โรงอาหารคณะวิทยาศาสตร์",
-      "boothNumber": "ล็อค SC-05",
-      "locationDetails": "หัวมุมโซนตู้กดน้ำ",
-      "category": "drinks_dessert",
-      "categoryName": "เครื่องดื่ม/ของหวาน",
-      "isOpen": true,
-      "statusNote": "กาแฟคั่วสด นมสดแท้ 100%",
-      "openingHours": "07:30 - 17:00",
-      "phone": "0898765432",
-      "line_id": null,
-      "facebook": null,
-      "other_contact": null,
-      "pin": "5432",
-      "vendorName": "พี่กิ๊ก SC",
-      "accentColor": "#0EA5E9",
-      "rating": 4.7,
-      "reviewCount": 35,
-      "lastStatusUpdate": "2026-10-19T08:00:00.000Z",
-      "menus": [
-        {
-          "id": "m32",
-          "name": "เอสเปรสโซ่เย็นเข้มข้น",
-          "price": 40,
           "isAvailable": true
         },
         {
-          "id": "m33",
-          "name": "มัทฉะลาเต้แท้เข้มข้น",
+          "id": "shop-green-24-m6",
+          "name": "กะเพราหมูกรอบ",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m7",
+          "name": "กะเพราทะเลรวม",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m8",
+          "name": "กะเพรารวม 2 อย่าง",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-24-m9",
+          "name": "เพิ่มไข่ดาว/ไข่เจียว",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-25",
+      "name": "ราดหน้า กระทะเหล็ก",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "made_to_order",
+      "categoryName": "อาหารตามสั่ง",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-25-m1",
+          "name": "ผัดซีอิ๊ว",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40/45/50/55 บาท"
+        },
+        {
+          "id": "shop-green-25-m2",
+          "name": "ราดหน้าหมี่กรอบ",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45/50/55/60 บาท"
+        },
+        {
+          "id": "shop-green-25-m3",
+          "name": "สุกี้น้ำ / แห้ง",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40/45/50/55 บาท"
+        },
+        {
+          "id": "shop-green-25-m4",
+          "name": "ก๋วยเตี๋ยวคั่ว",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40/45/50/55 บาท"
+        },
+        {
+          "id": "shop-green-25-m5",
+          "name": "ผัดหมี่ฮ่องกง",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45/50/55/60 บาท"
+        },
+        {
+          "id": "shop-green-25-m6",
+          "name": "ผัดมาม่า",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45/50/55/60 บาท"
+        },
+        {
+          "id": "shop-green-25-m7",
+          "name": "ผัดเส้นเซี่ยงไฮ้",
+          "price": 45,
+          "isAvailable": true,
+          "note": "ราคา 45/50/55/60 บาท"
+        },
+        {
+          "id": "shop-green-25-m8",
+          "name": "ผัดงอแง",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-25-m9",
+          "name": "พิเศษเพิ่ม",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-26",
+      "name": "ก๋วยเตี๋ยวเรืออยุธยา",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "noodles",
+      "categoryName": "ก๋วยเตี๋ยว",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-26-m1",
+          "name": "ก๋วยเตี๋ยวหมูน้ำตก",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-26-m2",
+          "name": "ก๋วยเตี๋ยวหมูน้ำตกต้มยำ",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-26-m3",
+          "name": "ก๋วยเตี๋ยวหมูตุ๋น",
+          "price": 40,
+          "isAvailable": true,
+          "note": "ราคา 40-50 บาท"
+        },
+        {
+          "id": "shop-green-26-m4",
+          "name": "ก๋วยเตี๋ยวน้ำตก เส้นมาม่า",
           "price": 45,
           "isAvailable": true
         },
         {
-          "id": "m34",
-          "name": "โกโก้ดาร์กช็อกโกแลต",
-          "price": 40,
+          "id": "shop-green-26-m5",
+          "name": "เกาเหลา",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-26-m6",
+          "name": "ข้าวเปล่า",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-26-m7",
+          "name": "ไข่ต้ม",
+          "price": 10,
           "isAvailable": true
         }
       ],
-      "latitude": null,
-      "longitude": null
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-27",
+      "name": "สลัด สลัดโรล ผลไม้รวมปั่น",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-27-m1",
+          "name": "สลัดผัก",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m2",
+          "name": "สลัดโรล (ปูอัด, ทูน่า, แฮม, ไส้กรอก, เต้าหู้ปลา)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m3",
+          "name": "ผลไม้รวมปั่น",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m4",
+          "name": "สั่งเพิ่มผลไม้ปั่น (นม)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m5",
+          "name": "สั่งเพิ่มผลไม้ปั่น (น้ำผึ้ง)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m6",
+          "name": "สั่งเพิ่มผลไม้ปั่น (โยเกิร์ต)",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m7",
+          "name": "สั่งเพิ่มผลไม้ปั่น (มะนาว)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m8",
+          "name": "ยำผลไม้รวม",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-27-m9",
+          "name": "ยำมะม่วง",
+          "price": 35,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-28",
+      "name": "Waffle PB",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0927514346",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-30",
+      "name": "วันวาน 90 เครื่องดื่มดับกระหาย",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-30-m1",
+          "name": "น้ำจรวดโบราณ (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-30-m2",
+          "name": "น้ำจรวดโบราณ (L)",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-30-m3",
+          "name": "สภากาแฟ (M)",
+          "price": 18,
+          "isAvailable": true,
+          "note": "ราคา 18-20 บาท"
+        },
+        {
+          "id": "shop-green-30-m4",
+          "name": "สภากาแฟ (L)",
+          "price": 23,
+          "isAvailable": true,
+          "note": "ราคา 23-25 บาท"
+        },
+        {
+          "id": "shop-green-30-m5",
+          "name": "น้ำผลไม้ + สมุนไพร (M)",
+          "price": 18,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-30-m6",
+          "name": "น้ำผลไม้ + สมุนไพร (L)",
+          "price": 23,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-30-m7",
+          "name": "เพิ่มท็อปปิ้งน้ำ (ไข่มุก/บุก/วุ้น)",
+          "price": 10,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-31",
+      "name": "หยูอี่ชา Rú Yì Chá",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-31-m1",
+          "name": "Milk Tea (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m2",
+          "name": "Milk Tea (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m3",
+          "name": "Assam Milk Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m4",
+          "name": "Assam Milk Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m5",
+          "name": "Milk Green Tea (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m6",
+          "name": "Milk Green Tea (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m7",
+          "name": "Honey Milk Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m8",
+          "name": "Honey Milk Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m9",
+          "name": "Chocolate Milk Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m10",
+          "name": "Chocolate Milk Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m11",
+          "name": "Milk Tea with Fruit Syrup (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m12",
+          "name": "Milk Tea with Fruit Syrup (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m13",
+          "name": "Taro/Cantaloupe/Banana Milk Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m14",
+          "name": "Taro/Cantaloupe/Banana Milk Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m15",
+          "name": "Coffee/Vanilla (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m16",
+          "name": "Coffee/Vanilla (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m17",
+          "name": "Thai Milk Tea (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m18",
+          "name": "Thai Milk Tea (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m19",
+          "name": "Thai Traditional Coffee (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m20",
+          "name": "Thai Traditional Coffee (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m21",
+          "name": "Brown Sugar Fresh Milk (M)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m22",
+          "name": "Brown Sugar Fresh Milk (L)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m23",
+          "name": "Brown Sugar Milk Tea (M)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m24",
+          "name": "Brown Sugar Milk Tea (L)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m25",
+          "name": "Jasmine Green Tea (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m26",
+          "name": "Jasmine Green Tea (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m27",
+          "name": "Mix Fruit Green Tea (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m28",
+          "name": "Mix Fruit Green Tea (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m29",
+          "name": "Peach Green Tea (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m30",
+          "name": "Peach Green Tea (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m31",
+          "name": "Double Peach Green Tea (M)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m32",
+          "name": "Double Peach Green Tea (L)",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m33",
+          "name": "Yuzu Green Tea (M)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m34",
+          "name": "Yuzu Green Tea (L)",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m35",
+          "name": "Honey Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m36",
+          "name": "Honey Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m37",
+          "name": "Apple Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m38",
+          "name": "Apple Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m39",
+          "name": "Strawberry Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m40",
+          "name": "Strawberry Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m41",
+          "name": "Lychee Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m42",
+          "name": "Lychee Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m43",
+          "name": "Kiwi Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m44",
+          "name": "Kiwi Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m45",
+          "name": "Grape Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m46",
+          "name": "Grape Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m47",
+          "name": "Lemon Green Tea (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m48",
+          "name": "Lemon Green Tea (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m49",
+          "name": "Blueberry Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m50",
+          "name": "Blueberry Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m51",
+          "name": "Passion Fruit Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m52",
+          "name": "Passion Fruit Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m53",
+          "name": "Pineapple Green Tea (M)",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m54",
+          "name": "Pineapple Green Tea (L)",
+          "price": 45,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m55",
+          "name": "Apple Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m56",
+          "name": "Apple Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m57",
+          "name": "Apple Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m58",
+          "name": "Apple Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m59",
+          "name": "Strawberry Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m60",
+          "name": "Strawberry Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m61",
+          "name": "Strawberry Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m62",
+          "name": "Strawberry Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m63",
+          "name": "Kiwi Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m64",
+          "name": "Kiwi Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m65",
+          "name": "Kiwi Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m66",
+          "name": "Kiwi Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m67",
+          "name": "Lychee Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m68",
+          "name": "Lychee Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m69",
+          "name": "Lychee Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m70",
+          "name": "Lychee Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m71",
+          "name": "Grape Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m72",
+          "name": "Grape Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m73",
+          "name": "Grape Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m74",
+          "name": "Grape Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m75",
+          "name": "Blueberry Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m76",
+          "name": "Blueberry Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m77",
+          "name": "Blueberry Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m78",
+          "name": "Blueberry Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m79",
+          "name": "Passion Fruit Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m80",
+          "name": "Passion Fruit Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m81",
+          "name": "Passion Fruit Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m82",
+          "name": "Passion Fruit Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m83",
+          "name": "Lemon Juice (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m84",
+          "name": "Lemon Juice (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m85",
+          "name": "Lemon Soda (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m86",
+          "name": "Lemon Soda (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m87",
+          "name": "Peach Juice (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m88",
+          "name": "Peach Juice (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m89",
+          "name": "Peach Soda (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m90",
+          "name": "Peach Soda (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m91",
+          "name": "Pineapple Juice (M)",
+          "price": 20,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m92",
+          "name": "Pineapple Juice (L)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m93",
+          "name": "Pineapple Soda (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m94",
+          "name": "Pineapple Soda (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m95",
+          "name": "Oreo Frappe (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m96",
+          "name": "Oreo Frappe (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m97",
+          "name": "Nestvita / White Malt Frappe (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m98",
+          "name": "Nestvita / White Malt Frappe (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m99",
+          "name": "Yogurt Jelly Frappe (M)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m100",
+          "name": "Yogurt Jelly Frappe (L)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m101",
+          "name": "Matcha Latte (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m102",
+          "name": "Matcha Latte (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m103",
+          "name": "Hojicha Latte (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m104",
+          "name": "Hojicha Latte (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m105",
+          "name": "Chocolate Latte (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m106",
+          "name": "Chocolate Latte (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m107",
+          "name": "Mashed Taro Fresh Milk (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m108",
+          "name": "Mashed Taro Fresh Milk (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m109",
+          "name": "Fresh Milk (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m110",
+          "name": "Fresh Milk (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m111",
+          "name": "Pink Milk (M)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m112",
+          "name": "Pink Milk (L)",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m113",
+          "name": "Jasmine Green Tea Cheese Macchiato (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m114",
+          "name": "Jasmine Green Tea Cheese Macchiato (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m115",
+          "name": "Passion Fruit Green Tea Cheese Macchiato (M)",
+          "price": 55,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m116",
+          "name": "Passion Fruit Green Tea Cheese Macchiato (L)",
+          "price": 65,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m117",
+          "name": "Milk Tea Cheese Macchiato (M)",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m118",
+          "name": "Milk Tea Cheese Macchiato (L)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m119",
+          "name": "Mix Fruit Green Tea Cheese Macchiato (M)",
+          "price": 60,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m120",
+          "name": "Mix Fruit Green Tea Cheese Macchiato (L)",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m121",
+          "name": "Matcha / Hojicha Cheese Macchiato (M)",
+          "price": 70,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m122",
+          "name": "Matcha / Hojicha Cheese Macchiato (L)",
+          "price": 80,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m123",
+          "name": "Topping (Tapioca Pearls / Boba)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m124",
+          "name": "Topping (Jelly Brown Sugar)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m125",
+          "name": "Topping (Basil Seed)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m126",
+          "name": "Topping (Grass Jelly)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m127",
+          "name": "Topping (Pudding)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m128",
+          "name": "Topping (Popping Boba)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m129",
+          "name": "Topping (Aloe Vera in Syrup)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m130",
+          "name": "Topping (White Konjac Pearl)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-31-m131",
+          "name": "Topping (Cheese)",
+          "price": 20,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-32",
+      "name": "ฉ่ำชะบู ยำและชาบูเสียบไม้",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "papaya_salad",
+      "categoryName": "ส้มตำ/ยำรสเด็ด",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0825962401",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": "FB / LINE / IG: ChamChabuTu",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-32-m1",
+          "name": "วัตถุดิบชาบูเสียบไม้",
+          "price": 10,
+          "isAvailable": true,
+          "note": "ราคา 10-20 บาท"
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-33",
+      "name": "หมูแด่แด๊",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": null,
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-33-m1",
+          "name": "ข้าวเหนียว",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-33-m2",
+          "name": "ข้าวเหนียวหมูฝอย",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        },
+        {
+          "id": "shop-green-33-m3",
+          "name": "ข้าวเหนียวหมูแผ่น",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        },
+        {
+          "id": "shop-green-33-m4",
+          "name": "ข้าวเหนียวหมูสวรรค์",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        },
+        {
+          "id": "shop-green-33-m5",
+          "name": "ข้าวเหนียวปลาหมึกหวาน",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        },
+        {
+          "id": "shop-green-33-m6",
+          "name": "ข้าวเหนียวหอยหวาน",
+          "price": 20,
+          "isAvailable": true,
+          "note": "ราคา 20-25 บาท"
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-green-34",
+      "name": "โรตีชัด ชาใต้",
+      "canteen": "green",
+      "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
+      "boothNumber": null,
+      "locationDetails": null,
+      "category": "drinks_dessert",
+      "categoryName": "เครื่องดื่ม/ของหวาน",
+      "isOpen": true,
+      "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
+      "openingHours": "ยังไม่ระบุเวลา",
+      "phone": "0930405742",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": "LINE MAN; โทรเพิ่ม: 0813606631",
+      "pin": null,
+      "vendorName": null,
+      "accentColor": "#F97316",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-green-34-m1",
+          "name": "โรตีธรรมดา",
+          "price": 15,
+          "isAvailable": true,
+          "note": "ราคา 15-30 บาท"
+        },
+        {
+          "id": "shop-green-34-m2",
+          "name": "โรตีใส่ไข่",
+          "price": 25,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m3",
+          "name": "โรตีลาวา",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m4",
+          "name": "โรตีกล้วย",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m5",
+          "name": "โรตีชีส",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m6",
+          "name": "โรตีลูกชิ้น",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m7",
+          "name": "โรตีหมึก/นม",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m8",
+          "name": "โรตีกรอบ",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m9",
+          "name": "โรตีมันกล้วย+ฝอยทอง",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m10",
+          "name": "โรตีพิซซ่า",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m11",
+          "name": "โรตีมะตะบะ",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m12",
+          "name": "โรตีน้ำแกง",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m13",
+          "name": "โรตีรวม",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m14",
+          "name": "โรตีน้ำพริกเผาไก่หยองปูอัด",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m15",
+          "name": "โรตีมันกล้วยชีส",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m16",
+          "name": "โรตีผักโขมอบชีส",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m17",
+          "name": "โรตีไข่ดาว",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m18",
+          "name": "โรตีมะพร้าว",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m19",
+          "name": "โรตีกล้วย+ไข่",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m20",
+          "name": "โรตีไส้กรอกชีส",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m21",
+          "name": "โรตีฝอยทอง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m22",
+          "name": "โรตีลาวา+ชีส",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m23",
+          "name": "โรตีมะม่วง",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m24",
+          "name": "โรตีใส่ไข่+ชีส",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m25",
+          "name": "โรตีข้าวโพด",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m26",
+          "name": "โรตีมันกล้วย",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m27",
+          "name": "ท็อปปิ้ง โรตี (นูเทลล่า)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m28",
+          "name": "ท็อปปิ้ง โรตี (สตอเบอร์รี่)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m29",
+          "name": "ท็อปปิ้ง โรตี (ชีส)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m30",
+          "name": "ท็อปปิ้ง โรตี (ไข่)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m31",
+          "name": "ท็อปปิ้ง โรตี (ลูกเกด)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m32",
+          "name": "ท็อปปิ้ง โรตี (ช็อกโกแลต)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m33",
+          "name": "ท็อปปิ้ง โรตี (บลูเบอร์รี่)",
+          "price": 10,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m34",
+          "name": "ชาใต้",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m35",
+          "name": "ชาเขียว",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m36",
+          "name": "กาแฟ",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m37",
+          "name": "โกโก้",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m38",
+          "name": "โอวัลติน",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m39",
+          "name": "ชาดำเย็น",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m40",
+          "name": "ชามะนาว",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m41",
+          "name": "โกปี๊",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m42",
+          "name": "นมเขียว",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m43",
+          "name": "เผือก",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m44",
+          "name": "นมสด",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m45",
+          "name": "ชากุหลาบ",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m46",
+          "name": "โซดาทูโทน",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m47",
+          "name": "แดงโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m48",
+          "name": "เสาวรสโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m49",
+          "name": "เขียวโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m50",
+          "name": "สับปะรดโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m51",
+          "name": "บลูฮาวายโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m52",
+          "name": "ส้มโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m53",
+          "name": "บลูเบอร์รี่โซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m54",
+          "name": "กีวีโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m55",
+          "name": "องุ่นโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m56",
+          "name": "ลิ้นจี่โซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m57",
+          "name": "แคนตาลูปโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m58",
+          "name": "บ๊วยโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m59",
+          "name": "สตรอเบอร์รี่โซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m60",
+          "name": "แอปเปิ้ลโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m61",
+          "name": "มะนาวโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m62",
+          "name": "มะนาวน้ำผึ้งโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m63",
+          "name": "ลิ้นจี่สตรอเบอร์รี่โซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m64",
+          "name": "โกโก้ชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m65",
+          "name": "เผือกชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m66",
+          "name": "ชาใต้ครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m67",
+          "name": "โอวัลตินชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m68",
+          "name": "นมชมพูโกโก้",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m69",
+          "name": "นมชมพูเผือก",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m70",
+          "name": "นมสดบลูเบอร์รี่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m71",
+          "name": "นมชมพูลาวา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m72",
+          "name": "นมเขียวลาวา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m73",
+          "name": "ชาเขียวนมสดลาวา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m74",
+          "name": "ชาไทยนมสดลาวา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m75",
+          "name": "นมชมพูชาเขียว",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m76",
+          "name": "เผือกโกโก้",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m77",
+          "name": "ชาเขียวน้ำผึ้งมะนาวโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m78",
+          "name": "ชาเขียวชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m79",
+          "name": "ชาเขียวครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m80",
+          "name": "โอวัลตินครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m81",
+          "name": "นมชมพูครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m82",
+          "name": "นมสดครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m83",
+          "name": "โกโก้ครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m84",
+          "name": "นมสดลิ้นจี่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m85",
+          "name": "นมสดองุ่น",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m86",
+          "name": "นมสดคาราเมลชาไทย",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m87",
+          "name": "นมสดคาราเมลชาเขียว",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m88",
+          "name": "โอวัลตินภูเขาไฟ",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m89",
+          "name": "ชาไทยลิ้นจี่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m90",
+          "name": "ชาเขียวลิ้นจี่",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m91",
+          "name": "นมเผือกครีมชีส",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m92",
+          "name": "ชาไทยน้ำผึ้งมะนาวโซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m93",
+          "name": "น้ำบ๊วยลิ้นจี่โซดา",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m94",
+          "name": "ชาเขียวโกโก้",
+          "price": 35,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m95",
+          "name": "กล้วย+โกโก้ปั่น",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m96",
+          "name": "กล้วยปั่น",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m97",
+          "name": "มะพร้าวนมสดปั่น",
+          "price": 50,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m98",
+          "name": "นมร้อน",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m99",
+          "name": "ชาร้อน",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m100",
+          "name": "โอวัลติน (ร้อน)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m101",
+          "name": "โกโก้ (ร้อน)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m102",
+          "name": "กาแฟ (ร้อน)",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m103",
+          "name": "เพิ่มท็อปปิ้งน้ำ (ครีมชีส)",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m104",
+          "name": "เพิ่มท็อปปิ้งน้ำ (ไข่มุก)",
+          "price": 5,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-green-34-m105",
+          "name": "เพิ่มท็อปปิ้งน้ำ (บุกบราวน์)",
+          "price": 5,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     }
   ],
   "admins": [
