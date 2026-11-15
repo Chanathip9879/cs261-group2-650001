@@ -8,6 +8,7 @@ import {
 import { Toggle } from '../ui/Primitives';
 import MobileNav from './MobileNav';
 import { routes } from '../../router';
+import { isSoldOut } from '../../utils/shopDisplay';
 
 export default function MerchantLayout({
   path, user, shop, shops, onSelectShop, onToggleOpen, statusBusy, onLogout, children, subtitle = 'Store Dashboard',
@@ -105,7 +106,7 @@ export default function MerchantLayout({
             <div className="flex items-center gap-3">
               <span className="relative hidden size-9 items-center justify-center rounded-lg bg-surface-low text-ink lg:flex" aria-hidden>
                 <Bell className="size-4" />
-                {shop?.menus?.some((m) => !m.isAvailable) && <span className="absolute right-2 top-2 size-2 rounded-full bg-brand-accent" />}
+                {shop?.menus?.some(isSoldOut) && <span className="absolute right-2 top-2 size-2 rounded-full bg-brand-accent" />}
               </span>
               <div className="hidden text-right text-xs lg:block">
                 <p className="font-semibold text-ink">{user?.name || user?.vendorName}</p>
