@@ -9,6 +9,7 @@ import {
 import { StatusPill, HeartButton, Stars, Spinner, LiveDot } from '../components/ui/Primitives';
 import { getOpeningHours } from '../services/api';
 import { getTodayRow } from '../utils/openingHours';
+import WeeklyHours from '../components/WeeklyHours';
 import {
   getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone,
 } from '../utils/shopDisplay';
@@ -16,14 +17,17 @@ import { navigate, routes, goBack } from '../router';
 import ReviewList from '../components/ReviewList';
 
 export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleBookmark, justPosted, showToast, loading }) {
-  const [todayRow, setTodayRow] = useState(undefined);
+  // U12: ตารางเวลารายวัน (undefined = กำลังโหลด, null = โหลดไม่สำเร็จ)
+  const [hoursRows, setHoursRows] = useState(undefined);
+  const todayRow = hoursRows ? getTodayRow(hoursRows) : null;
 
   useEffect(() => {
     if (!shop?.id) return;
     let cancelled = false;
+    setHoursRows(undefined);
     getOpeningHours(shop.id)
-      .then((rows) => !cancelled && setTodayRow(getTodayRow(rows)))
-      .catch(() => !cancelled && setTodayRow(null));
+      .then((rows) => !cancelled && setHoursRows(rows))
+      .catch(() => !cancelled && setHoursRows(null));
     return () => {
       cancelled = true;
     };
@@ -209,6 +213,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
                 <LiveDot open={shop.isOpen} /> {shop.isOpen ? 'กำลังเปิด' : 'ปิดอยู่'}
               </span>
             </div>
+            <WeeklyHours rows={hoursRows} fallbackText={shop.openingHours} />
             <div className="hidden space-y-3 lg:block">
               <a
                 href={telHref(shop.phone)}
