@@ -170,6 +170,49 @@ async function main() {
 
   await runCase(
     'Task 39',
+    '39.4 รีวิวได้ทุกร้านใน database.json (201) / ร้านที่ไม่มีจริงคืนค่า 404',
+    async () => {
+      // ใช้ IP ต่างกันต่อร้าน เพื่อไม่ให้ชน rate limit (5 รีวิว / 10 นาที ต่อ IP)
+      for (const [index, shop] of allShops.entries()) {
+        const getRes = await fetch(`${BASE_URL}/api/shops/${shop.id}/reviews`);
+        assert.equal(getRes.status, 200, `GET รีวิวร้าน ${shop.id}`);
+
+        const postRes = await fetch(`${BASE_URL}/api/shops/${shop.id}/reviews`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Forwarded-For': `10.39.4.${index + 1}`
+          },
+          body: JSON.stringify({
+            username: `AllShops_${shop.id}`,
+            rating: 4,
+            comment: `ทดสอบรีวิวร้าน ${shop.id} จากรายชื่อร้านจริง`
+          })
+        });
+        assert.equal(postRes.status, 201, `POST รีวิวร้าน ${shop.id}`);
+      }
+
+      const resUnknown = await fetch(`${BASE_URL}/api/shops/shop-inter-01/reviews`);
+      assert.equal(resUnknown.status, 404);
+    }
+  );
+
+  await runCase(
+    'Task 39',
+    '39.5 response ของ GET /reviews (ทั้งสองรูปแบบ) ไม่มี client_ip',
+    async () => {
+      for (const url of ['/api/shops/shop-green-01/reviews', '/api/reviews?shop_id=shop-green-01']) {
+        const res = await fetch(`${BASE_URL}${url}`);
+        assert.equal(res.status, 200);
+        const json = await res.json();
+        assert.ok(json.data.length > 0);
+        assert.equal(json.data.some((r) => 'client_ip' in r), false);
+      }
+    }
+  );
+
+  await runCase(
+    'Task 39',
     '39.2 ส่งข้อมูลผิดพลาด (ข้อความว่าง / สั้นกว่า 10 ตัวอักษร / ไม่กรอกชื่อ) คืนค่า 400',
     async () => {
       const resEmpty = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
