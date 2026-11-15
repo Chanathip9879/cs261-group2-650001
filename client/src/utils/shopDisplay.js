@@ -60,8 +60,15 @@ export function hoursText(shop) {
   return h ? `${h.open} - ${h.close} น.` : shop?.openingHours || '-';
 }
 
+// U6: เมนูหมดหรือไม่ — รองรับทั้ง is_sold_out (ตามสเปก Task27/28) และ isAvailable (ข้อมูลปัจจุบัน)
+export function isSoldOut(menu) {
+  if (!menu) return false;
+  if (typeof menu.is_sold_out === 'boolean') return menu.is_sold_out;
+  return menu.isAvailable === false;
+}
+
 export function soldOutMenus(shop) {
-  return (shop?.menus || []).filter((m) => !m.isAvailable);
+  return (shop?.menus || []).filter(isSoldOut);
 }
 
 export function priceLevel(shop) {
