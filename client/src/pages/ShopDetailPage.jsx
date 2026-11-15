@@ -11,7 +11,7 @@ import { getOpeningHours } from '../services/api';
 import { getTodayRow } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
 import {
-  getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone,
+  getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone, isSoldOut,
 } from '../utils/shopDisplay';
 import { navigate, routes, goBack } from '../router';
 import ReviewList from '../components/ReviewList';
@@ -35,7 +35,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
 
   const canteen = canteens.find((c) => c.id === shop?.canteen);
   const menus = shop?.menus || [];
-  const availableCount = menus.filter((m) => m.isAvailable).length;
+  const availableCount = menus.filter((m) => !isSoldOut(m)).length;
 
   const todayHours = useMemo(() => {
     if (todayRow && todayRow.is_closed) return 'วันนี้ปิดทำการ';
@@ -265,7 +265,7 @@ function InfoItem({ icon, label, value, tone }) {
 }
 
 function MenuCard({ shop, menu, index, shopClosed }) {
-  const soldOut = !menu.isAvailable;
+  const soldOut = isSoldOut(menu); // U6: ป้าย "หมด" ตาม is_sold_out / isAvailable
   return (
     <article className={`flex gap-3 rounded-xl bg-white p-3 shadow-card sm:flex-col ${soldOut ? 'bg-surface-low' : ''}`}>
       <div className="relative size-20 shrink-0 overflow-hidden rounded-lg sm:h-36 sm:w-full">
