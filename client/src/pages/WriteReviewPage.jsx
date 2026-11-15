@@ -1,13 +1,17 @@
 // client/src/pages/WriteReviewPage.jsx
 // เขียนรีวิวและให้คะแนนร้านอาหาร (Write Review)
-// ยังไม่มี API รีวิวฝั่ง server จึงเก็บรีวิว/ฉบับร่างไว้ใน localStorage ของเครื่อง
+// U9: ส่งรีวิวผ่าน API (Task37) — บังคับ username + ข้อความ, ดาวและแท็กไม่บังคับ
+// ฉบับร่างยังเก็บใน localStorage ของเครื่อง
 
 import React, { useEffect, useState } from 'react';
 import {
   Star, Check, Utensils, Zap, BellRing, PiggyBank, Soup, GraduationCap, BadgeCheck, Info, ArrowRight, Store, Home, ChevronRight,
+  User, AlertCircle, Loader2,
 } from 'lucide-react';
 import { Spinner } from '../components/ui/Primitives';
 import useLocalState from '../hooks/useLocalList';
+import { createShopReview } from '../services/api';
+import { validateReview, USERNAME_MAX, COMMENT_MIN, COMMENT_MAX } from '../utils/reviewValidation';
 import { getShopImage, canteenShort } from '../utils/shopDisplay';
 import { navigate, routes } from '../router';
 
@@ -28,21 +32,22 @@ const RATING_TEXT = {
   5: { emoji: '😍', label: 'อร่อยประทับใจสุดๆ • ร้านในดวงใจ!', sub: 'ยอดเยี่ยม' },
 };
 
-const MIN_LEN = 10;
-const MAX_LEN = 500;
-
-export default function WriteReviewPage({ shop, loading, customer, onSubmit, showToast }) {
+export default function WriteReviewPage({ shop, loading, customer, onSubmitted, showToast }) {
   const [drafts, setDrafts] = useLocalState('hiwkhaw_review_drafts', {});
   const draft = (shop && drafts[shop.id]) || {};
+  const [username, setUsername] = useState(draft.username || customer?.name || '');
   const [rating, setRating] = useState(draft.rating || 0);
   const [hover, setHover] = useState(0);
   const [tags, setTags] = useState(draft.tags || []);
   const [text, setText] = useState(draft.text || '');
-  const [touched, setTouched] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (!shop) return;
     const d = drafts[shop.id] || {};
+    setUsername(d.username || customer?.name || '');
     setRating(d.rating || 0);
     setTags(d.tags || []);
     setText(d.text || '');
@@ -54,38 +59,56 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
   }
 
   const shown = hover || rating;
-  const textTooShort = text.trim().length < MIN_LEN;
-  const canSubmit = rating > 0 && !textTooShort;
 
   const toggleTag = (label) => setTags((prev) => (prev.includes(label) ? prev.filter((t) => t !== label) : [...prev, label]));
+  const clearError = (field) => errors[field] && setErrors((prev) => ({ ...prev, [field]: undefined }));
 
   const saveDraft = () => {
-    setDrafts((prev) => ({ ...prev, [shop.id]: { rating, tags, text } }));
+    setDrafts((prev) => ({ ...prev, [shop.id]: { username, rating, tags, text } }));
     showToast('บันทึกฉบับร่างไว้ในเครื่องแล้ว', 'success');
   };
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    setTouched(true);
-    if (!canSubmit) {
-      showToast(rating === 0 ? 'กรุณาให้คะแนนดาวก่อนส่งรีวิว' : `กรุณาเขียนรีวิวอย่างน้อย ${MIN_LEN} ตัวอักษร`, 'error');
+    if (submitting) return;
+    setFormError('');
+
+    // ตรวจข้อมูลก่อนส่ง (ห้ามว่าง / จำกัดความยาว)
+    const found = validateReview({ username, comment: text });
+    setErrors(found);
+    if (Object.keys(found).length) {
+      document.getElementById(found.username ? 'review-username' : 'review-comment')?.focus();
       return;
     }
-    onSubmit(shop.id, {
-      id: `r-${Date.now()}`,
-      rating,
-      tags,
-      text: text.trim(),
-      author: customer?.name || 'นักศึกษา มธ.',
-      createdAt: new Date().toISOString(),
-    });
-    setDrafts((prev) => {
-      const next = { ...prev };
-      delete next[shop.id];
-      return next;
-    });
-    showToast('ส่งรีวิวเรียบร้อย ขอบคุณที่ช่วยแบ่งปัน!', 'success');
-    navigate(routes.shop(shop.id));
+
+    setSubmitting(true);
+    try {
+      const review = await createShopReview(shop.id, {
+        username: username.trim(),
+        comment: text.trim(),
+        rating: rating || undefined,
+        tags,
+      });
+      // สำเร็จ -> ล้างฟอร์ม/ฉบับร่าง แล้วกลับไปหน้าร้านที่จะแสดงรีวิวใหม่บนสุด
+      setDrafts((prev) => {
+        const next = { ...prev };
+        delete next[shop.id];
+        return next;
+      });
+      setText('');
+      setRating(0);
+      setTags([]);
+      onSubmitted(shop.id, review);
+      showToast('ส่งรีวิวเรียบร้อย ขอบคุณที่ช่วยแบ่งปัน!', 'success');
+      navigate(routes.shop(shop.id));
+    } catch (err) {
+      // ไม่สำเร็จ -> แจ้งใต้ช่องที่ผิด หรือแจ้งรวม โดยไม่ลบข้อความที่ผู้ใช้พิมพ์ไว้
+      const fe = err.fieldErrors || {};
+      setErrors({ username: fe.username, comment: fe.comment });
+      if (!fe.username && !fe.comment) setFormError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const step = (n, title) => <p className="text-[11px] font-semibold text-brand">ขั้นตอนที่ {n} • {title}</p>;
@@ -124,6 +147,42 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
         </aside>
 
         <div className="space-y-6 lg:order-1">
+          {formError && (
+            <p role="alert" className="flex items-center gap-2 rounded-xl bg-danger-soft/60 px-4 py-3 text-sm text-danger">
+              <AlertCircle className="size-4 shrink-0" /> {formError}
+            </p>
+          )}
+
+          {/* ชื่อผู้รีวิว (username) */}
+          <section className="space-y-2 rounded-xl bg-white p-5 shadow-card lg:p-6">
+            <div className="flex items-start justify-between gap-3">
+              <label htmlFor="review-username" className="font-display text-lg font-bold text-ink">ชื่อผู้รีวิว (username)</label>
+              <span className="shrink-0 rounded-full bg-brand-peach px-2 py-0.5 text-[11px] font-semibold text-brand-deep">จำเป็น</span>
+            </div>
+            <div
+              className={`flex items-center gap-3 rounded-lg bg-surface-low px-4 focus-within:ring-2 ${
+                errors.username ? 'ring-2 ring-danger/40 focus-within:ring-danger/40' : 'focus-within:ring-brand-accent/40'
+              }`}
+            >
+              <User className="size-4 text-ink-muted" />
+              <input
+                id="review-username"
+                value={username}
+                maxLength={USERNAME_MAX}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  clearError('username');
+                }}
+                placeholder="เช่น นักศึกษาวิศวะ ปี 2"
+                aria-invalid={!!errors.username}
+                aria-describedby="review-username-error"
+                className="h-12 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink-muted"
+              />
+              <span className="text-[11px] text-ink-muted">{username.length}/{USERNAME_MAX}</span>
+            </div>
+            <p id="review-username-error" className="min-h-4 text-xs text-danger">{errors.username || ''}</p>
+          </section>
+
           {/* Step 1: rating */}
           <section className="space-y-4 rounded-xl bg-white p-5 shadow-card lg:p-6">
             <div className="flex items-start justify-between gap-3">
@@ -131,7 +190,7 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
                 {step(1, 'ความพึงพอใจ')}
                 <h2 className="font-display text-lg font-bold text-ink">ให้คะแนนประสบการณ์ของคุณ "ความประทับใจโดยรวม"</h2>
               </div>
-              <span className="shrink-0 rounded-full bg-brand-peach px-2 py-0.5 text-[11px] font-semibold text-brand-deep">จำเป็น</span>
+              <span className="shrink-0 rounded-full bg-surface-mid px-2 py-0.5 text-[11px] font-semibold text-ink-muted">ไม่บังคับ</span>
             </div>
             <div className="flex flex-col items-center gap-4 rounded-xl bg-surface-low p-5 sm:flex-row sm:justify-between">
               <div className="flex gap-2" onMouseLeave={() => setHover(0)} role="radiogroup" aria-label="คะแนนดาว">
@@ -157,7 +216,7 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
                     <p className="text-[11px] text-brand">{shown} จาก 5 คะแนน ({RATING_TEXT[shown].sub})</p>
                   </>
                 ) : (
-                  <p className={`py-2 text-sm ${touched ? 'text-danger' : 'text-ink-muted'}`}>แตะดาวเพื่อให้คะแนน</p>
+                  <p className="py-2 text-sm text-ink-muted">แตะดาวเพื่อให้คะแนน</p>
                 )}
               </div>
             </div>
@@ -197,26 +256,39 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
             <div className="flex items-start justify-between gap-3">
               <div>
                 {step(3, 'คำบรรยายความอร่อย')}
-                <h2 className="font-display text-lg font-bold text-ink">เขียนรีวิวฉบับคุณ</h2>
+                <label htmlFor="review-comment" className="font-display text-lg font-bold text-ink">เขียนรีวิวฉบับคุณ</label>
               </div>
               <span className="flex items-center gap-1 text-xs font-semibold text-ok">
                 <BadgeCheck className="size-4" /> ช่วยนักกินท่านอื่นตัดสินใจ
               </span>
             </div>
             <textarea
+              id="review-comment"
               value={text}
-              onChange={(e) => setText(e.target.value.slice(0, MAX_LEN))}
-              onBlur={() => setTouched(true)}
+              onChange={(e) => {
+                setText(e.target.value.slice(0, COMMENT_MAX));
+                clearError('comment');
+              }}
               rows={5}
-              maxLength={MAX_LEN}
+              maxLength={COMMENT_MAX}
+              aria-invalid={!!errors.comment}
+              aria-describedby="review-comment-error"
               placeholder="เช่น ไก่เนื้อนุ่มต้มสดใหม่ฉ่ำมาก ให้ปริมาณข้าวและเนื้อเยอะคุ้มค่าราคานักศึกษา ช่วงเที่ยงคนเยอะแต่ตักรวดเร็วรอคิวไม่เกิน 5 นาที..."
-              className="w-full resize-y rounded-lg bg-surface-low p-4 text-sm leading-6 text-ink outline-none placeholder:text-ink-muted focus:ring-2 focus:ring-brand-accent/40"
+              className={`w-full resize-y rounded-lg bg-surface-low p-4 text-sm leading-6 text-ink outline-none placeholder:text-ink-muted focus:ring-2 ${
+                errors.comment ? 'ring-2 ring-danger/40 focus:ring-danger/40' : 'focus:ring-brand-accent/40'
+              }`}
             />
-            <div className="flex items-center justify-between text-xs">
-              <span className={`flex items-center gap-1 ${textTooShort && touched ? 'text-danger' : 'text-ink-muted'}`}>
-                <Info className="size-3.5" /> ต้องมีอย่างน้อย {MIN_LEN} ตัวอักษร
-              </span>
-              <span className="text-ink-muted">{text.length} / {MAX_LEN}</span>
+            <div className="flex items-start justify-between gap-3 text-xs">
+              {errors.comment ? (
+                <p id="review-comment-error" className="flex items-center gap-1 text-danger">
+                  <AlertCircle className="size-3.5" /> {errors.comment}
+                </p>
+              ) : (
+                <p id="review-comment-error" className="flex items-center gap-1 text-ink-muted">
+                  <Info className="size-3.5" /> ต้องมีอย่างน้อย {COMMENT_MIN} ตัวอักษร
+                </p>
+              )}
+              <span className="shrink-0 text-ink-muted">{text.length} / {COMMENT_MAX}</span>
             </div>
           </section>
 
@@ -226,9 +298,11 @@ export default function WriteReviewPage({ shop, loading, customer, onSubmit, sho
             </button>
             <button
               type="submit"
-              className="flex items-center justify-center gap-2 rounded-lg bg-brand-accent px-6 py-3 text-sm font-semibold text-white shadow-hero transition hover:bg-brand-accent/90 disabled:opacity-60"
+              disabled={submitting}
+              className="flex items-center justify-center gap-2 rounded-lg bg-brand-accent px-6 py-3 text-sm font-semibold text-white shadow-hero transition hover:bg-brand-accent/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              ส่งรีวิวเพื่อเป็นข้อมูลให้เพื่อนๆ นักศึกษา มธ. <ArrowRight className="size-4" />
+              {submitting && <Loader2 className="size-4 animate-spin" />}
+              {submitting ? 'กำลังส่งรีวิว...' : 'ส่งรีวิวเพื่อเป็นข้อมูลให้เพื่อนๆ นักศึกษา มธ.'} {!submitting && <ArrowRight className="size-4" />}
             </button>
           </div>
         </div>

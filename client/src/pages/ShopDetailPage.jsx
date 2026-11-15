@@ -11,11 +11,12 @@ import { getOpeningHours } from '../services/api';
 import { getTodayRow } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
 import {
-  getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone, timeAgo,
+  getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone,
 } from '../utils/shopDisplay';
 import { navigate, routes, goBack } from '../router';
+import ReviewList from '../components/ReviewList';
 
-export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleBookmark, reviews, showToast, loading }) {
+export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleBookmark, justPosted, showToast, loading }) {
   // U12: ตารางเวลารายวัน (undefined = กำลังโหลด, null = โหลดไม่สำเร็จ)
   const [hoursRows, setHoursRows] = useState(undefined);
   const todayRow = hoursRows ? getTodayRow(hoursRows) : null;
@@ -42,9 +43,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
     return hoursText(shop);
   }, [todayRow, shop]);
 
-  const allReviews = reviews || [];
   const rating = Number(shop?.rating || 0);
-  const reviewCount = Number(shop?.reviewCount || 0) + allReviews.length;
+  const reviewCount = Number(shop?.reviewCount || 0);
 
   if (!shop) {
     return (
@@ -168,35 +168,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
                 <Stars value={rating} />
                 <p className="mt-1 text-xs text-ink-muted">จากทั้งหมด {reviewCount} รีวิว</p>
               </div>
-              <div className="flex-1 space-y-3">
-                {allReviews.length === 0 ? (
-                  <div className="rounded-xl bg-white p-4 text-sm text-ink-muted">
-                    ยังไม่มีรีวิวที่เขียนจากเครื่องนี้ — เป็นคนแรกที่รีวิวร้านนี้เลย!
-                  </div>
-                ) : (
-                  allReviews.slice(0, 3).map((r) => (
-                    <article key={r.id} className="space-y-2 rounded-xl bg-white p-4 shadow-card">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="flex size-7 items-center justify-center rounded-full bg-brand-peach text-xs font-bold text-brand">
-                            {(r.author || 'U').slice(0, 1)}
-                          </span>
-                          <span className="text-xs font-semibold text-ink">{r.author}</span>
-                        </div>
-                        <Stars value={r.rating} size="size-3.5" />
-                      </div>
-                      {r.text && <p className="text-sm leading-6 text-ink">“{r.text}”</p>}
-                      {r.tags?.length > 0 && (
-                        <div className="flex flex-wrap gap-1">
-                          {r.tags.map((t) => (
-                            <span key={t} className="rounded-full bg-brand-accent/10 px-2 py-0.5 text-[11px] text-brand">{t}</span>
-                          ))}
-                        </div>
-                      )}
-                      <p className="text-[11px] text-ink-muted">{timeAgo(r.createdAt)}</p>
-                    </article>
-                  ))
-                )}
+              <div className="min-w-0 flex-1">
+                <ReviewList shopId={shop.id} justPosted={justPosted} />
               </div>
             </div>
           </section>

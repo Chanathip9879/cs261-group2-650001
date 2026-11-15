@@ -17,6 +17,14 @@
       "landmark": "ใกล้อาคาร บร.4 และศูนย์คอมพิวเตอร์",
       "totalShops": 5,
       "operatingHours": "07:30 - 17:00 น."
+    },
+    {
+      "id": "sc",
+      "name": "โรงอาหารสังคมศาสตร์",
+      "shortName": "SC",
+      "description": "โรงอาหารสังคมศาสตร์ ใกล้ตึก SC",
+      "landmark": "ใกล้ตึก SC",
+      "totalShops": 0
     }
   ],
   "categories": [
@@ -70,6 +78,9 @@
       "statusNote": "เปิดให้บริการตามปกติ",
       "openingHours": "07:00 - 15:30",
       "phone": "0811111111",
+      "line_id": "@sample-g01",
+      "facebook": "SAMPLE Shop G01",
+      "other_contact": "IG: sample_g01",
       "pin": "1111",
       "vendorName": "ป้าณี ศรีรังสิต",
       "accentColor": "#10B981",
@@ -101,7 +112,9 @@
           "price": 10,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-02",
@@ -116,6 +129,9 @@
       "statusNote": "รับออเดอร์เรื่อยๆ ผัดใหม่จานต่อจาน",
       "openingHours": "08:00 - 17:00",
       "phone": "0822222222",
+      "line_id": "@sample-g02",
+      "facebook": null,
+      "other_contact": null,
       "pin": "2222",
       "vendorName": "คุณยายสมศรี",
       "accentColor": "#F59E0B",
@@ -147,7 +163,9 @@
           "price": 55,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-03",
@@ -162,6 +180,9 @@
       "statusNote": "น้ำซุปหมด กำลังเตรียมวัตถุดิบช่วงบ่าย",
       "openingHours": "08:30 - 15:00",
       "phone": "0833333333",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "3333",
       "vendorName": "พี่ชาติ เตี๋ยวเรือ",
       "accentColor": "#EF4444",
@@ -193,7 +214,9 @@
           "price": 10,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-04",
@@ -208,6 +231,9 @@
       "statusNote": "เปิดพร้อมเสิร์ฟ น้ำปั่นสดชื่น",
       "openingHours": "07:30 - 18:00",
       "phone": "0844444444",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "4444",
       "vendorName": "น้องมายด์",
       "accentColor": "#06B6D4",
@@ -233,7 +259,9 @@
           "price": 30,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-05",
@@ -248,6 +276,9 @@
       "statusNote": "ไก่ทอดร้อนๆ ทอดใหม่ทุก 15 นาที",
       "openingHours": "09:00 - 17:30",
       "phone": "0855555555",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "5555",
       "vendorName": "พี่ตั้ม ปังปัง",
       "accentColor": "#F97316",
@@ -273,7 +304,9 @@
           "price": 35,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": null,
+      "longitude": null
     },
     {
       "id": "shop-sci-01",
@@ -288,6 +321,9 @@
       "statusNote": "เปิดบริการ ข้าวมันหอมนุ่ม น้ำจิ้มรสเด็ด",
       "openingHours": "07:30 - 15:30",
       "phone": "0866666666",
+      "line_id": null,
+      "facebook": "SAMPLE Shop S01",
+      "other_contact": "โทรสั่งล่วงหน้าได้ (ข้อมูลตัวอย่าง)",
       "pin": "6666",
       "vendorName": "ลุงหนุ่ม มธ.",
       "accentColor": "#10B981",
@@ -319,7 +355,9 @@
           "price": 20,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-02",
@@ -334,6 +372,9 @@
       "statusNote": "เปิดปกติ มะนาวแท้ 100% หมูบะช่อแผ่นโต",
       "openingHours": "08:00 - 16:00",
       "phone": "0877777777",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "7777",
       "vendorName": "ป้าแหวว",
       "accentColor": "#EC4899",
@@ -359,7 +400,9 @@
           "price": 20,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-03",
@@ -374,6 +417,9 @@
       "statusNote": "ปิดชั่วคราว วัตถุดิบหมด เปิดอีกทีพรุ่งนี้",
       "openingHours": "07:30 - 14:00",
       "phone": "0888888888",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "8888",
       "vendorName": "พี่เอส ไข่เจียว",
       "accentColor": "#EF4444",
@@ -393,7 +439,9 @@
           "price": 45,
           "isAvailable": false
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-04",
@@ -408,6 +456,9 @@
       "statusNote": "เปิดตำความแซ่บ ปลาร้านัวต้มสุก",
       "openingHours": "09:30 - 16:30",
       "phone": "0812345678",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "1234",
       "vendorName": "เจ๊หน่อย แซ่บเวอร์",
       "accentColor": "#8B5CF6",
@@ -439,7 +490,9 @@
           "price": 60,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-05",
@@ -454,6 +507,9 @@
       "statusNote": "กาแฟคั่วสด นมสดแท้ 100%",
       "openingHours": "07:30 - 17:00",
       "phone": "0898765432",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
       "pin": "5432",
       "vendorName": "พี่กิ๊ก SC",
       "accentColor": "#0EA5E9",
@@ -479,7 +535,9 @@
           "price": 40,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": null,
+      "longitude": null
     }
   ],
   "admins": [
