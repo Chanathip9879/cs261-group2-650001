@@ -154,12 +154,20 @@ export async function updateShopStatus(shopId, isOpen, statusNote) {
   return data;
 }
 
+// API เวลาเปิด-ปิดมี 2 รูปแบบ: เดิมส่ง data เป็น array, Task48 ส่ง data = { weekly: [...], special_holidays }
+// แปลงให้เป็น array ของแถวรายวันเสมอ (กันหน้าร้านพังเมื่อรูปแบบไม่ตรง)
+function toWeeklyRows(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (payload && Array.isArray(payload.weekly)) return payload.weekly;
+  return [];
+}
+
 // ดึงเวลาเปิด-ปิดรายวันของร้าน (U12) คืน array ของแถว opening_hours
 export async function getOpeningHours(shopId) {
   const res = await fetch(`${BASE_URL}/shops/${shopId}/opening-hours`);
   if (!res.ok) throw new Error('ไม่สามารถโหลดเวลาเปิด-ปิดร้านได้');
   const data = await res.json();
-  return data.data || [];
+  return toWeeklyRows(data.data);
 }
 
 // บันทึกเวลาเปิด-ปิดรายวันของร้าน (U13) ต้องล็อกอินเป็นเจ้าของร้านหรือแอดมิน
@@ -173,14 +181,20 @@ export async function saveOpeningHours(shopId, hours) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({ hours })
+    // ส่งทั้ง hours (API เดิม) และ weekly (API ของ Task48)
+    body: JSON.stringify({ hours, weekly: hours })
   });
 
-  const data = await res.json();
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    // response ไม่ใช่ JSON
+  }
   if (!res.ok || !data.success) {
     throw new Error(data.message || 'ไม่สามารถบันทึกเวลาเปิด-ปิดร้านได้');
   }
-  return data;
+  return { ...data, data: toWeeklyRows(data.data) };
 }
 
 
