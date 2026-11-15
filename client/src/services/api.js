@@ -199,22 +199,52 @@ export async function saveOpeningHours(shopId, hours) {
 
 
 // แจ้งเมนูหมด / เปิดขายอีกครั้ง (หน้า Merchant Dashboard)
+// U6: error ที่บอกสาเหตุได้ (status) เพื่อให้หน้าจอแจ้งผู้ใช้ตรงกรณี
+export class MenuUpdateError extends Error {
+  constructor(message, status = 0) {
+    super(message);
+    this.name = 'MenuUpdateError';
+    this.status = status; // 0 = เชื่อมต่อไม่ได้, 401 = token หมดอายุ, 403 = ไม่มีสิทธิ์, 404 = ไม่พบเมนู
+  }
+}
+
+const MENU_ERROR_MESSAGES = {
+  0: 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่อีกครั้ง',
+  401: 'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่',
+  403: 'คุณไม่มีสิทธิ์แก้ไขเมนูของร้านนี้',
+  404: 'ไม่พบเมนูนี้ อาจถูกลบไปแล้ว',
+};
+
 export async function updateMenuAvailability(shopId, menuId, isAvailable) {
   const token = authStorage.getToken();
-  if (!token) throw new Error('กรุณาเข้าสู่ระบบก่อนแก้ไขเมนู');
+  if (!token) throw new MenuUpdateError(MENU_ERROR_MESSAGES[401], 401);
 
-  const res = await fetch(`${BASE_URL}/shops/${shopId}/menus/${menuId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ isAvailable })
-  });
+  let res;
+  try {
+    res = await fetch(`${BASE_URL}/shops/${shopId}/menus/${menuId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      // ส่ง is_sold_out ไปด้วย เผื่อ API ของ Task27 ใช้ชื่อตามสเปก
+      body: JSON.stringify({ isAvailable, is_sold_out: !isAvailable })
+    });
+  } catch {
+    throw new MenuUpdateError(MENU_ERROR_MESSAGES[0], 0);
+  }
 
-  const data = await res.json();
+  let data = {};
+  try {
+    data = await res.json();
+  } catch {
+    // response ไม่ใช่ JSON
+  }
   if (!res.ok || !data.success) {
-    throw new Error(data.message || 'ไม่สามารถอัปเดตเมนูได้');
+    throw new MenuUpdateError(
+      MENU_ERROR_MESSAGES[res.status] || data.message || 'ไม่สามารถอัปเดตเมนูได้',
+      res.status
+    );
   }
   return data;
 }

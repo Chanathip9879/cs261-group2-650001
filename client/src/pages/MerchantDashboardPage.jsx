@@ -1,5 +1,5 @@
 // client/src/pages/MerchantDashboardPage.jsx
-// แดชบอร์ดจัดการร้าน (Merchant Dashboard) — U5 เปิด/ปิดร้าน + แจ้งเมนูหมด
+// แดชบอร์ดจัดการร้าน (Merchant Dashboard) — U5 เปิด/ปิดร้าน + U6 แจ้งเมนูหมด
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Toggle, LiveDot } from '../components/ui/Primitives';
 import { updateMenuAvailability } from '../services/api';
-import { getMenuImage, formatBaht, formatPhone, hoursText, timeAgo, canteenShort } from '../utils/shopDisplay';
+import { getMenuImage, formatBaht, formatPhone, hoursText, timeAgo, canteenShort, isSoldOut } from '../utils/shopDisplay';
 import { routes } from '../router';
 
 const NOTE_PRESETS_OPEN = ['เปิดให้บริการตามปกติ', 'กับข้าวร้อนๆ พร้อมเสิร์ฟ', 'คิวยาว รอประมาณ 10 นาที'];
@@ -15,7 +15,8 @@ const NOTE_PRESETS_CLOSED = ['วัตถุดิบหมด ปิดก่�
 
 export default function MerchantDashboardPage({ shop, onSetStatus, statusBusy, onShopUpdated, showToast }) {
   const [note, setNote] = useState(shop?.statusNote || '');
-  const [busyMenu, setBusyMenu] = useState(null);
+  // U6: สถานะเมนูที่กดแล้วแต่ยังรอ server ตอบ { [menuId]: soldOut } — แสดงผลทันที (optimistic)
+  const [pendingMenus, setPendingMenus] = useState({});
 
   useEffect(() => setNote(shop?.statusNote || ''), [shop?.id, shop?.statusNote]);
 
@@ -24,20 +25,31 @@ export default function MerchantDashboardPage({ shop, onSetStatus, statusBusy, o
   }
 
   const menus = shop.menus || [];
-  const ready = menus.filter((m) => m.isAvailable).length;
-  const out = menus.length - ready;
+  const soldOutOf = (m) => (m.id in pendingMenus ? pendingMenus[m.id] : isSoldOut(m));
+  const out = menus.filter(soldOutOf).length;
+  const ready = menus.length - out;
   const presets = shop.isOpen ? NOTE_PRESETS_OPEN : NOTE_PRESETS_CLOSED;
 
+  const clearPending = (menuId) =>
+    setPendingMenus((prev) => {
+      const next = { ...prev };
+      delete next[menuId];
+      return next;
+    });
+
+  // U6: เปลี่ยนสถานะบนจอทันทีหลังกด แล้วค่อยบันทึก — ถ้าไม่สำเร็จจะคืนปุ่มเป็นสถานะเดิมพร้อมแจ้งเตือน
   const toggleMenu = async (menu) => {
-    setBusyMenu(menu.id);
+    if (menu.id in pendingMenus) return;
+    const nextSoldOut = !isSoldOut(menu);
+    setPendingMenus((prev) => ({ ...prev, [menu.id]: nextSoldOut }));
     try {
-      const res = await updateMenuAvailability(shop.id, menu.id, !menu.isAvailable);
-      onShopUpdated(res.data);
-      showToast(res.message, menu.isAvailable ? 'info' : 'success');
+      const res = await updateMenuAvailability(shop.id, menu.id, !nextSoldOut);
+      if (res.data) onShopUpdated(res.data);
+      showToast(res.message || (nextSoldOut ? `แจ้ง "${menu.name}" หมดแล้ว` : `เปิดขาย "${menu.name}" แล้ว`), nextSoldOut ? 'info' : 'success');
     } catch (err) {
-      showToast(err.message, 'error');
+      showToast(`${err.message} — "${menu.name}" ยังเป็นสถานะเดิม`, 'error');
     } finally {
-      setBusyMenu(null);
+      clearPending(menu.id);
     }
   };
 
@@ -168,8 +180,8 @@ export default function MerchantDashboardPage({ shop, onSetStatus, statusBusy, o
 
           <ul className="space-y-3">
             {menus.map((m, i) => {
-              const soldOut = !m.isAvailable;
-              const busy = busyMenu === m.id;
+              const soldOut = soldOutOf(m);
+              const busy = m.id in pendingMenus;
               return (
                 <li
                   key={m.id}
