@@ -1,31 +1,43 @@
 const assert = require('node:assert/strict');
+const fs = require('fs');
+const path = require('path');
 const { resetStore, readShops } = require('../utils/dbAdapter');
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
 
-// สร้าง Token จำลองสำหรับทดสอบ Authorization
-function createMockToken(payload) {
+// Token จำลองที่ไม่ได้มาจากการ Login จริง — ต้องถูกปฏิเสธเสมอ
+function createForgedToken(payload) {
   const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
   const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
   return `${header}.${body}.mock-signature`;
 }
 
-const OWNER_GREEN_TOKEN = createMockToken({
+const FORGED_OWNER_TOKEN = createForgedToken({
   id: 'user-owner-green',
   role: 'OWNER',
   shop_id: 'shop-green-01'
 });
 
-const OWNER_SCI_TOKEN = createMockToken({
-  id: 'user-owner-sci',
-  role: 'OWNER',
-  shop_id: 'shop-sci-01'
-});
+// Login จริงผ่าน POST /api/auth/login ด้วยเบอร์โทร + PIN ของร้านใน database.json
+function readShopCredentials(shopId) {
+  const db = JSON.parse(
+    fs.readFileSync(path.join(__dirname, '..', 'data', 'database.json'), 'utf8')
+  );
+  const shop = db.shops.find((s) => s.id === shopId);
+  return { phone: shop.phone, pin: shop.pin };
+}
 
-const CUSTOMER_TOKEN = createMockToken({
-  id: 'user-student-01',
-  role: 'CUSTOMER'
-});
+async function loginAsShop(shopId) {
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(readShopCredentials(shopId))
+  });
+  const json = await res.json();
+  assert.equal(res.status, 200, `Login ร้าน ${shopId} ไม่สำเร็จ`);
+  assert.equal(json.user.shopId, shopId);
+  return json.token;
+}
 
 const results = [];
 
@@ -48,6 +60,11 @@ async function main() {
 
   // รีเซ็ตข้อมูลเริ่มต้นก่อนรันทดสอบทุกครั้ง
   resetStore();
+
+  const OWNER_GREEN_TOKEN = await loginAsShop('shop-green-01');
+  const OWNER_SCI_TOKEN = await loginAsShop('shop-sci-01');
+  // ร้านที่มีเฉพาะใน database.json (ไม่เคยอยู่ในร้านทดสอบ 5 ร้านเดิม)
+  const OWNER_GREEN2_TOKEN = await loginAsShop('shop-green-02');
 
   // --------------------------------------------------------------------------
   // TASK 35 (U8): ทดสอบการเรียงระยะทางและกรณีร้านไม่มีพิกัด
@@ -260,7 +277,7 @@ async function main() {
   // --------------------------------------------------------------------------
   await runCase(
     'Task 50',
-    '50.1 บัญชีเจ้าของร้าน (OWNER) ตั้งเวลาเปิด/ปิดและวันหยุดพิเศษสำเร็จ (200)',
+    '50.1 เจ้าของร้าน Login จริงแล้วตั้งเวลาเปิด/ปิดและวันหยุดพิเศษสำเร็จ (200)',
     async () => {
       const payload = {
         weekly: [
@@ -296,7 +313,7 @@ async function main() {
 
   await runCase(
     'Task 50',
-    '50.2 ป้องกันสิทธิ์: ไม่ล็อกอิน (401) / ผู้ใช้ทั่วไปหรือเจ้าของร้านอื่น (403)',
+    '50.2 ป้องกันสิทธิ์: ไม่ล็อกอิน (401) / Token ปลอมหรือเจ้าของร้านอื่น (403)',
     async () => {
       const validBody = JSON.stringify({
         weekly: [{ day_of_week: 1, is_closed: false, open_time: '09:00', close_time: '17:00' }]
@@ -309,15 +326,15 @@ async function main() {
       });
       assert.equal(resNoAuth.status, 401);
 
-      const resCustomer = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resForged = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${CUSTOMER_TOKEN}`
+          Authorization: `Bearer ${FORGED_OWNER_TOKEN}`
         },
         body: validBody
       });
-      assert.equal(resCustomer.status, 403);
+      assert.equal(resForged.status, 403);
 
       const resOtherOwner = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
         method: 'PUT',
@@ -328,6 +345,32 @@ async function main() {
         body: validBody
       });
       assert.equal(resOtherOwner.status, 403);
+    }
+  );
+
+  await runCase(
+    'Task 50',
+    '50.4 ร้านจริงที่ไม่ได้อยู่ในร้านทดสอบเดิม ดูและบันทึกเวลาเปิด/ปิดได้ (200)',
+    async () => {
+      const getRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`);
+      assert.equal(getRes.status, 200);
+
+      const putRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${OWNER_GREEN2_TOKEN}`
+        },
+        body: JSON.stringify({
+          weekly: [{ day_of_week: 1, is_closed: false, open_time: '10:00', close_time: '16:00' }]
+        })
+      });
+      assert.equal(putRes.status, 200);
+
+      const afterRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`);
+      const afterJson = await afterRes.json();
+      const monday = afterJson.data.weekly.find((d) => d.day_of_week === 1);
+      assert.equal(monday.open_time, '10:00');
     }
   );
 
