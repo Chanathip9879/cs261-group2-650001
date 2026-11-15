@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-const { resetStore } = require('../utils/dbAdapter');
+const { resetStore, readShops } = require('../utils/dbAdapter');
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
 
@@ -52,32 +52,51 @@ async function main() {
   // --------------------------------------------------------------------------
   // TASK 35 (U8): ทดสอบการเรียงระยะทางและกรณีร้านไม่มีพิกัด
   // --------------------------------------------------------------------------
+  // ร้านมาจาก database.json (ร้านจริง) จึงคำนวณผลที่คาดหวังจากข้อมูลจริงแทนการ fix รหัสร้าน
+  const allShops = readShops();
+  const hasCoords = (s) => Number.isFinite(s.latitude) && Number.isFinite(s.longitude);
+  const expectedNearbyIds = allShops.filter((s) => s.is_open && hasCoords(s)).map((s) => s.id).sort();
+  const closedIds = allShops.filter((s) => !s.is_open).map((s) => s.id);
+  const noCoordIds = allShops.filter((s) => !hasCoords(s)).map((s) => s.id);
+  const greenShop = allShops.find((s) => s.canteen === 'green' && s.is_open && hasCoords(s));
+  const sciShop = allShops.find((s) => s.canteen === 'sci' && s.is_open && hasCoords(s));
+
+  const assertSortedByDistance = (data) => {
+    for (let i = 1; i < data.length; i += 1) {
+      assert.ok(data[i - 1].distance_km <= data[i].distance_km);
+    }
+  };
+
   await runCase(
     'Task 35',
-    '35.1 เรียงระยะทางถูกต้องจากตำแหน่ง Green Canteen (14.0736, 100.6014)',
+    '35.1 เรียงระยะทางถูกต้องจากตำแหน่ง Green Canteen (ร้านกรีนแคนทีนมาก่อน)',
     async () => {
-      const res = await fetch(`${BASE_URL}/api/shops/nearby?lat=14.0736&lng=100.6014`);
+      assert.ok(greenShop && sciShop, 'ต้องมีร้านเปิดที่มีพิกัดทั้งสองโรงอาหารใน database.json');
+      const res = await fetch(
+        `${BASE_URL}/api/shops/nearby?lat=${greenShop.latitude}&lng=${greenShop.longitude}`
+      );
       assert.equal(res.status, 200);
       const json = await res.json();
       assert.equal(json.success, true);
-      assert.equal(json.data[0].id, 'shop-green-01');
-      assert.equal(json.data[1].id, 'shop-sci-01');
-      assert.equal(json.data[2].id, 'shop-inter-01');
-      assert.ok(json.data[0].distance_km <= json.data[1].distance_km);
-      assert.ok(json.data[1].distance_km <= json.data[2].distance_km);
+      assert.deepEqual(json.data.map((s) => s.id).sort(), expectedNearbyIds);
+      assert.equal(json.data[0].canteen, 'green');
+      assert.equal(json.data[json.data.length - 1].canteen, 'sci');
+      assertSortedByDistance(json.data);
     }
   );
 
   await runCase(
     'Task 35',
-    '35.2 เรียงระยะทางเปลี่ยนถูกต้องเมื่อย้ายไปตำแหน่ง Interzone (14.0685, 100.6079)',
+    '35.2 เรียงระยะทางเปลี่ยนถูกต้องเมื่อย้ายไปตำแหน่ง SC Canteen (ร้านคณะวิทย์มาก่อน)',
     async () => {
-      const res = await fetch(`${BASE_URL}/api/shops/nearby?lat=14.0685&lng=100.6079`);
+      const res = await fetch(
+        `${BASE_URL}/api/shops/nearby?lat=${sciShop.latitude}&lng=${sciShop.longitude}`
+      );
       assert.equal(res.status, 200);
       const json = await res.json();
-      assert.equal(json.data[0].id, 'shop-inter-01');
-      assert.equal(json.data[1].id, 'shop-sci-01');
-      assert.equal(json.data[2].id, 'shop-green-01');
+      assert.equal(json.data[0].canteen, 'sci');
+      assert.equal(json.data[json.data.length - 1].canteen, 'green');
+      assertSortedByDistance(json.data);
     }
   );
 
@@ -85,9 +104,10 @@ async function main() {
     'Task 35',
     '35.3 ร้านที่ปิดอยู่ (CLOSED) ไม่แสดงในผลลัพธ์',
     async () => {
+      assert.ok(closedIds.length > 0, 'ต้องมีร้านที่ปิดอยู่อย่างน้อย 1 ร้านใน database.json');
       const res = await fetch(`${BASE_URL}/api/shops/nearby?lat=14.0736&lng=100.6014`);
       const json = await res.json();
-      const hasClosedShop = json.data.some((s) => s.id === 'shop-closed-01' || s.status === 'CLOSED');
+      const hasClosedShop = json.data.some((s) => closedIds.includes(s.id) || s.status === 'CLOSED');
       assert.equal(hasClosedShop, false);
     }
   );
@@ -96,11 +116,13 @@ async function main() {
     'Task 35',
     '35.4 ร้านที่ไม่มีพิกัด (null) ถูกข้ามอย่างปลอดภัยโดยระบบไม่ล่ม',
     async () => {
+      assert.ok(noCoordIds.length > 0, 'ต้องมีร้านที่ไม่มีพิกัดอย่างน้อย 1 ร้านใน database.json');
       const res = await fetch(`${BASE_URL}/api/shops/nearby?lat=14.0736&lng=100.6014`);
       assert.equal(res.status, 200);
       const json = await res.json();
-      const hasNullCoordShop = json.data.some((s) => s.id === 'shop-nocoord-01');
+      const hasNullCoordShop = json.data.some((s) => noCoordIds.includes(s.id));
       assert.equal(hasNullCoordShop, false);
+      assert.equal(json.data.some((s) => 'pin' in s), false);
     }
   );
 

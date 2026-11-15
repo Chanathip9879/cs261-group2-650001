@@ -2,7 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
+// sprint2_store.json เก็บเฉพาะข้อมูล Sprint 2 (reviews, opening_hours)
 const STORE_FILE = path.join(DATA_DIR, 'sprint2_store.json');
+// รายชื่อร้านจริงทั้งหมดมาจาก database.json (ไฟล์เดียวกับที่ shopController ใช้)
+const DATABASE_FILE = path.join(DATA_DIR, 'database.json');
 
 const DEFAULT_WEEKLY_HOURS = [
   { day_of_week: 0, day_name: 'อาทิตย์', is_closed: true, open_time: null, close_time: null },
@@ -14,64 +17,8 @@ const DEFAULT_WEEKLY_HOURS = [
   { day_of_week: 6, day_name: 'เสาร์', is_closed: false, open_time: '09:00', close_time: '17:00' }
 ];
 
+// รายชื่อร้านไม่ได้เก็บในไฟล์นี้แล้ว — ใช้จาก database.json เป็นแหล่งเดียว (ดู readShops)
 const INITIAL_DATA = {
-  shops: [
-    {
-      id: 'shop-green-01',
-      name: 'ข้าวมันไก่เจ๊หงษ์',
-      canteen: 'Green Canteen',
-      category: 'อาหารจานเดียว',
-      status: 'OPEN',
-      is_open: true,
-      latitude: 14.07365,
-      longitude: 100.60142,
-      owner_id: 'owner-green-01'
-    },
-    {
-      id: 'shop-sci-01',
-      name: 'ก๋วยเตี๋ยวเรือตึก SC',
-      canteen: 'SC Canteen',
-      category: 'ก๋วยเตี๋ยว',
-      status: 'OPEN',
-      is_open: true,
-      latitude: 14.07015,
-      longitude: 100.60588,
-      owner_id: 'owner-sci-01'
-    },
-    {
-      id: 'shop-inter-01',
-      name: 'ตามสั่งอินเตอร์โซน',
-      canteen: 'Interzone',
-      category: 'อาหารตามสั่ง',
-      status: 'OPEN',
-      is_open: true,
-      latitude: 14.06845,
-      longitude: 100.60795,
-      owner_id: 'owner-inter-01'
-    },
-    {
-      id: 'shop-closed-01',
-      name: 'ร้านน้ำปั่นปิดชั่วคราว',
-      canteen: 'Green Canteen',
-      category: 'เครื่องดื่ม',
-      status: 'CLOSED',
-      is_open: false,
-      latitude: 14.07370,
-      longitude: 100.60150,
-      owner_id: 'owner-closed-01'
-    },
-    {
-      id: 'shop-nocoord-01',
-      name: 'ร้านขนมหวานยังไม่มีพิกัด',
-      canteen: 'JC Canteen',
-      category: 'ของหวาน',
-      status: 'OPEN',
-      is_open: true,
-      latitude: null,
-      longitude: null,
-      owner_id: 'owner-nocoord-01'
-    }
-  ],
   reviews: [
     {
       id: 'rev-init-001',
@@ -113,15 +60,38 @@ function ensureStore() {
   }
 }
 
+/**
+ * อ่านรายชื่อร้านจาก database.json แล้วแปลงให้อยู่ในรูปที่ route ของ Sprint 2 ใช้
+ * - เพิ่ม is_open / status จาก isOpen (nearbyShops ใช้ field นี้กรองร้านที่เปิด)
+ * - ตัด pin ออกเสมอ เพราะบาง route ส่ง object ร้านกลับไปทั้งก้อน
+ */
+function readShops() {
+  const db = JSON.parse(fs.readFileSync(DATABASE_FILE, 'utf8'));
+  const shops = Array.isArray(db.shops) ? db.shops : [];
+  return shops.map((shop) => {
+    const { pin, ...publicShop } = shop;
+    const isOpen = shop.isOpen === true;
+    return {
+      ...publicShop,
+      is_open: isOpen,
+      status: isOpen ? 'OPEN' : 'CLOSED'
+    };
+  });
+}
+
 function readStore() {
   ensureStore();
   const raw = fs.readFileSync(STORE_FILE, 'utf8');
-  return JSON.parse(raw);
+  const stored = JSON.parse(raw);
+  // ไม่ใช้ shops ที่อาจค้างอยู่ในไฟล์ store รุ่นเก่า (ร้านทดสอบ 5 ร้าน)
+  return { ...stored, shops: readShops() };
 }
 
 function writeStore(data) {
   ensureStore();
-  fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf8');
+  // ร้านเป็นของ database.json — ไม่เขียนสำเนาลง sprint2_store.json
+  const { shops, ...persisted } = data;
+  fs.writeFileSync(STORE_FILE, JSON.stringify(persisted, null, 2), 'utf8');
 }
 
 function resetStore() {
@@ -131,6 +101,7 @@ function resetStore() {
 
 module.exports = {
   DEFAULT_WEEKLY_HOURS,
+  readShops,
   readStore,
   writeStore,
   resetStore
