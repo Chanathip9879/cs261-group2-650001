@@ -196,13 +196,49 @@ exports.getShops = (req, res) => {
         filteredCount: result.length,
         timestamp: new Date().toISOString()
       },
-      data: result
+      data: result.map(toPublicShop)
     });
   } catch (err) {
     console.error('Error in getShops:', err);
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการดึงข้อมูลร้านอาหาร' });
   }
 };
+
+// ==========================================
+// Helpers: ข้อมูลติดต่อร้าน + ซ่อน pin (Task40 / U10)
+// ==========================================
+const PHONE_PATTERN = /^0\d{9}$/; // 10 หลัก ขึ้นต้นด้วย 0
+const CONTACT_MAX_LENGTH = { line_id: 50, facebook: 200, other_contact: 200 };
+
+// ตรวจข้อมูลติดต่อ { phone, line_id, facebook, other_contact } คืนรายการ error (ว่าง = ผ่าน)
+function validateContact(contact) {
+  const errors = [];
+  if (!contact || typeof contact !== 'object') return ['ข้อมูลติดต่อไม่ถูกต้อง'];
+
+  if (typeof contact.phone !== 'string' || !PHONE_PATTERN.test(contact.phone)) {
+    errors.push('phone ต้องเป็นตัวเลข 10 หลัก ขึ้นต้นด้วย 0');
+  }
+  Object.entries(CONTACT_MAX_LENGTH).forEach(([field, max]) => {
+    const v = contact[field];
+    if (v === null || v === undefined) return; // null ได้
+    if (typeof v !== 'string' || !v.trim()) {
+      errors.push(`${field} ต้องเป็นข้อความที่ไม่ว่าง หรือเป็น null`);
+    } else if (v.length > max) {
+      errors.push(`${field} ต้องยาวไม่เกิน ${max} ตัวอักษร`);
+    }
+  });
+  return errors;
+}
+
+// ตัด field ลับ (pin) ออกก่อนส่งข้อมูลร้านกลับไปให้ client
+function toPublicShop(shop) {
+  if (!shop) return shop;
+  const { pin, ...publicShop } = shop;
+  return publicShop;
+}
+
+exports.validateContact = validateContact;
+exports.toPublicShop = toPublicShop;
 
 // 2. ดึงรายละเอียดร้านอาหารเดี่ยว (U3: แสดงร้านอาหารและที่ตั้ง)
 exports.getShopById = (req, res) => {
@@ -220,7 +256,7 @@ exports.getShopById = (req, res) => {
     return res.json({
       success: true,
       data: {
-        ...shop,
+        ...toPublicShop(shop),
         canteenInfo
       }
     });
@@ -307,7 +343,7 @@ exports.toggleShopStatus = (req, res) => {
     return res.json({
       success: true,
       message: `เปลี่ยนสถานะร้าน "${currentShop.name}" เป็น "${newStatus ? 'เปิด' : 'ปิด'}" เรียบร้อยแล้ว`,
-      data: currentShop
+      data: toPublicShop(currentShop)
     });
   } catch (err) {
     console.error('Error toggling shop status:', err);
@@ -344,7 +380,7 @@ exports.updateShopDetails = (req, res) => {
     return res.json({
       success: true,
       message: 'บันทึกข้อมูลเรียบร้อยแล้ว',
-      data: shop
+      data: toPublicShop(shop)
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล' });
@@ -427,7 +463,7 @@ exports.updateMenuAvailability = (req, res) => {
     return res.json({
       success: true,
       message: isAvailable ? `เปิดขาย "${menu.name}" แล้ว` : `แจ้ง "${menu.name}" หมดแล้ว`,
-      data: shop
+      data: toPublicShop(shop)
     });
   } catch (err) {
     console.error('Error updating menu availability:', err);
