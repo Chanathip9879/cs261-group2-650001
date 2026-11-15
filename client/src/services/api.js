@@ -242,12 +242,26 @@ async function requestReviews(url, options, fallbackMessage) {
     if (res.status >= 500 || !data.message) {
       throw new ReviewApiError(fallbackMessage, { status: res.status });
     }
-    throw new ReviewApiError(data.message, {
-      status: res.status,
-      fieldErrors: data.errors && typeof data.errors === 'object' ? data.errors : {}
-    });
+    const fieldErrors =
+      data.errors && typeof data.errors === 'object' ? data.errors : guessReviewField(res.status, data.message);
+    throw new ReviewApiError(data.message, { status: res.status, fieldErrors });
   }
   return data;
+}
+
+// API ของ Task37 ตอบ 400 เป็นข้อความเดียว (ไม่มี errors แยกช่อง)
+// จึงจับคู่ข้อความกับช่องในฟอร์ม เพื่อแสดง error ใต้ช่องที่ผิด
+function guessReviewField(status, message) {
+  if (status !== 400) return {};
+  if (/username|ชื่อผู้รีวิว/i.test(message)) return { username: message };
+  if (/ข้อความรีวิว|comment/i.test(message)) return { comment: message };
+  return {};
+}
+
+// รองรับทั้ง created_at (API ของ Task37) และ createdAt
+function normalizeReview(r) {
+  if (!r || typeof r !== 'object') return r;
+  return { ...r, createdAt: r.createdAt || r.created_at };
 }
 
 // ดึงรายการรีวิวของร้าน (ใหม่สุดก่อน)
@@ -257,7 +271,7 @@ export async function getShopReviews(shopId) {
     undefined,
     'โหลดรายการรีวิวไม่สำเร็จ'
   );
-  return Array.isArray(data.data) ? data.data : [];
+  return Array.isArray(data.data) ? data.data.map(normalizeReview) : [];
 }
 
 // เขียนรีวิวใหม่ คืนรีวิวที่บันทึกแล้วจาก server
@@ -275,5 +289,5 @@ export async function createShopReview(shopId, { username, comment, rating, tags
     },
     'ส่งรีวิวไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'
   );
-  return data.data;
+  return normalizeReview(data.data);
 }
