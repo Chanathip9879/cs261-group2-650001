@@ -430,6 +430,36 @@ exports.updateShopOpeningHours = (req, res) => {
   }
 };
 
+// GET /api/shops/:id/menus
+// ดึงรายการเมนูของร้าน
+exports.getMenusByShop = (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = readDb();
+
+    const shop = db.shops.find(s => s.id === id);
+
+    if (!shop) {
+      return res.status(404).json({
+        success: false,
+        message: 'ไม่พบร้านอาหาร'
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: shop.menus || []
+    });
+
+  } catch (err) {
+    console.error('Error getting shop menus:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'เกิดข้อผิดพลาดในการดึงรายการเมนู'
+    });
+  }
+};
+
 // PUT /api/shops/:id/menus/:menuId (ต้อง Login) — body: { isAvailable: boolean }
 // แจ้งเมนูหมด / เปิดรับสต็อกใหม่ (หน้า Merchant Dashboard)
 exports.updateMenuAvailability = (req, res) => {
@@ -457,6 +487,7 @@ exports.updateMenuAvailability = (req, res) => {
     }
 
     menu.isAvailable = isAvailable;
+    menu.is_sold_out = !isAvailable;
     shop.lastStatusUpdate = new Date().toISOString();
     writeDb(db);
 
