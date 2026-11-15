@@ -17,6 +17,14 @@
       "landmark": "ใกล้อาคาร บร.4 และศูนย์คอมพิวเตอร์",
       "totalShops": 5,
       "operatingHours": "07:30 - 17:00 น."
+    },
+    {
+      "id": "sc",
+      "name": "โรงอาหารสังคมศาสตร์",
+      "shortName": "SC",
+      "description": "โรงอาหารสังคมศาสตร์ ใกล้ตึก SC",
+      "landmark": "ใกล้ตึก SC",
+      "totalShops": 0
     }
   ],
   "categories": [
@@ -101,7 +109,9 @@
           "price": 10,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-02",
@@ -147,7 +157,9 @@
           "price": 55,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-03",
@@ -193,7 +205,9 @@
           "price": 10,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-04",
@@ -233,7 +247,9 @@
           "price": 30,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.073359122970857,
+      "longitude": 100.60113944112857
     },
     {
       "id": "shop-green-05",
@@ -273,7 +289,9 @@
           "price": 35,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": null,
+      "longitude": null
     },
     {
       "id": "shop-sci-01",
@@ -319,7 +337,9 @@
           "price": 20,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-02",
@@ -359,7 +379,9 @@
           "price": 20,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-03",
@@ -393,7 +415,9 @@
           "price": 45,
           "isAvailable": false
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-04",
@@ -439,7 +463,9 @@
           "price": 60,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     },
     {
       "id": "shop-sci-05",
@@ -479,7 +505,9 @@
           "price": 40,
           "isAvailable": true
         }
-      ]
+      ],
+      "latitude": null,
+      "longitude": null
     }
   ],
   "admins": [
