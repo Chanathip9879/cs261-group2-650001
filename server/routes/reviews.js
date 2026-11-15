@@ -17,6 +17,12 @@ function getClientIp(req) {
   return req.ip || req.socket?.remoteAddress || 'unknown';
 }
 
+// client_ip ใช้ภายในสำหรับกันสแปมเท่านั้น ห้ามส่งออกไปกับ response
+function toPublicReview(review) {
+  const { client_ip, ...publicReview } = review;
+  return publicReview;
+}
+
 function handleGetReviews(req, res, shopId) {
   try {
     if (!shopId || String(shopId).trim() === '') {
@@ -53,7 +59,7 @@ function handleGetReviews(req, res, shopId) {
       shop_id: shopId,
       total: totalReviews,
       average_rating: averageRating,
-      data: shopReviews
+      data: shopReviews.map(toPublicReview)
     });
   } catch (error) {
     console.error('[GET Reviews] Error:', error);
@@ -215,7 +221,7 @@ function handleCreateReview(req, res, shopIdFromParam) {
     return res.status(201).json({
       success: true,
       message: 'บันทึกรีวิวสำเร็จ',
-      data: newReview
+      data: toPublicReview(newReview)
     });
   } catch (error) {
     console.error('[POST Reviews] Error:', error);

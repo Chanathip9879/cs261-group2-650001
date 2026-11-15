@@ -7,3 +7,6 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ข้อมูล Sprint 2 ที่สร้างตอนรัน (reviews, opening_hours)
+server/data/sprint2_store.json

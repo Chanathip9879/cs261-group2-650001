@@ -2,6 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
 const { DEFAULT_WEEKLY_HOURS, readStore, writeStore } = require('../utils/dbAdapter');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const DAY_NAMES = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 const TIME_24H_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
@@ -20,67 +21,29 @@ function isValidCalendarDate(dateStr) {
 }
 
 /**
- * ถอดรหัส Bearer Token (รองรับทั้ง JWT มาตรฐานและ Token ทดสอบของระบบ)
- */
-function parseBearerToken(authHeader) {
-  if (!authHeader || typeof authHeader !== 'string') return null;
-  if (!authHeader.startsWith('Bearer ')) return null;
-
-  const token = authHeader.slice(7).trim();
-  if (!token) return null;
-
-  // รองรับ JWT (header.payload.signature)
-  const parts = token.split('.');
-  if (parts.length === 3) {
-    try {
-      const payloadJson = Buffer.from(parts[1], 'base64url').toString('utf8');
-      return JSON.parse(payloadJson);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // รองรับ Base64 JSON Token
-  try {
-    const decoded = Buffer.from(token, 'base64').toString('utf8');
-    return JSON.parse(decoded);
-  } catch (_) {
-    return null;
-  }
-}
-
-/**
- * Middleware ตรวจสอบสิทธิ์เฉพาะ OWNER ของร้านนั้นๆ
+ * Middleware ตรวจสอบสิทธิ์เฉพาะเจ้าของร้านนั้นๆ (หรือแอดมิน)
+ * ใช้ Token ตัวเดียวกับที่ได้จาก POST /api/auth/login และตรวจด้วย authMiddleware ตัวเดียวกับ API อื่น
+ * (เดิมถอด payload จาก Token เองโดยไม่ตรวจกับฐานข้อมูล ทำให้ Token ของ Login ใช้ไม่ได้ และปลอมสิทธิ์ได้)
  */
 function requireShopOwner(req, res, next) {
-  const user = parseBearerToken(req.headers.authorization);
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: 'กรุณาเข้าสู่ระบบด้วยบัญชีเจ้าของร้าน (Missing or invalid token)'
-    });
-  }
+  authMiddleware(req, res, () => {
+    const user = req.user || {};
+    if (user.role !== 'admin' && user.role !== 'vendor') {
+      return res.status(403).json({
+        success: false,
+        message: 'ไม่มีสิทธิ์เข้าถึง: เฉพาะเจ้าของร้านเท่านั้นที่แก้ไขเวลาเปิด/ปิดได้'
+      });
+    }
 
-  const role = String(user.role || '').toUpperCase();
-  const tokenShopId = user.shop_id || user.shopId;
-  const targetShopId = req.params.id;
+    if (user.role === 'vendor' && user.shopId !== req.params.id) {
+      return res.status(403).json({
+        success: false,
+        message: 'ไม่มีสิทธิ์แก้ไขเวลาเปิด/ปิดของร้านอื่น'
+      });
+    }
 
-  if (role !== 'OWNER' && role !== 'ADMIN') {
-    return res.status(403).json({
-      success: false,
-      message: 'ไม่มีสิทธิ์เข้าถึง: เฉพาะเจ้าของร้าน (OWNER) เท่านั้นที่แก้ไขเวลาเปิด/ปิดได้'
-    });
-  }
-
-  if (role === 'OWNER' && tokenShopId !== targetShopId) {
-    return res.status(403).json({
-      success: false,
-      message: 'ไม่มีสิทธิ์แก้ไขเวลาเปิด/ปิดของร้านอื่น'
-    });
-  }
-
-  req.user = user;
-  next();
+    next();
+  });
 }
 
 /**
