@@ -92,7 +92,9 @@ export function menuSummary(shop, n = 3) {
 
 export function canteenShort(shop) {
   if (!shop) return '';
-  return shop.canteen === 'sci' ? 'โรงอาหาร SC' : 'กรีนแคนทีน';
+  if (shop.canteen === 'sci') return 'โรงอาหาร SCI';
+  if (shop.canteen === 'sc') return 'โรงอาหาร SC';
+  return 'กรีนแคนทีน';
 }
 
 export function locationText(shop) {

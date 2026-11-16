@@ -120,7 +120,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
             </div>
             <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3 lg:p-5">
               <InfoItem icon={<Clock className="size-4" />} label="เวลาเปิด-ปิดวันนี้" value={todayHours} />
-              <InfoItem icon={<Store className="size-4" />} label="พิกัด" value={`${canteenShort(shop)} ${shop.boothNumber}`} />
+              <InfoItem icon={<Store className="size-4" />} label="พิกัด" value={`${canteenShort(shop)} ${shop.boothNumber || ''}`} />
               <InfoItem
                 icon={shop.isOpen ? <CheckCircle2 className="size-4" /> : <XCircle className="size-4" />}
                 label="สถานะบริการ"
