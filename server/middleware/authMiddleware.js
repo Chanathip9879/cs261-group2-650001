@@ -1,18 +1,11 @@
 // server/middleware/authMiddleware.js
 // ระบบตรวจสอบสิทธิ์สำหรับแม่ค้าและแอดมิน (U4: Log in จัดการร้านอาหาร)
+// ตรวจสอบผู้ใช้ผ่าน server/db (MSSQL หรือ JSON ตาม DB_DRIVER)
 
-const fs = require('fs');
-const path = require('path');
-
-const DB_PATH = path.join(__dirname, '../data/database.json');
-
-function readDb() {
-  const data = fs.readFileSync(DB_PATH, 'utf-8');
-  return JSON.parse(data);
-}
+const db = require('../db');
 
 // ตรวจสอบ Bearer Token (token format: base64(phone:pin:timestamp))
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const authHeader = req.headers['authorization'];
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({
@@ -26,10 +19,8 @@ function authMiddleware(req, res, next) {
     const decoded = Buffer.from(token, 'base64').toString('utf-8');
     const [phone, pin] = decoded.split(':');
 
-    const db = readDb();
-
     // ตรวจสอบว่าเป็นแอดมินหรือไม่
-    const admin = (db.admins || []).find(a => a.phone === phone && a.pin === pin);
+    const admin = await db.findAdminByCredentials(phone, pin);
     if (admin) {
       req.user = {
         role: 'admin',
@@ -40,7 +31,7 @@ function authMiddleware(req, res, next) {
     }
 
     // ตรวจสอบว่าเป็นเจ้าของร้านหรือไม่
-    const shop = db.shops.find(s => s.phone === phone && s.pin === pin);
+    const shop = await db.findShopByCredentials(phone, pin);
     if (shop) {
       req.user = {
         role: 'vendor',
@@ -57,9 +48,10 @@ function authMiddleware(req, res, next) {
       message: 'โทเค็นไม่ถูกต้องหรือเซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่'
     });
   } catch (err) {
-    return res.status(401).json({
+    console.error('Error in authMiddleware:', err);
+    return res.status(500).json({
       success: false,
-      message: 'รูปแบบ Token ไม่ถูกต้อง'
+      message: 'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์ กรุณาลองใหม่อีกครั้ง'
     });
   }
 }

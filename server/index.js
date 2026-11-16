@@ -1,11 +1,15 @@
 // server/index.js
 // ระบบ Backend API - HiwKhaw TU Rangsit (หิวข้าว มธ. รังสิต)
 
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
+const db = require('./db');
+const { bootstrapMssql } = require('./db/bootstrap');
 const authController = require('./controllers/authController');
 const shopController = require('./controllers/shopController');
 const authMiddleware = require('./middleware/authMiddleware');
@@ -20,6 +24,8 @@ const openingHoursRoutes = require('./routes/openingHours');
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// routes ของ Sprint 2 (reviews / opening-hours) ยังใช้ sprint2_store.json ในขั้นนี้
 app.use('/api/shops', nearbyShopsRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', openingHoursRoutes);
@@ -40,6 +46,7 @@ app.get('/api/health', (req, res) => {
     status: 'online',
     app: 'HiwKhaw - TU Rangsit Food Status',
     sprint: 'Sprint 1',
+    database: db.driver,
     time: new Date().toISOString()
   });
 });
@@ -49,12 +56,8 @@ app.post('/api/auth/login', authController.login);
 app.get('/api/auth/me', authMiddleware, authController.getMe);
 
 // --- Shop & Canteen Routes (U1, U2, U3, U5) ---
-// U1: ตรวจสอบสถานะเปิด/ปิดร้านอาหารแบบ Real-time
-// U2: ระบบค้นหาร้านอาหาร (ค้นหาชื่อร้าน ชื่อเมนู filter โรงอาหาร/หมวดหมู่)
-// U3: แสดงร้านอาหารและที่ตั้ง
 app.get('/api/shops', shopController.getShops);
 app.get('/api/shops/:id', shopController.getShopById);
-app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
 app.get('/api/canteens', shopController.getCanteens);
 app.get('/api/categories', shopController.getCategories);
 
@@ -64,12 +67,9 @@ app.put('/api/shops/:id/details', authMiddleware, shopController.updateShopDetai
 
 // Task 27: ดึงรายการเมนูของร้าน
 app.get('/api/shops/:id/menus', shopController.getMenusByShop);
-
 app.put('/api/shops/:id/menus/:menuId', authMiddleware, shopController.updateMenuAvailability);
 
-// เวลาเปิด-ปิดรายวัน (U12 ดู / U13 ตั้งเวลา)
-app.get('/api/shops/:id/opening-hours', shopController.getShopOpeningHours);
-app.put('/api/shops/:id/opening-hours', authMiddleware, shopController.updateShopOpeningHours);
+// เวลาเปิด-ปิดรายวัน (U12 ดู / U13 ตั้งเวลา) ให้ routes/openingHours.js เป็นผู้ให้บริการ
 
 // ==========================================
 // Serve Static Frontend (Production Build)
@@ -85,11 +85,54 @@ if (fs.existsSync(clientDistPath)) {
   });
 }
 
+// ==========================================
 // Start Server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`====================================================`);
-  console.log(`  🌾 HiwKhaw (หิวข้าว) - TU Rangsit Backend Ready!  `);
-  console.log(`  🚀 Server running at: http://localhost:${PORT}      `);
-  console.log(`  📋 Sprint 1 APIs active: U1, U2, U3, U4, U5        `);
-  console.log(`====================================================`);
+// ==========================================
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// โหมด MSSQL: เตรียม database/ตาราง/seed ก่อนเปิด server (ปิดได้ด้วย DB_AUTO_INIT=false)
+async function prepareDatabase() {
+  if (db.driver !== 'mssql') return;
+  if (String(process.env.DB_AUTO_INIT || 'true').toLowerCase() === 'false') return;
+
+  const reset = String(process.env.DB_AUTO_RESET || 'false').toLowerCase() === 'true';
+  const attempts = Number(process.env.DB_INIT_RETRIES || 15);
+
+  console.log('🔌 กำลังเตรียมฐานข้อมูล MSSQL...');
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const result = await bootstrapMssql({ reset });
+      if (result) {
+        console.log(result.seeded
+          ? `✅ seed ข้อมูลตั้งต้นแล้ว (shops=${result.counts.shops}, menus=${result.counts.menu_items})`
+          : '✅ ฐานข้อมูลพร้อมใช้งาน (มีข้อมูลอยู่แล้ว)');
+      }
+      return;
+    } catch (err) {
+      console.warn(`[db] รอ SQL Server (${attempt}/${attempts}): ${err.message}`);
+      if (attempt === attempts) throw err;
+      await sleep(3000);
+    }
+  }
+}
+
+async function start() {
+  await prepareDatabase();
+
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`====================================================`);
+    console.log(`  🌾 HiwKhaw (หิวข้าว) - TU Rangsit Backend Ready!  `);
+    console.log(`  🚀 Server running at: http://localhost:${PORT}      `);
+    console.log(`  🗄️  Database driver: ${db.driver}                  `);
+    console.log(`  📋 Sprint 1 APIs active: U1, U2, U3, U4, U5        `);
+    console.log(`====================================================`);
+  });
+}
+
+start().catch((err) => {
+  console.error('❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้:', err.message);
+  console.error('   ตรวจสอบ SQL Server หรือตั้ง DB_DRIVER=json เพื่อใช้ database.json');
+  process.exit(1);
 });
