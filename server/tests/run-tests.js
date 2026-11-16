@@ -104,7 +104,7 @@ async function main() {
 
   await runCase(
     'Task 35',
-    '35.2 เรียงระยะทางเปลี่ยนถูกต้องเมื่อย้ายไปตำแหน่ง SC Canteen (ร้านคณะวิทย์มาก่อน)',
+    '35.2 เรียงระยะทางเปลี่ยนถูกต้องเมื่อย้ายไปตำแหน่ง SCI Canteen (ร้านคณะวิทย์มาก่อน)',
     async () => {
       const res = await fetch(
         `${BASE_URL}/api/shops/nearby?lat=${sciShop.latitude}&lng=${sciShop.longitude}`
