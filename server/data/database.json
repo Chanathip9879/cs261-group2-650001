@@ -4914,7 +4914,7 @@
       "category": "other",
       "categoryName": "อื่น ๆ",
       "isOpen": true,
-      "statusNote": "ร้านทดสอบระบบ",
+      "statusNote": "เปิดให้บริการตามปกติ (ร้านตัวอย่างสำหรับเดโม)",
       "openingHours": "08:00 - 17:00",
       "phone": "0811111111",
       "line_id": null,
@@ -4923,8 +4923,8 @@
       "pin": "1111",
       "vendorName": null,
       "accentColor": "#0EA5E9",
-      "rating": 0,
-      "reviewCount": 0,
+      "rating": 4.6,
+      "reviewCount": 12,
       "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
@@ -4959,7 +4959,7 @@
       "category": "other",
       "categoryName": "อื่น ๆ",
       "isOpen": true,
-      "statusNote": "ร้านทดสอบระบบ",
+      "statusNote": "บางเมนูหมดแล้ว (ร้านตัวอย่างสำหรับเดโม)",
       "openingHours": "08:00 - 17:00",
       "phone": "0822222222",
       "line_id": null,
@@ -4968,8 +4968,8 @@
       "pin": "2222",
       "vendorName": null,
       "accentColor": "#0EA5E9",
-      "rating": 0,
-      "reviewCount": 0,
+      "rating": 4.2,
+      "reviewCount": 8,
       "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
@@ -4982,7 +4982,8 @@
           "id": "shop-test-02-m2",
           "name": "เมนูทดสอบ B",
           "price": 35,
-          "isAvailable": true
+          "isAvailable": false,
+          "is_sold_out": true
         }
       ],
       "latitude": 14.07259451627268,
@@ -4998,7 +4999,7 @@
       "category": "other",
       "categoryName": "อื่น ๆ",
       "isOpen": true,
-      "statusNote": "ร้านทดสอบระบบ",
+      "statusNote": "เมนูพร้อมเสิร์ฟ (ร้านตัวอย่างสำหรับเดโม)",
       "openingHours": "08:00 - 17:00",
       "phone": "0833333333",
       "line_id": null,
@@ -5007,8 +5008,8 @@
       "pin": "3333",
       "vendorName": null,
       "accentColor": "#0EA5E9",
-      "rating": 0,
-      "reviewCount": 0,
+      "rating": 3.9,
+      "reviewCount": 5,
       "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
@@ -5040,8 +5041,8 @@
       "pin": "4444",
       "vendorName": null,
       "accentColor": "#0EA5E9",
-      "rating": 0,
-      "reviewCount": 0,
+      "rating": 4.0,
+      "reviewCount": 3,
       "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
       "menus": [
         {
