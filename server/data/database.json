@@ -4903,6 +4903,156 @@
       ],
       "latitude": 14.073359122970857,
       "longitude": 100.60113944112857
+    },
+    {
+      "id": "shop-test-01",
+      "name": "[ทดสอบ] ร้านทดสอบ 1 (Demo)",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "boothNumber": null,
+      "locationDetails": "ร้านสำหรับทดสอบระบบ (ไม่ใช่ร้านจริง)",
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ร้านทดสอบระบบ",
+      "openingHours": "08:00 - 17:00",
+      "phone": "0811111111",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": "1111",
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-test-01-m1",
+          "name": "ข้าวผัดทดสอบ",
+          "price": 40,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-test-01-m2",
+          "name": "น้ำทดสอบ",
+          "price": 15,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-test-01-m3",
+          "name": "ของหวานทดสอบ",
+          "price": 20,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
+    },
+    {
+      "id": "shop-test-02",
+      "name": "[ทดสอบ] ร้านทดสอบ 2",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "boothNumber": null,
+      "locationDetails": "ร้านสำหรับทดสอบระบบ (ไม่ใช่ร้านจริง)",
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ร้านทดสอบระบบ",
+      "openingHours": "08:00 - 17:00",
+      "phone": "0822222222",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": "2222",
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-test-02-m1",
+          "name": "เมนูทดสอบ A",
+          "price": 30,
+          "isAvailable": true
+        },
+        {
+          "id": "shop-test-02-m2",
+          "name": "เมนูทดสอบ B",
+          "price": 35,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
+    },
+    {
+      "id": "shop-test-03",
+      "name": "[ทดสอบ] ร้านทดสอบ 3 (ไม่มีพิกัด)",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "boothNumber": null,
+      "locationDetails": "ร้านสำหรับทดสอบระบบ (ไม่ใช่ร้านจริง)",
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": true,
+      "statusNote": "ร้านทดสอบระบบ",
+      "openingHours": "08:00 - 17:00",
+      "phone": "0833333333",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": "3333",
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-test-03-m1",
+          "name": "เมนูทดสอบ C",
+          "price": 25,
+          "isAvailable": true
+        }
+      ],
+      "latitude": null,
+      "longitude": null
+    },
+    {
+      "id": "shop-test-04",
+      "name": "[ทดสอบ] ร้านทดสอบ 4 (ปิดอยู่)",
+      "canteen": "sci",
+      "canteenName": "โรงอาหารคณะวิทยาศาสตร์และเทคโนโลยี",
+      "boothNumber": null,
+      "locationDetails": "ร้านสำหรับทดสอบระบบ (ไม่ใช่ร้านจริง)",
+      "category": "other",
+      "categoryName": "อื่น ๆ",
+      "isOpen": false,
+      "statusNote": "ร้านทดสอบ (ปิดอยู่)",
+      "openingHours": "08:00 - 17:00",
+      "phone": "0844444444",
+      "line_id": null,
+      "facebook": null,
+      "other_contact": null,
+      "pin": "4444",
+      "vendorName": null,
+      "accentColor": "#0EA5E9",
+      "rating": 0,
+      "reviewCount": 0,
+      "lastStatusUpdate": "2026-11-15T13:21:54.000Z",
+      "menus": [
+        {
+          "id": "shop-test-04-m1",
+          "name": "เมนูทดสอบ D",
+          "price": 30,
+          "isAvailable": true
+        }
+      ],
+      "latitude": 14.07259451627268,
+      "longitude": 100.60859730370368
     }
   ],
   "admins": [

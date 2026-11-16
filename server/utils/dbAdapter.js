@@ -22,7 +22,7 @@ const INITIAL_DATA = {
   reviews: [
     {
       id: 'rev-init-001',
-      shop_id: 'shop-green-01',
+      shop_id: 'shop-test-01',
       username: 'นักศึกษาปี 2 คณะวิทย์',
       rating: 5,
       comment: 'ไก่เนื้อน่องต้มสดใหม่ฉ่ำมาก ให้ปริมาณข้าวและเนื้อเยอะคุ้มราคานักศึกษา',
@@ -31,7 +31,7 @@ const INITIAL_DATA = {
     }
   ],
   opening_hours: {
-    'shop-green-01': {
+    'shop-test-01': {
       weekly: JSON.parse(JSON.stringify(DEFAULT_WEEKLY_HOURS)),
       special_holidays: [
         {
@@ -44,7 +44,7 @@ const INITIAL_DATA = {
         }
       ]
     },
-    'shop-sci-01': {
+    'shop-test-03': {
       weekly: JSON.parse(JSON.stringify(DEFAULT_WEEKLY_HOURS)),
       special_holidays: []
     }
