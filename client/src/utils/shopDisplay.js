@@ -92,8 +92,8 @@ export function menuSummary(shop, n = 3) {
 
 export function canteenShort(shop) {
   if (!shop) return '';
-  if (shop.canteen === 'sci') return 'โรงอาหาร SC';
-  if (shop.canteen === 'sc') return 'โรงอาหารสังคมศาสตร์';
+  if (shop.canteen === 'sci') return 'โรงอาหาร SCI';
+  if (shop.canteen === 'sc') return 'โรงอาหาร SC';
   return 'กรีนแคนทีน';
 }
 
