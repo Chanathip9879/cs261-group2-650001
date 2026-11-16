@@ -1,6 +1,29 @@
-version: '3.8'
-
 services:
+  # ==========================================
+  # Database: SQL Server 2022 (container แยก)
+  # ==========================================
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: hiwkhaw_mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+    restart: unless-stopped
+
+  # ==========================================
+  # Web Server: Node.js + React build (container แยก)
+  # ==========================================
   hiwkhaw-app:
     build:
       context: .
@@ -11,7 +34,19 @@ services:
     environment:
       - PORT=5000
       - NODE_ENV=production
+      - DB_DRIVER=mssql
+      - DB_SERVER=mssql
+      - DB_PORT=1433
+      - DB_USER=sa
+      - DB_PASSWORD=${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+      - DB_NAME=${DB_NAME:-hiwkhaw}
+      - DB_ENCRYPT=false
+      - DB_TRUST_SERVER_CERT=true
+      - DB_AUTO_INIT=true
+    depends_on:
+      mssql:
+        condition: service_healthy
     restart: unless-stopped
-    volumes:
-      # ให้ข้อมูลสถานะร้านอาหารบันทึกเก็บไว้ได้แม้ restart container
-      - ./server/data:/app/server/data
+
+volumes:
+  mssql_data:
