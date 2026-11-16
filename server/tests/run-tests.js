@@ -15,7 +15,7 @@ function createForgedToken(payload) {
 const FORGED_OWNER_TOKEN = createForgedToken({
   id: 'user-owner-green',
   role: 'OWNER',
-  shop_id: 'shop-green-01'
+  shop_id: 'shop-test-01'
 });
 
 // Login จริงผ่าน POST /api/auth/login ด้วยเบอร์โทร + PIN ของร้านใน database.json
@@ -61,10 +61,10 @@ async function main() {
   // รีเซ็ตข้อมูลเริ่มต้นก่อนรันทดสอบทุกครั้ง
   resetStore();
 
-  const OWNER_GREEN_TOKEN = await loginAsShop('shop-green-01');
-  const OWNER_SCI_TOKEN = await loginAsShop('shop-sci-01');
+  const OWNER_GREEN_TOKEN = await loginAsShop('shop-test-01');
+  const OWNER_SCI_TOKEN = await loginAsShop('shop-test-03');
   // ร้านที่มีเฉพาะใน database.json (ไม่เคยอยู่ในร้านทดสอบ 5 ร้านเดิม)
-  const OWNER_GREEN2_TOKEN = await loginAsShop('shop-green-02');
+  const OWNER_GREEN2_TOKEN = await loginAsShop('shop-test-02');
 
   // --------------------------------------------------------------------------
   // TASK 35 (U8): ทดสอบการเรียงระยะทางและกรณีร้านไม่มีพิกัด
@@ -170,14 +170,14 @@ async function main() {
         rating: 5,
         comment: 'น้ำซุปเข้มข้นมาก เส้นเหนียวนุ่ม ให้เยอะสมราคาครับ'
       };
-      const postRes = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
+      const postRes = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       assert.equal(postRes.status, 201);
 
-      const getRes = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`);
+      const getRes = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`);
       assert.equal(getRes.status, 200);
       const getJson = await getRes.json();
       assert.equal(getJson.data[0].username, payload.username);
@@ -218,7 +218,7 @@ async function main() {
     'Task 39',
     '39.5 response ของ GET /reviews (ทั้งสองรูปแบบ) ไม่มี client_ip',
     async () => {
-      for (const url of ['/api/shops/shop-green-01/reviews', '/api/reviews?shop_id=shop-green-01']) {
+      for (const url of ['/api/shops/shop-test-01/reviews', '/api/reviews?shop_id=shop-test-01']) {
         const res = await fetch(`${BASE_URL}${url}`);
         assert.equal(res.status, 200);
         const json = await res.json();
@@ -232,21 +232,21 @@ async function main() {
     'Task 39',
     '39.2 ส่งข้อมูลผิดพลาด (ข้อความว่าง / สั้นกว่า 10 ตัวอักษร / ไม่กรอกชื่อ) คืนค่า 400',
     async () => {
-      const resEmpty = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
+      const resEmpty = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: 'Tester01', comment: '   ' })
       });
       assert.equal(resEmpty.status, 400);
 
-      const resShort = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
+      const resShort = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: 'Tester01', comment: 'อร่อยดี' })
       });
       assert.equal(resShort.status, 400);
 
-      const resNoUser = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
+      const resNoUser = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: '', comment: 'อร่อยมากๆ แนะนำเลยครับร้านนี้' })
@@ -259,7 +259,7 @@ async function main() {
     'Task 39',
     '39.3 ระบบกันสแปมทำงานเมื่อส่งรีวิวถี่เกินไปในร้านเดิม (คืนค่า 429)',
     async () => {
-      const resSpam = await fetch(`${BASE_URL}/api/shops/shop-sci-01/reviews`, {
+      const resSpam = await fetch(`${BASE_URL}/api/shops/shop-test-03/reviews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -294,7 +294,7 @@ async function main() {
         ]
       };
 
-      const putRes = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const putRes = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ async function main() {
       });
       assert.equal(putRes.status, 200);
 
-      const getRes = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`);
+      const getRes = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`);
       const getJson = await getRes.json();
       assert.equal(getJson.data.weekly[1].open_time, '07:30');
       assert.equal(getJson.data.special_holidays[0].date, '2026-12-31');
@@ -319,14 +319,14 @@ async function main() {
         weekly: [{ day_of_week: 1, is_closed: false, open_time: '09:00', close_time: '17:00' }]
       });
 
-      const resNoAuth = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resNoAuth = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: validBody
       });
       assert.equal(resNoAuth.status, 401);
 
-      const resForged = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resForged = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -336,7 +336,7 @@ async function main() {
       });
       assert.equal(resForged.status, 403);
 
-      const resOtherOwner = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resOtherOwner = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -352,10 +352,10 @@ async function main() {
     'Task 50',
     '50.4 ร้านจริงที่ไม่ได้อยู่ในร้านทดสอบเดิม ดูและบันทึกเวลาเปิด/ปิดได้ (200)',
     async () => {
-      const getRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`);
+      const getRes = await fetch(`${BASE_URL}/api/shops/shop-test-02/opening-hours`);
       assert.equal(getRes.status, 200);
 
-      const putRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`, {
+      const putRes = await fetch(`${BASE_URL}/api/shops/shop-test-02/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -367,7 +367,7 @@ async function main() {
       });
       assert.equal(putRes.status, 200);
 
-      const afterRes = await fetch(`${BASE_URL}/api/shops/shop-green-02/opening-hours`);
+      const afterRes = await fetch(`${BASE_URL}/api/shops/shop-test-02/opening-hours`);
       const afterJson = await afterRes.json();
       const monday = afterJson.data.weekly.find((d) => d.day_of_week === 1);
       assert.equal(monday.open_time, '10:00');
@@ -378,7 +378,7 @@ async function main() {
     'Task 50',
     '50.3 ส่งรูปแบบเวลาผิดพลาด (25:99) หรือเวลาปิดก่อนเวลาเปิด คืนค่า 400 Bad Request',
     async () => {
-      const resBadFormat = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resBadFormat = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -390,7 +390,7 @@ async function main() {
       });
       assert.equal(resBadFormat.status, 400);
 
-      const resBadRange = await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`, {
+      const resBadRange = await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
