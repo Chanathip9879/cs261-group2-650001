@@ -55,6 +55,8 @@ const SCHEMA_STATEMENTS = [
        lastStatusUpdate DATETIME2 NULL,
        latitude DECIMAL(9,6) NULL,
        longitude DECIMAL(9,6) NULL,
+       -- ลำดับร้านตาม index ใน database.json shops[] (0, 1, 2, ...)
+       sort_order INT NOT NULL CONSTRAINT DF_shops_sort_order DEFAULT 0,
        CONSTRAINT FK_shops_canteen FOREIGN KEY (canteen) REFERENCES dbo.canteens(id)
      );
    END`,
@@ -64,6 +66,8 @@ const SCHEMA_STATEMENTS = [
      ALTER TABLE dbo.shops ADD latitude DECIMAL(9,6) NULL;`,
   `IF COL_LENGTH('dbo.shops', 'longitude') IS NULL
      ALTER TABLE dbo.shops ADD longitude DECIMAL(9,6) NULL;`,
+  `IF COL_LENGTH('dbo.shops', 'sort_order') IS NULL
+     ALTER TABLE dbo.shops ADD sort_order INT NOT NULL CONSTRAINT DF_shops_sort_order DEFAULT 0;`,
 
   `IF OBJECT_ID('dbo.admins', 'U') IS NULL
    BEGIN
@@ -136,6 +140,7 @@ const TABLE_DEFINITIONS = {
     ['lastStatusUpdate', sql.DateTime2],
     ['latitude', sql.Decimal(9, 6)],
     ['longitude', sql.Decimal(9, 6)],
+    ['sort_order', sql.Int],
   ],
   admins: [
     ['id', sql.NVarChar(50)],
@@ -193,7 +198,7 @@ function buildSeedRows(db) {
     sortOrder: index,
   }));
 
-  const shops = (db.shops || []).map((row) => ({
+  const shops = (db.shops || []).map((row, index) => ({
     id: row.id,
     name: row.name,
     canteen: row.canteen,
@@ -217,6 +222,7 @@ function buildSeedRows(db) {
     lastStatusUpdate: toDate(row.lastStatusUpdate),
     latitude: toNumberOrNull(row.latitude),
     longitude: toNumberOrNull(row.longitude),
+    sort_order: index,
   }));
 
   const admins = (db.admins || []).map((row) => ({
