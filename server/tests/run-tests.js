@@ -58,8 +58,8 @@ async function main() {
   console.log(` Target Server: ${BASE_URL}`);
   console.log('==============================================================\n');
 
-  // รีเซ็ตข้อมูลเริ่มต้นก่อนรันทดสอบทุกครั้ง
-  resetStore();
+  // รีเซ็ตข้อมูลเริ่มต้นก่อนรันทดสอบทุกครั้ง (ผ่าน DB ไม่ใช่ไฟล์ store)
+  await resetStore();
 
   const OWNER_GREEN_TOKEN = await loginAsShop('shop-test-01');
   const OWNER_SCI_TOKEN = await loginAsShop('shop-test-03');

@@ -4,6 +4,7 @@
 
 const sql = require('mssql');
 const { getMssqlConfig } = require('./config');
+const { resetSprint2Data: resetSprint2DataInDb } = require('./schema');
 
 let poolPromise = null;
 
@@ -233,6 +234,148 @@ async function setMenuAvailability(shopId, menuId, isAvailable) {
   return getShopById(shopId);
 }
 
+const REVIEW_COLUMNS = 'id, shop_id, username, rating, comment, client_ip, created_at';
+
+// shopId = null → คืนรีวิวทั้งหมด (ใช้ตรวจกันสแปมใน POST /reviews)
+async function listReviews(shopId = null) {
+  const pool = await getPool();
+  const request = pool.request();
+  let query = `SELECT ${REVIEW_COLUMNS} FROM dbo.reviews`;
+
+  if (shopId) {
+    request.input('shopId', sql.NVarChar(50), shopId);
+    query += ' WHERE shop_id = @shopId';
+  }
+  query += ' ORDER BY created_at DESC, id';
+
+  const result = await request.query(query);
+  return result.recordset;
+}
+
+async function createReview(review) {
+  const pool = await getPool();
+  await pool.request()
+    .input('id', sql.NVarChar(50), review.id)
+    .input('shopId', sql.NVarChar(50), review.shop_id)
+    .input('username', sql.NVarChar(100), review.username)
+    .input('rating', sql.Int, review.rating)
+    .input('comment', sql.NVarChar(500), review.comment)
+    .input('clientIp', sql.NVarChar(64), review.client_ip ?? null)
+    .input('createdAt', sql.DateTime2, toDate(review.created_at))
+    .query(`INSERT INTO dbo.reviews (id, shop_id, username, rating, comment, client_ip, created_at)
+            VALUES (@id, @shopId, @username, @rating, @comment, @clientIp, @createdAt)`);
+
+  return review;
+}
+
+function mapWeeklyRow(row) {
+  const openTime = row.open_time ? String(row.open_time).trim() : null;
+  const closeTime = row.close_time ? String(row.close_time).trim() : null;
+  return {
+    day_of_week: row.day_of_week,
+    day_name: row.day_name,
+    is_closed: row.is_closed === true,
+    open_time: openTime,
+    close_time: closeTime,
+  };
+}
+
+function mapHolidayRow(row) {
+  return {
+    id: row.id,
+    date: row.holiday_date,
+    is_closed: row.is_closed === true,
+    open_time: row.open_time ? String(row.open_time).trim() : null,
+    close_time: row.close_time ? String(row.close_time).trim() : null,
+    note: row.note || '',
+  };
+}
+
+async function getOpeningHours(shopId) {
+  const pool = await getPool();
+  const header = await pool.request()
+    .input('shopId', sql.NVarChar(50), shopId)
+    .query('SELECT shop_id, updated_at FROM dbo.opening_hours WHERE shop_id = @shopId');
+
+  if (!header.recordset[0]) return null;
+
+  const [weekly, holidays] = await Promise.all([
+    pool.request()
+      .input('shopId', sql.NVarChar(50), shopId)
+      .query('SELECT day_of_week, day_name, is_closed, open_time, close_time FROM dbo.opening_hours_weekly WHERE shop_id = @shopId ORDER BY day_of_week'),
+    pool.request()
+      .input('shopId', sql.NVarChar(50), shopId)
+      .query('SELECT id, holiday_date, is_closed, open_time, close_time, note FROM dbo.special_holidays WHERE shop_id = @shopId ORDER BY holiday_date'),
+  ]);
+
+  return {
+    weekly: weekly.recordset.map(mapWeeklyRow),
+    special_holidays: holidays.recordset.map(mapHolidayRow),
+    updated_at: toIsoOrNull(header.recordset[0].updated_at),
+  };
+}
+
+// บันทึกทั้งชุด (weekly / special_holidays ที่ route เตรียมมาแล้ว) แทนข้อมูลเดิมของร้าน
+async function saveOpeningHours(shopId, { weekly, special_holidays, updated_at }) {
+  const pool = await getPool();
+  const updatedAt = toDate(updated_at || new Date());
+
+  await pool.request()
+    .input('shopId', sql.NVarChar(50), shopId)
+    .input('updatedAt', sql.DateTime2, updatedAt)
+    .query(`IF EXISTS (SELECT 1 FROM dbo.opening_hours WHERE shop_id = @shopId)
+              UPDATE dbo.opening_hours SET updated_at = @updatedAt WHERE shop_id = @shopId;
+            ELSE
+              INSERT INTO dbo.opening_hours (shop_id, updated_at) VALUES (@shopId, @updatedAt);`);
+
+  if (Array.isArray(weekly)) {
+    await pool.request()
+      .input('shopId', sql.NVarChar(50), shopId)
+      .query('DELETE FROM dbo.opening_hours_weekly WHERE shop_id = @shopId');
+
+    for (const day of weekly) {
+      await pool.request()
+        .input('shopId', sql.NVarChar(50), shopId)
+        .input('dayOfWeek', sql.TinyInt, day.day_of_week)
+        .input('dayName', sql.NVarChar(20), day.day_name ?? null)
+        .input('isClosed', sql.Bit, day.is_closed === true)
+        .input('openTime', sql.Char(5), day.is_closed ? null : day.open_time)
+        .input('closeTime', sql.Char(5), day.is_closed ? null : day.close_time)
+        .query(`INSERT INTO dbo.opening_hours_weekly
+                  (shop_id, day_of_week, day_name, is_closed, open_time, close_time)
+                VALUES (@shopId, @dayOfWeek, @dayName, @isClosed, @openTime, @closeTime)`);
+    }
+  }
+
+  if (Array.isArray(special_holidays)) {
+    await pool.request()
+      .input('shopId', sql.NVarChar(50), shopId)
+      .query('DELETE FROM dbo.special_holidays WHERE shop_id = @shopId');
+
+    for (const holiday of special_holidays) {
+      await pool.request()
+        .input('id', sql.NVarChar(50), holiday.id)
+        .input('shopId', sql.NVarChar(50), shopId)
+        .input('holidayDate', sql.Char(10), holiday.date)
+        .input('isClosed', sql.Bit, holiday.is_closed !== false)
+        .input('openTime', sql.Char(5), holiday.is_closed ? null : holiday.open_time)
+        .input('closeTime', sql.Char(5), holiday.is_closed ? null : holiday.close_time)
+        .input('note', sql.NVarChar(300), holiday.note ?? null)
+        .query(`INSERT INTO dbo.special_holidays
+                  (id, shop_id, holiday_date, is_closed, open_time, close_time, note)
+                VALUES (@id, @shopId, @holidayDate, @isClosed, @openTime, @closeTime, @note)`);
+    }
+  }
+
+  return getOpeningHours(shopId);
+}
+
+// ใช้โดยเทสต์: ล้างข้อมูล Sprint 2 แล้ว seed ใหม่ผ่าน DB (ไม่แตะไฟล์ JSON)
+async function resetSprint2Data() {
+  const pool = await getPool();
+  return resetSprint2DataInDb(pool);
+}
+
 async function closePool() {
   if (poolPromise) {
     const pool = await poolPromise.catch(() => null);
@@ -257,4 +400,9 @@ module.exports = {
   updateShopStatus,
   updateShopDetails,
   setMenuAvailability,
+  listReviews,
+  createReview,
+  getOpeningHours,
+  saveOpeningHours,
+  resetSprint2Data,
 };

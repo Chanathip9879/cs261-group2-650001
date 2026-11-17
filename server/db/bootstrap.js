@@ -8,7 +8,7 @@ const sql = require('mssql');
 
 const { getMasterConfig, getDatabaseName, isValidDatabaseName } = require('./config');
 const { getPool } = require('./mssqlRepository');
-const { ensureSchema, seedDatabase } = require('./schema');
+const { ensureSchema, seedDatabase, seedSprint2Data } = require('./schema');
 
 const SEED_PATH = path.join(__dirname, '../data/database.json');
 
@@ -38,7 +38,12 @@ async function bootstrapMssql({ reset = false, seed = true } = {}) {
 
   const raw = fs.readFileSync(SEED_PATH, 'utf-8');
   const db = JSON.parse(raw);
-  return seedDatabase(pool, db, { reset });
+  const result = await seedDatabase(pool, db, { reset });
+
+  // ข้อมูล Sprint 2 (reviews / opening_hours / special_holidays) seed แยกจากตารางหลัก
+  const sprint2 = await seedSprint2Data(pool, db, { reset });
+
+  return result ? { ...result, sprint2 } : { seeded: false, sprint2 };
 }
 
 module.exports = { bootstrapMssql, createDatabaseIfMissing };

@@ -2,7 +2,13 @@
 // สร้างตาราง MSSQL และ seed ข้อมูลตั้งต้นจาก server/data/database.json
 // ใช้ร่วมกันทั้งสคริปต์ db:init และตอน server bootstrap
 
+const fs = require('fs');
+const path = require('path');
 const sql = require('mssql');
+
+const { DEFAULT_WEEKLY_HOURS, cloneWeeklyHours, INITIAL_REVIEWS, INITIAL_OPENING_HOURS } = require('./defaults');
+
+const SEED_PATH = path.join(__dirname, '../data/database.json');
 
 const SCHEMA_STATEMENTS = [
   `IF OBJECT_ID('dbo.canteens', 'U') IS NULL
@@ -96,6 +102,64 @@ const SCHEMA_STATEMENTS = [
 
   `IF COL_LENGTH('dbo.menu_items', 'note') IS NULL
      ALTER TABLE dbo.menu_items ADD note NVARCHAR(200) NULL;`,
+
+  // ------------------------------------------------------------------
+  // Sprint 2: รีวิว / เวลาเปิด-ปิดประจำสัปดาห์ / วันหยุดพิเศษ
+  // DDL เขียนเองสำหรับ MSSQL (ไม่ใช้ server/migrations/sprint2_nuttakorn.sql)
+  // ------------------------------------------------------------------
+  `IF OBJECT_ID('dbo.reviews', 'U') IS NULL
+   BEGIN
+     CREATE TABLE dbo.reviews (
+       id NVARCHAR(50) NOT NULL PRIMARY KEY,
+       shop_id NVARCHAR(50) NOT NULL,
+       username NVARCHAR(100) NOT NULL,
+       rating INT NOT NULL CONSTRAINT DF_reviews_rating DEFAULT 5,
+       comment NVARCHAR(500) NOT NULL,
+       client_ip NVARCHAR(64) NULL,
+       created_at DATETIME2 NOT NULL CONSTRAINT DF_reviews_created_at DEFAULT SYSUTCDATETIME(),
+       CONSTRAINT FK_reviews_shop FOREIGN KEY (shop_id) REFERENCES dbo.shops(id)
+     );
+   END`,
+
+  `IF OBJECT_ID('dbo.opening_hours', 'U') IS NULL
+   BEGIN
+     CREATE TABLE dbo.opening_hours (
+       shop_id NVARCHAR(50) NOT NULL PRIMARY KEY,
+       updated_at DATETIME2 NULL,
+       CONSTRAINT FK_opening_hours_shop FOREIGN KEY (shop_id) REFERENCES dbo.shops(id) ON DELETE CASCADE
+     );
+   END`,
+
+  `IF OBJECT_ID('dbo.opening_hours_weekly', 'U') IS NULL
+   BEGIN
+     CREATE TABLE dbo.opening_hours_weekly (
+       shop_id NVARCHAR(50) NOT NULL,
+       day_of_week TINYINT NOT NULL,
+       day_name NVARCHAR(20) NULL,
+       is_closed BIT NOT NULL CONSTRAINT DF_oh_weekly_is_closed DEFAULT 0,
+       open_time CHAR(5) NULL,
+       close_time CHAR(5) NULL,
+       CONSTRAINT PK_opening_hours_weekly PRIMARY KEY (shop_id, day_of_week),
+       CONSTRAINT FK_oh_weekly_hours FOREIGN KEY (shop_id)
+         REFERENCES dbo.opening_hours(shop_id) ON DELETE CASCADE
+     );
+   END`,
+
+  `IF OBJECT_ID('dbo.special_holidays', 'U') IS NULL
+   BEGIN
+     CREATE TABLE dbo.special_holidays (
+       id NVARCHAR(50) NOT NULL PRIMARY KEY,
+       shop_id NVARCHAR(50) NOT NULL,
+       holiday_date CHAR(10) NOT NULL,
+       is_closed BIT NOT NULL CONSTRAINT DF_special_holidays_is_closed DEFAULT 1,
+       open_time CHAR(5) NULL,
+       close_time CHAR(5) NULL,
+       note NVARCHAR(300) NULL,
+       CONSTRAINT UQ_special_holidays_shop_date UNIQUE (shop_id, holiday_date),
+       CONSTRAINT FK_special_holidays_hours FOREIGN KEY (shop_id)
+         REFERENCES dbo.opening_hours(shop_id) ON DELETE CASCADE
+     );
+   END`,
 ];
 
 // คอลัมน์ที่ใช้ทั้งตอน bulk insert และตอนนับ/ล้างตาราง
@@ -302,11 +366,14 @@ async function countAll(pool) {
 // seed ข้อมูลเมื่อตาราง shops ว่าง (หรือเมื่อ reset = true)
 async function seedDatabase(pool, db, { reset = false } = {}) {
   if (reset) {
+    // ล้างข้อมูล Sprint 2 ก่อน เพราะ reviews อ้างอิง shops
+    await clearSprint2Tables(pool);
     await clearTables(pool);
   } else if (await countRows(pool, 'shops') > 0) {
     return { seeded: false, counts: await countAll(pool) };
   } else {
     // มีข้อมูลค้างบางตารางแต่ไม่มีร้าน ให้ล้างก่อนเพื่อไม่ให้ FK ชน
+    await clearSprint2Tables(pool);
     await clearTables(pool);
   }
 
@@ -330,10 +397,176 @@ async function seedDatabase(pool, db, { reset = false } = {}) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Sprint 2 seed (reviews / opening_hours / special_holidays)
+// ---------------------------------------------------------------------------
+
+// แปลงข้อความเวลาเปิด-ปิดของร้านเป็นตารางรายสัปดาห์
+// ค่า "ยังไม่ระบุเวลา" (หรือรูปแบบอื่นที่ไม่รู้จัก) ใช้เวลาเริ่มต้นของระบบ
+// ห้ามแปลงเป็น "ปิดทั้งสัปดาห์" เพราะหน้าเว็บถือว่าเป็นเวลาเริ่มต้นจนกว่าจะกรอกจริง
+function parseWeeklyFromShopText(text) {
+  const match = /^([01]\d|2[0-3]):([0-5]\d)\s*-\s*([01]\d|2[0-3]):([0-5]\d)$/.exec(
+    String(text || '').trim()
+  );
+  if (!match) return cloneWeeklyHours();
+
+  const openTime = `${match[1]}:${match[2]}`;
+  const closeTime = `${match[3]}:${match[4]}`;
+  return DEFAULT_WEEKLY_HOURS.map((day) => ({
+    ...day,
+    open_time: day.is_closed ? null : openTime,
+    close_time: day.is_closed ? null : closeTime
+  }));
+}
+
+function buildSprint2SeedRows(db) {
+  const reviews = INITIAL_REVIEWS.map((review) => ({
+    ...review,
+    created_at: toDate(review.created_at)
+  }));
+
+  const hoursByShop = new Map();
+  for (const shop of db.shops || []) {
+    hoursByShop.set(shop.id, {
+      shop_id: shop.id,
+      weekly: parseWeeklyFromShopText(shop.openingHours),
+      special_holidays: [],
+      updated_at: null
+    });
+  }
+
+  // ทับด้วยข้อมูลตั้งต้นของร้านทดสอบ (รวมวันหยุดตัวอย่าง)
+  for (const [shopId, record] of Object.entries(INITIAL_OPENING_HOURS)) {
+    hoursByShop.set(shopId, {
+      shop_id: shopId,
+      weekly: cloneWeeklyHours(record.weekly),
+      special_holidays: (record.special_holidays || []).map((holiday) => ({ ...holiday })),
+      updated_at: null
+    });
+  }
+
+  return { reviews, openingHours: [...hoursByShop.values()] };
+}
+
+const SPRINT2_DELETE_ORDER = [
+  'special_holidays',
+  'opening_hours_weekly',
+  'opening_hours',
+  'reviews',
+];
+
+async function clearSprint2Tables(pool) {
+  for (const table of SPRINT2_DELETE_ORDER) {
+    if (!(await tableExists(pool, table))) continue;
+    await pool.request().query(`DELETE FROM dbo.[${table}]`);
+  }
+}
+
+async function tableExists(pool, table) {
+  const result = await pool
+    .request()
+    .input('table', sql.NVarChar(100), table)
+    .query(`SELECT 1 AS found FROM sys.tables WHERE name = @table AND schema_id = SCHEMA_ID('dbo')`);
+  return result.recordset.length > 0;
+}
+
+async function insertOpeningHoursRecord(pool, record) {
+  await pool
+    .request()
+    .input('shopId', sql.NVarChar(50), record.shop_id)
+    .input('updatedAt', sql.DateTime2, toDate(record.updated_at))
+    .query('INSERT INTO dbo.opening_hours (shop_id, updated_at) VALUES (@shopId, @updatedAt)');
+
+  for (const day of record.weekly) {
+    await pool
+      .request()
+      .input('shopId', sql.NVarChar(50), record.shop_id)
+      .input('dayOfWeek', sql.TinyInt, day.day_of_week)
+      .input('dayName', sql.NVarChar(20), day.day_name ?? null)
+      .input('isClosed', sql.Bit, day.is_closed === true)
+      .input('openTime', sql.Char(5), day.is_closed ? null : day.open_time)
+      .input('closeTime', sql.Char(5), day.is_closed ? null : day.close_time)
+      .query(`INSERT INTO dbo.opening_hours_weekly
+                (shop_id, day_of_week, day_name, is_closed, open_time, close_time)
+              VALUES (@shopId, @dayOfWeek, @dayName, @isClosed, @openTime, @closeTime)`);
+  }
+
+  for (const holiday of record.special_holidays) {
+    await pool
+      .request()
+      .input('id', sql.NVarChar(50), holiday.id)
+      .input('shopId', sql.NVarChar(50), record.shop_id)
+      .input('holidayDate', sql.Char(10), holiday.date)
+      .input('isClosed', sql.Bit, holiday.is_closed !== false)
+      .input('openTime', sql.Char(5), holiday.is_closed ? null : holiday.open_time)
+      .input('closeTime', sql.Char(5), holiday.is_closed ? null : holiday.close_time)
+      .input('note', sql.NVarChar(300), holiday.note ?? null)
+      .query(`INSERT INTO dbo.special_holidays
+                (id, shop_id, holiday_date, is_closed, open_time, close_time, note)
+              VALUES (@id, @shopId, @holidayDate, @isClosed, @openTime, @closeTime, @note)`);
+  }
+}
+
+// seed แบบ idempotent: ใส่รีวิวตั้งต้นเมื่อตารางว่าง และสร้างเวลาเปิด-ปิดให้ร้านที่ยังไม่มี
+async function seedSprint2Data(pool, db, { reset = false } = {}) {
+  if (reset) await clearSprint2Tables(pool);
+
+  const rows = buildSprint2SeedRows(db);
+  const counts = { reviews: 0, opening_hours: 0, special_holidays: 0 };
+
+  if (reset || (await countRows(pool, 'reviews')) === 0) {
+    for (const review of rows.reviews) {
+      await pool
+        .request()
+        .input('id', sql.NVarChar(50), review.id)
+        .input('shopId', sql.NVarChar(50), review.shop_id)
+        .input('username', sql.NVarChar(100), review.username)
+        .input('rating', sql.Int, review.rating)
+        .input('comment', sql.NVarChar(500), review.comment)
+        .input('clientIp', sql.NVarChar(64), review.client_ip ?? null)
+        .input('createdAt', sql.DateTime2, review.created_at)
+        .query(`INSERT INTO dbo.reviews (id, shop_id, username, rating, comment, client_ip, created_at)
+                VALUES (@id, @shopId, @username, @rating, @comment, @clientIp, @createdAt)`);
+      counts.reviews += 1;
+    }
+  }
+
+  for (const record of rows.openingHours) {
+    if (!reset) {
+      const exists = await pool
+        .request()
+        .input('shopId', sql.NVarChar(50), record.shop_id)
+        .query('SELECT 1 AS found FROM dbo.opening_hours WHERE shop_id = @shopId');
+      if (exists.recordset.length > 0) continue;
+    }
+
+    const shopExists = await pool
+      .request()
+      .input('shopId', sql.NVarChar(50), record.shop_id)
+      .query('SELECT 1 AS found FROM dbo.shops WHERE id = @shopId');
+    if (shopExists.recordset.length === 0) continue;
+
+    await insertOpeningHoursRecord(pool, record);
+    counts.opening_hours += 1;
+    counts.special_holidays += record.special_holidays.length;
+  }
+
+  return counts;
+}
+
+// ใช้โดยเทสต์ (resetStore) — ล้างข้อมูล Sprint 2 แล้ว seed ใหม่จาก database.json
+async function resetSprint2Data(pool) {
+  const db = JSON.parse(fs.readFileSync(SEED_PATH, 'utf-8'));
+  return seedSprint2Data(pool, db, { reset: true });
+}
+
 module.exports = {
   SCHEMA_STATEMENTS,
   TABLE_DEFINITIONS,
   ensureSchema,
   buildSeedRows,
   seedDatabase,
+  seedSprint2Data,
+  resetSprint2Data,
+  buildSprint2SeedRows,
 };
