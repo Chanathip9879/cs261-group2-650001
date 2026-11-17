@@ -10,6 +10,9 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "build:client": "npm --prefix client install && npm --prefix client run build",
     "build": "npm run build:client",
+    "db:init": "node server/scripts/init-mssql.js",
+    "db:reset": "node server/scripts/init-mssql.js --reset",
+    "test:api": "node server/tests/run-tests.js",
     "docker:build": "docker build -t hiwkhaw-app .",
     "docker:run": "docker run -p 5000:5000 hiwkhaw-app"
   },
@@ -25,7 +28,8 @@
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
-    "express": "^4.22.3"
+    "express": "^4.22.3",
+    "mssql": "^11.0.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
