@@ -52,7 +52,8 @@ export function parseHours(text) {
 }
 
 export function effectiveOf(shop) {
-  return shop?.effectiveStatus || getEffectiveStatus(shop, shop?.todayHours || []);
+  if (shop?.effectiveStatus && typeof shop.effectiveStatus === 'object') return shop.effectiveStatus;
+  return getEffectiveStatus(shop, Array.isArray(shop?.todayHours) ? shop.todayHours : []);
 }
 
 export function closingText(shop) {

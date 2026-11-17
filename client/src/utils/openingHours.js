@@ -120,6 +120,7 @@ export function getEffectiveStatus(shop, weeklyRows, now = new Date()) {
 // ตรวจความถูกต้อง คืน { [day_of_week]: ข้อความ error }
 export function validateWeek(week) {
   const errors = {};
+  if (!Array.isArray(week)) return errors;
   week.forEach((d) => {
     if (d.is_closed) return;
     if (!d.open_time || !d.close_time) {
@@ -133,6 +134,7 @@ export function validateWeek(week) {
 
 // แปลงเป็นรูปแบบที่ API รับ (ส่งทั้ง 7 วัน)
 export function weekToPayload(week) {
+  if (!Array.isArray(week)) return [];
   return week.map((d) => ({
     day_of_week: d.day_of_week,
     is_closed: d.is_closed,
