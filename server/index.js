@@ -25,7 +25,7 @@ const openingHoursRoutes = require('./routes/openingHours');
 app.use(cors());
 app.use(express.json());
 
-// routes ของ Sprint 2 (reviews / opening-hours) ยังใช้ sprint2_store.json ในขั้นนี้
+// routes ของ Sprint 2 (reviews / opening-hours) อ่าน-เขียนผ่านชั้น server/db (MSSQL หรือ JSON)
 app.use('/api/shops', nearbyShopsRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', openingHoursRoutes);

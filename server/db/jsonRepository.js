@@ -6,6 +6,9 @@ const fs = require('fs');
 const path = require('path');
 
 const DB_PATH = path.join(__dirname, '../data/database.json');
+const STORE_PATH = path.join(__dirname, '../data/sprint2_store.json');
+
+const { INITIAL_REVIEWS, INITIAL_OPENING_HOURS } = require('./defaults');
 
 function readDb() {
   return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
@@ -148,6 +151,57 @@ async function setMenuAvailability(shopId, menuId, isAvailable) {
   return shop ? withMenus(db, shop) : null;
 }
 
+function initialStore() {
+  return {
+    reviews: INITIAL_REVIEWS.map((review) => ({ ...review })),
+    opening_hours: JSON.parse(JSON.stringify(INITIAL_OPENING_HOURS)),
+  };
+}
+
+function readStoreData() {
+  if (!fs.existsSync(STORE_PATH)) {
+    fs.writeFileSync(STORE_PATH, JSON.stringify(initialStore(), null, 2), 'utf-8');
+  }
+  return JSON.parse(fs.readFileSync(STORE_PATH, 'utf-8'));
+}
+
+function writeStoreData(data) {
+  fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+async function listReviews(shopId = null) {
+  const reviews = readStoreData().reviews || [];
+  const filtered = shopId ? reviews.filter((review) => review.shop_id === shopId) : reviews;
+  return filtered
+    .slice()
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+}
+
+async function createReview(review) {
+  const store = readStoreData();
+  store.reviews = [review, ...(store.reviews || [])];
+  writeStoreData(store);
+  return review;
+}
+
+async function getOpeningHours(shopId) {
+  const openingHours = readStoreData().opening_hours || {};
+  return openingHours[shopId] || null;
+}
+
+async function saveOpeningHours(shopId, { weekly, special_holidays, updated_at }) {
+  const store = readStoreData();
+  if (!store.opening_hours) store.opening_hours = {};
+  store.opening_hours[shopId] = { weekly, special_holidays, updated_at };
+  writeStoreData(store);
+  return getOpeningHours(shopId);
+}
+
+async function resetSprint2Data() {
+  writeStoreData(initialStore());
+  return readStoreData();
+}
+
 module.exports = {
   driver: 'json',
   readDb,
@@ -164,4 +218,9 @@ module.exports = {
   updateShopStatus,
   updateShopDetails,
   setMenuAvailability,
+  listReviews,
+  createReview,
+  getOpeningHours,
+  saveOpeningHours,
+  resetSprint2Data,
 };
