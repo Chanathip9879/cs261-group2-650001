@@ -1,7 +1,8 @@
 const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
-const { DEFAULT_WEEKLY_HOURS, readStore, writeStore } = require('../utils/dbAdapter');
+const { DEFAULT_WEEKLY_HOURS } = require('../db/defaults');
+const db = require('../db');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const DAY_NAMES = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
@@ -214,20 +215,18 @@ function validateOpeningHoursPayload(body) {
  * GET /api/shops/:id/opening-hours
  * ดึงข้อมูลตารางเวลาเปิด/ปิดประจำสัปดาห์และวันหยุดพิเศษของร้าน
  */
-router.get('/shops/:id/opening-hours', (req, res) => {
+router.get('/shops/:id/opening-hours', async (req, res) => {
   try {
     const shopId = req.params.id;
-    const store = readStore();
 
-    const shopExists = (store.shops || []).some((s) => s.id === shopId);
-    if (!shopExists) {
+    if (!(await db.shopExists(shopId))) {
       return res.status(404).json({
         success: false,
         message: `ไม่พบร้านค้ารหัส ${shopId}`
       });
     }
 
-    const record = (store.opening_hours && store.opening_hours[shopId]) || {
+    const record = (await db.getOpeningHours(shopId)) || {
       weekly: DEFAULT_WEEKLY_HOURS,
       special_holidays: []
     };
@@ -250,13 +249,11 @@ router.get('/shops/:id/opening-hours', (req, res) => {
  * PUT /api/shops/:id/opening-hours (และ POST alias)
  * ตั้งเวลาเปิด/ปิดประจำสัปดาห์และวันหยุดพิเศษ (เฉพาะ OWNER ของร้านนั้น)
  */
-function handleUpdateOpeningHours(req, res) {
+async function handleUpdateOpeningHours(req, res) {
   try {
     const shopId = req.params.id;
-    const store = readStore();
 
-    const shopExists = (store.shops || []).some((s) => s.id === shopId);
-    if (!shopExists) {
+    if (!(await db.shopExists(shopId))) {
       return res.status(404).json({
         success: false,
         message: `ไม่พบร้านค้ารหัส ${shopId}`
@@ -271,11 +268,7 @@ function handleUpdateOpeningHours(req, res) {
       });
     }
 
-    if (!store.opening_hours) {
-      store.opening_hours = {};
-    }
-
-    const existing = store.opening_hours[shopId] || {
+    const existing = (await db.getOpeningHours(shopId)) || {
       weekly: JSON.parse(JSON.stringify(DEFAULT_WEEKLY_HOURS)),
       special_holidays: []
     };
@@ -289,8 +282,7 @@ function handleUpdateOpeningHours(req, res) {
       updated_at: new Date().toISOString()
     };
 
-    store.opening_hours[shopId] = updated;
-    writeStore(store);
+    await db.saveOpeningHours(shopId, updated);
 
     return res.status(200).json({
       success: true,

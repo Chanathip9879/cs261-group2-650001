@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { readStore } = require('../utils/dbAdapter');
+const db = require('../db');
 const { calculateHaversineDistance, validateCoordinates } = require('../utils/haversine');
 
 /**
  * GET /api/shops/nearby?lat=14.0735&lng=100.6015
  * รองรับตัวกรองเสริม: canteen, q, category
  */
-router.get('/nearby', (req, res) => {
+router.get('/nearby', async (req, res) => {
   try {
     const { lat: rawLat, lng: rawLng, canteen, q, category } = req.query;
 
@@ -23,15 +23,18 @@ router.get('/nearby', (req, res) => {
     const userLat = validation.lat;
     const userLng = validation.lng;
 
-    // 2. ดึงข้อมูลร้านค้าทั้งหมด
-    const store = readStore();
-    const shops = Array.isArray(store.shops) ? store.shops : [];
+    // 2. ดึงข้อมูลร้านค้าทั้งหมดจาก DB
+    const shops = await db.listShops();
 
     const nearbyOpenShops = [];
 
-    for (const shop of shops) {
+    for (const record of shops) {
+      // ตัด pin ออกเสมอ (response ของ route นี้ส่ง object ร้านกลับทั้งก้อน)
+      const { pin, ...shop } = record;
+
       // 3. กรองเฉพาะร้านที่เปิดอยู่ (Open)
       const isOpen =
+        shop.isOpen === true ||
         shop.is_open === true ||
         shop.is_open === 1 ||
         String(shop.status || '').toUpperCase() === 'OPEN';

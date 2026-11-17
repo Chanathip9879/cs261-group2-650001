@@ -1,7 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 const router = express.Router();
-const { readStore, writeStore } = require('../utils/dbAdapter');
+const db = require('../db');
 
 // ตั้งค่ากันสแปมเบื้องต้น
 const COOLDOWN_SAME_SHOP_MS = 60 * 1000; // ห้ามโพสต์ร้านเดิมซ้ำภายใน 60 วินาที
@@ -23,7 +23,7 @@ function toPublicReview(review) {
   return publicReview;
 }
 
-function handleGetReviews(req, res, shopId) {
+async function handleGetReviews(req, res, shopId) {
   try {
     if (!shopId || String(shopId).trim() === '') {
       return res.status(400).json({
@@ -32,18 +32,14 @@ function handleGetReviews(req, res, shopId) {
       });
     }
 
-    const store = readStore();
-    const shopExists = (store.shops || []).some((s) => s.id === shopId);
-    if (!shopExists) {
+    if (!(await db.shopExists(shopId))) {
       return res.status(404).json({
         success: false,
         message: `ไม่พบร้านค้ารหัส ${shopId}`
       });
     }
 
-    const shopReviews = (store.reviews || [])
-      .filter((r) => r.shop_id === shopId)
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const shopReviews = await db.listReviews(shopId);
 
     const totalReviews = shopReviews.length;
     const averageRating =
@@ -70,7 +66,7 @@ function handleGetReviews(req, res, shopId) {
   }
 }
 
-function handleCreateReview(req, res, shopIdFromParam) {
+async function handleCreateReview(req, res, shopIdFromParam) {
   try {
     const shopId = shopIdFromParam || req.body.shop_id || req.body.shopId;
     const rawUsername = req.body.username;
@@ -85,9 +81,7 @@ function handleCreateReview(req, res, shopIdFromParam) {
       });
     }
 
-    const store = readStore();
-    const shopExists = (store.shops || []).some((s) => s.id === shopId);
-    if (!shopExists) {
+    if (!(await db.shopExists(shopId))) {
       return res.status(404).json({
         success: false,
         message: `ไม่พบร้านค้ารหัส ${shopId}`
@@ -146,7 +140,7 @@ function handleCreateReview(req, res, shopIdFromParam) {
     // 5. ระบบกันสแปมเบื้องต้น
     const clientIp = getClientIp(req);
     const now = Date.now();
-    const allReviews = Array.isArray(store.reviews) ? store.reviews : [];
+    const allReviews = await db.listReviews();
 
     // 5.1 เช็กจำนวนครั้งทั้งหมดในช่วง 10 นาทีล่าสุดจากผู้ใช้หรือ IP เดียวกัน
     const recentUserReviews = allReviews.filter((r) => {
@@ -215,8 +209,7 @@ function handleCreateReview(req, res, shopIdFromParam) {
       created_at: new Date(now).toISOString()
     };
 
-    store.reviews = [newReview, ...allReviews];
-    writeStore(store);
+    await db.createReview(newReview);
 
     return res.status(201).json({
       success: true,
