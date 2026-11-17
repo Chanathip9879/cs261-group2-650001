@@ -1,4 +1,5 @@
 @echo off
+setlocal
 title HiwKhaw TU Canteen WebApp - CS261 Sprint 1
 echo ========================================================
 echo   HiwKhaw (TU Canteen) - CS261 Group 2 Sprint 1
@@ -17,6 +18,11 @@ goto :NOT_FOUND
 
 :RUN_NODE
 echo [OK] Found Node.js!
+if not exist ".env" (
+  echo [INFO] No .env found - using JSON database fallback ^(DB_DRIVER=json^)
+  echo [INFO] For MSSQL, copy .env.example to .env and run Docker ^(run-docker.bat^)
+  set "DB_DRIVER=json"
+)
 echo [INFO] Starting web application at http://localhost:5000 ...
 start http://localhost:5000
 echo.
@@ -30,13 +36,13 @@ goto :END
 
 :RUN_DOCKER
 echo [INFO] Node.js not found, but Docker is detected!
-echo [INFO] Starting application inside Docker container...
+echo [INFO] Starting 2 containers (SQL Server + Web App)...
 docker compose up -d --build
 start http://localhost:5000
 echo.
 echo ========================================================
 echo Application is running inside Docker at http://localhost:5000
-echo To stop container later, run: docker compose down
+echo To stop containers later, run: docker compose down
 echo ========================================================
 echo.
 pause

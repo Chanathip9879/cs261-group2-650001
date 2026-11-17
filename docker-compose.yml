@@ -7,7 +7,9 @@ services:
     container_name: hiwkhaw_mssql
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}"
+      # ค่า default สำหรับเดโม: clone ใหม่รันได้เลยโดยไม่ต้องมี .env
+      # ถ้าต้องการรหัสจริง ให้ตั้ง MSSQL_SA_PASSWORD ใน .env (จะ override ค่านี้)
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-HiwKhawDemo2026}"
       MSSQL_PID: "Express"
     ports:
       - "1433:1433"
@@ -38,7 +40,7 @@ services:
       - DB_SERVER=mssql
       - DB_PORT=1433
       - DB_USER=sa
-      - DB_PASSWORD=${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+      - DB_PASSWORD=${MSSQL_SA_PASSWORD:-HiwKhawDemo2026}
       - DB_NAME=${DB_NAME:-hiwkhaw}
       - DB_ENCRYPT=false
       - DB_TRUST_SERVER_CERT=true

@@ -12,8 +12,16 @@ function getDatabaseName() {
 }
 
 // config สำหรับเชื่อมต่อฐานข้อมูลที่ใช้งานจริง
+// รหัสเดโมตัวเดียวกับ default ใน docker-compose.yml เพื่อให้ clone ใหม่รันได้ทันที
+// (ใช้เฉพาะตอน dev — โหมด production ต้องตั้ง DB_PASSWORD ผ่าน environment เสมอ)
+const DEMO_PASSWORD = 'HiwKhawDemo2026';
+
 function getMssqlConfig() {
-  const password = process.env.DB_PASSWORD;
+  let password = process.env.DB_PASSWORD;
+  if (!password && process.env.NODE_ENV !== 'production') {
+    password = DEMO_PASSWORD;
+    console.warn('[db] ไม่พบ DB_PASSWORD — ใช้รหัสเดโมสำหรับ dev (ตั้งค่าใน .env เพื่อความปลอดภัย)');
+  }
   if (!password) {
     throw new Error(
       'ยังไม่ได้ตั้งค่า DB_PASSWORD — คัดลอก .env.example เป็น .env แล้วใส่รหัสผ่าน SQL Server'
