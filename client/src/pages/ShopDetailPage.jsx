@@ -1,18 +1,18 @@
 // client/src/pages/ShopDetailPage.jsx
 // รายละเอียดร้านค้า & เมนู (Restaurant Detail) — U3 ที่ตั้ง, U12 เวลาเปิด-ปิดวันนี้, รีวิว
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ArrowLeft, Clock, Store, CheckCircle2, XCircle, Phone, Share2, Heart, Navigation, MapPin,
   MessageSquarePlus, Ban, BadgeCheck, AlertCircle,
 } from 'lucide-react';
 import { StatusPill, HeartButton, Stars, Spinner, LiveDot } from '../components/ui/Primitives';
 import { getOpeningHours } from '../services/api';
-import { getTodayRow } from '../utils/openingHours';
+import { getEffectiveStatus } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
 import ShopContactCard from '../components/ShopContactCard';
 import {
-  getShopImage, getMenuImage, hoursText, locationText, canteenShort, formatBaht, telHref, formatPhone, isSoldOut,
+  getShopImage, getMenuImage, locationText, canteenShort, formatBaht, telHref, formatPhone, isSoldOut,
 } from '../utils/shopDisplay';
 import { navigate, routes, goBack } from '../router';
 import ReviewList from '../components/ReviewList';
@@ -20,7 +20,6 @@ import ReviewList from '../components/ReviewList';
 export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleBookmark, justPosted, showToast, loading }) {
   // U12: ตารางเวลารายวัน (undefined = กำลังโหลด, null = โหลดไม่สำเร็จ)
   const [hoursRows, setHoursRows] = useState(undefined);
-  const todayRow = hoursRows ? getTodayRow(hoursRows) : null;
 
   useEffect(() => {
     if (!shop?.id) return;
@@ -38,11 +37,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
   const menus = shop?.menus || [];
   const availableCount = menus.filter((m) => !isSoldOut(m)).length;
 
-  const todayHours = useMemo(() => {
-    if (todayRow && todayRow.is_closed) return 'วันนี้ปิดทำการ';
-    if (todayRow && todayRow.open_time) return `${todayRow.open_time} - ${todayRow.close_time} น.`;
-    return hoursText(shop);
-  }, [todayRow, shop]);
+  const status = shop?.effectiveStatus || getEffectiveStatus(shop, shop?.todayHours || hoursRows || []);
+  const todayHours = status.todayText;
 
   const rating = Number(shop?.rating || 0);
   const reviewCount = Number(shop?.reviewCount || 0);
@@ -65,7 +61,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
 
   const share = async () => {
     const url = window.location.href;
-    const text = `${shop.name} — ${shop.isOpen ? 'เปิดอยู่' : 'ปิดแล้ว'} (${locationText(shop)})`;
+    const text = `${shop.name} — ${status.open ? 'เปิดอยู่' : 'ปิดแล้ว'} (${locationText(shop)})`;
     try {
       if (navigator.share) await navigator.share({ title: shop.name, text, url });
       else {
@@ -100,8 +96,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
               <img src={getShopImage(shop)} alt={shop.name} className="size-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-                <StatusPill open={shop.isOpen}>
-                  {shop.isOpen ? `เปิดให้บริการหน้าร้าน • ${hoursText(shop)}` : 'ปิดแล้ว'}
+                <StatusPill open={status.open}>
+                  {status.open ? `เปิดให้บริการหน้าร้าน • ${todayHours}` : 'ปิดแล้ว'}
                 </StatusPill>
               </div>
               <HeartButton active={isBookmarked} onClick={onToggleBookmark} className="absolute right-3 top-3" />
@@ -122,10 +118,12 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
               <InfoItem icon={<Clock className="size-4" />} label="เวลาเปิด-ปิดวันนี้" value={todayHours} />
               <InfoItem icon={<Store className="size-4" />} label="พิกัด" value={`${canteenShort(shop)} ${shop.boothNumber || ''}`} />
               <InfoItem
-                icon={shop.isOpen ? <CheckCircle2 className="size-4" /> : <XCircle className="size-4" />}
+                icon={status.open ? <CheckCircle2 className="size-4" /> : <XCircle className="size-4" />}
                 label="สถานะบริการ"
-                value={shop.statusNote || (shop.isOpen ? 'เปิดรับหน้าร้านปกติ' : 'ปิดให้บริการ')}
-                tone={shop.isOpen ? 'ok' : 'danger'}
+                value={status.open
+                  ? (shop.statusNote || 'เปิดรับหน้าร้านปกติ')
+                  : (status.reason === 'vendor_closed' ? (shop.statusNote || 'ปิดให้บริการ') : 'ปิดตามเวลาทำการ')}
+                tone={status.open ? 'ok' : 'danger'}
               />
             </div>
           </section>
@@ -143,7 +141,7 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-4">
               {menus.map((m, i) => (
-                <MenuCard key={m.id} shop={shop} menu={m} index={i} shopClosed={!shop.isOpen} />
+                <MenuCard key={m.id} shop={shop} menu={m} index={i} shopClosed={!status.open} />
               ))}
             </div>
           </section>
@@ -183,9 +181,9 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
               <Navigation className="mt-1 size-4 text-brand" /> พิกัด & ตำแหน่งร้านใน มธ. รังสิต
             </h2>
             <span
-              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white ${shop.isOpen ? 'bg-ok' : 'bg-danger'}`}
+              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold text-white ${status.open ? 'bg-ok' : 'bg-danger'}`}
             >
-              {shop.isOpen ? '• เปิดให้บริการ' : '• ปิดแล้ว'}
+              {status.open ? '• เปิดให้บริการ' : '• ปิดแล้ว'}
             </span>
           </div>
           <div className="space-y-3 p-4">
@@ -210,8 +208,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
                   <p className="text-sm text-ink">{todayHours}</p>
                 </div>
               </div>
-              <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${shop.isOpen ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
-                <LiveDot open={shop.isOpen} /> {shop.isOpen ? 'กำลังเปิด' : 'ปิดอยู่'}
+              <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${status.open ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
+                <LiveDot open={status.open} /> {status.open ? 'กำลังเปิด' : 'ปิดแล้ว'}
               </span>
             </div>
             <WeeklyHours rows={hoursRows} fallbackText={shop.openingHours} />

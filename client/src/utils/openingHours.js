@@ -42,10 +42,79 @@ export function buildFullWeek(rows, legacyText) {
     return { day_of_week: day, is_closed: false, open_time: fallback.open, close_time: fallback.close };
   });
 }
-// หาแถวของวันนี้จาก rows ที่ได้จาก API (ไม่มีข้อมูลคืน null)
-export function getTodayRow(rows) {
-  const today = new Date().getDay();
-  return (rows || []).find((r) => r.day_of_week === today) || null;
+// Find today's row using Asia/Bangkok day (not the browser's local day)
+export function getTodayRow(rows, now = new Date()) {
+  const day = getBangkokParts(now).dayOfWeek;
+  return (rows || []).find((r) => r.day_of_week === day) || null;
+}
+
+const DAY_INDEX_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export function getBangkokParts(now = new Date()) {
+  const fmt = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Bangkok',
+    weekday: 'short',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  });
+  const parts = Object.fromEntries(fmt.formatToParts(now).map((p) => [p.type, p.value]));
+  return {
+    dayOfWeek: DAY_INDEX_EN.indexOf(parts.weekday),
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    minutes: Number(parts.hour) * 60 + Number(parts.minute),
+  };
+}
+
+function holidayForToday(shop, date) {
+  const lists = [shop?.todayHolidays, shop?.special_holidays, shop?.opening_hours?.special_holidays];
+  for (const list of lists) {
+    if (Array.isArray(list)) {
+      const found = list.find((h) => h.date === date);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+// Effective customer-facing status: vendor switch AND today's schedule/holiday.
+// Returns { open, todayText, reason }.
+export function getEffectiveStatus(shop, weeklyRows, now = new Date()) {
+  const parts = getBangkokParts(now);
+  const fallbackText = shop?.openingHours || '';
+  const holiday = holidayForToday(shop, parts.date);
+  const row = getTodayRow(weeklyRows, now);
+  const source = holiday && holiday.is_closed !== true && holiday.open_time && holiday.close_time
+    ? { is_closed: false, open_time: holiday.open_time, close_time: holiday.close_time }
+    : row;
+
+  let todayText = fallbackText || '-';
+  if (holiday && holiday.is_closed === true) {
+    todayText = holiday.note ? `หยุด: ${holiday.note}` : 'วันหยุดพิเศษ';
+  } else if (source && source.is_closed) {
+    todayText = 'ปิดทำการวันนี้';
+  } else if (source && source.open_time && source.close_time) {
+    todayText = `${source.open_time} - ${source.close_time} น.`;
+  }
+
+  const base = { open: false, todayText, reason: 'vendor_closed' };
+  if (!shop || shop.isOpen !== true) return base;
+  if (holiday && holiday.is_closed === true) return { ...base, reason: 'holiday' };
+  if (source && source.is_closed) return { ...base, reason: 'closed_today' };
+  if (!source || !source.open_time || !source.close_time) {
+    return { ...base, open: true, todayText: fallbackText || 'ยังไม่ระบุเวลา', reason: 'no_schedule' };
+  }
+
+  const start = timeToMinutes(source.open_time);
+  const end = timeToMinutes(source.close_time);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) {
+    return { ...base, open: true, reason: 'no_schedule' };
+  }
+  const open = parts.minutes >= start && parts.minutes < end;
+  return { open, todayText, reason: open ? 'within_hours' : 'outside_hours' };
 }
 
 // ตรวจความถูกต้อง คืน { [day_of_week]: ข้อความ error }

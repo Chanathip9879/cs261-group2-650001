@@ -2,29 +2,15 @@
 // US14 / Task52: การ์ดร้านโปรดแนวนอน (อิง Figma: Bookmarks)
 // มีรูปย่อ+คะแนน ชื่อร้าน สถานะเปิด/ปิด (ปิดกี่โมง) ข้อความจากร้าน ปุ่มดูรายละเอียด โทร และหัวใจ
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { UtensilsCrossed, Star, Store, Phone, Heart, MapPin, Bell, Info } from 'lucide-react';
-import { getOpeningHours } from '../services/api';
-import { getTodayRow } from '../utils/openingHours';
+import { effectiveOf } from '../utils/shopDisplay';
 
 export default function BookmarkShopCard({ shop, onSelect, onToggleBookmark }) {
-  const [closeTime, setCloseTime] = useState(null);
-
-  // ดึงเวลาปิดของวันนี้ไว้แสดงใน "เปิดอยู่ (ปิด 20:00)"
-  useEffect(() => {
-    let cancelled = false;
-    getOpeningHours(shop.id)
-      .then((rows) => {
-        const today = getTodayRow(rows);
-        if (!cancelled && today && !today.is_closed) setCloseTime(today.close_time);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [shop.id]);
-
-  const isOpen = shop.isOpen;
+  const status = effectiveOf(shop);
+  const isOpen = status.open;
+  const times = /(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/.exec(status.todayText);
+  const closeTime = isOpen && times ? times[2] : null;
   const accent = shop.accentColor || '#F97316';
 
   return (

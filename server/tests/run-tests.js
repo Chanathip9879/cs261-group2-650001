@@ -2,6 +2,8 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { resetStore, readShops } = require('../utils/dbAdapter');
+const db = require('../db');
+const { bangkokParts, getEffectiveStatus } = require('../utils/effectiveHours');
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
 
@@ -401,6 +403,133 @@ async function main() {
         })
       });
       assert.equal(resBadRange.status, 400);
+    }
+  );
+
+  // --------------------------------------------------------------------------
+  // EFFECTIVE STATUS: vendor switch + today's hours (Asia/Bangkok)
+  // --------------------------------------------------------------------------
+  await runCase(
+    'Effective status',
+    'ES.1 fixed-time getEffectiveStatus covers within/outside/vendor/holiday/no-schedule',
+    async () => {
+      const row = { day_of_week: 2, is_closed: false, open_time: '10:00', close_time: '18:00' };
+      const baseShop = { isOpen: true, openingHours: '08:00 - 17:00' };
+      const within = new Date('2026-11-17T04:00:00Z'); // 11:00 Bangkok
+      const outside = new Date('2026-11-17T12:00:00Z'); // 19:00 Bangkok
+
+      const insideResult = getEffectiveStatus(baseShop, [row], [], within);
+      assert.equal(insideResult.open, true);
+      assert.equal(insideResult.todayText, '10:00 - 18:00 น.');
+      assert.equal(insideResult.reason, 'within_hours');
+
+      const outsideResult = getEffectiveStatus(baseShop, [row], [], outside);
+      assert.equal(outsideResult.open, false);
+      assert.equal(outsideResult.reason, 'outside_hours');
+
+      const vendorClosed = getEffectiveStatus({ ...baseShop, isOpen: false }, [row], [], within);
+      assert.equal(vendorClosed.open, false);
+      assert.equal(vendorClosed.reason, 'vendor_closed');
+
+      const holiday = getEffectiveStatus(baseShop, [row], [
+        { date: '2026-11-17', is_closed: true, note: 'หยุดพิเศษ' }
+      ], within);
+      assert.equal(holiday.open, false);
+      assert.equal(holiday.reason, 'holiday');
+
+      const noSchedule = getEffectiveStatus(baseShop, [], [], within);
+      assert.equal(noSchedule.open, true);
+      assert.equal(noSchedule.reason, 'no_schedule');
+      assert.equal(noSchedule.todayText, '08:00 - 17:00');
+    }
+  );
+
+  const parts = bangkokParts();
+  const weekForToday = (todayRow) => [0, 1, 2, 3, 4, 5, 6].map((d) => (
+    d === parts.dayOfWeek
+      ? todayRow
+      : { day_of_week: d, is_closed: false, open_time: '00:00', close_time: '23:59' }
+  ));
+
+  const setHours = async (shopId, token, todayRow) => {
+    const res = await fetch(`${BASE_URL}/api/shops/${shopId}/opening-hours`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ weekly: weekForToday(todayRow), special_holidays: [] })
+    });
+    assert.equal(res.status, 200, `PUT opening-hours ${shopId}`);
+  };
+
+  await setHours('shop-test-01', OWNER_GREEN_TOKEN, {
+    day_of_week: parts.dayOfWeek, is_closed: true
+  });
+  await setHours('shop-test-02', OWNER_GREEN2_TOKEN, {
+    day_of_week: parts.dayOfWeek, is_closed: false, open_time: '00:00', close_time: '23:59'
+  });
+  await setHours('shop-test-03', OWNER_SCI_TOKEN, {
+    day_of_week: parts.dayOfWeek, is_closed: false, open_time: '00:00', close_time: '23:59'
+  });
+
+  await runCase(
+    'Effective status',
+    'ES.2 listTodayHours returns grouped rows for all shops in one call',
+    async () => {
+      const grouped = await db.listTodayHours(parts);
+      assert.ok(grouped['shop-test-01'], 'shop-test-01 must have today hours');
+      assert.equal(grouped['shop-test-01'].weekly[0].is_closed, true);
+      assert.ok(grouped['shop-test-02'].weekly.some((r) => r.open_time === '00:00'));
+    }
+  );
+
+  await runCase(
+    'Effective status',
+    'ES.3 GET /shops attaches effective status from today weekly rows',
+    async () => {
+      const res = await fetch(`${BASE_URL}/api/shops`);
+      assert.equal(res.status, 200);
+      const json = await res.json();
+      const byId = Object.fromEntries(json.data.map((s) => [s.id, s]));
+
+      const s1 = byId['shop-test-01'];
+      assert.equal(s1.isOpen, true);
+      assert.equal(s1.effectiveOpen, false);
+      assert.equal(s1.effectiveStatus.open, false);
+      assert.equal(s1.effectiveStatus.reason, 'closed_today');
+      assert.equal(s1.effectiveStatus.todayText, 'ปิดทำการวันนี้');
+      assert.equal(s1.todayHours[0].is_closed, true);
+
+      const s2 = byId['shop-test-02'];
+      assert.equal(s2.effectiveOpen, true);
+      assert.equal(s2.effectiveStatus.reason, 'within_hours');
+      assert.equal(s2.effectiveStatus.todayText, '00:00 - 23:59 น.');
+
+      const s4 = byId['shop-test-04'];
+      assert.equal(s4.isOpen, false);
+      assert.equal(s4.effectiveOpen, false);
+      assert.equal(s4.effectiveStatus.reason, 'vendor_closed');
+    }
+  );
+
+  await runCase(
+    'Effective status',
+    'ES.4 open filter and sorting use effective status',
+    async () => {
+      const allRes = await fetch(`${BASE_URL}/api/shops`);
+      const allJson = await allRes.json();
+      const openRes = await fetch(`${BASE_URL}/api/shops?status=open`);
+      const openJson = await openRes.json();
+
+      const allOpenIds = allJson.data.filter((s) => s.effectiveOpen).map((s) => s.id).sort();
+      assert.deepEqual(openJson.data.map((s) => s.id).sort(), allOpenIds);
+      assert.equal(openJson.data.some((s) => s.id === 'shop-test-01'), false);
+      assert.equal(openJson.data.some((s) => s.id === 'shop-test-04'), false);
+
+      const firstClosed = allJson.data.findIndex((s) => !s.effectiveOpen);
+      const lastOpen = allJson.data.findLastIndex((s) => s.effectiveOpen);
+      assert.ok(firstClosed === -1 || lastOpen === -1 || lastOpen < firstClosed);
+
+      assert.equal(allJson.meta.openCount, allOpenIds.length);
+      assert.equal(allJson.meta.closedCount, allJson.meta.total - allOpenIds.length);
     }
   );
 

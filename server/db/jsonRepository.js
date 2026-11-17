@@ -169,6 +169,21 @@ function writeStoreData(data) {
   fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
 }
 
+// โหลดแถวของวันนี้ของทุกร้านจาก store เดียวกัน (ไม่ยิง request ต่อร้าน)
+async function listTodayHours({ dayOfWeek, date }) {
+  const store = readStoreData();
+  const grouped = {};
+  const openingHours = store.opening_hours || {};
+  for (const [shopId, record] of Object.entries(openingHours)) {
+    const weekly = (record.weekly || []).filter((row) => row.day_of_week === dayOfWeek);
+    const holidays = (record.special_holidays || []).filter((h) => h.date === date);
+    if (weekly.length || holidays.length) {
+      grouped[shopId] = { weekly, special_holidays: holidays };
+    }
+  }
+  return grouped;
+}
+
 async function listReviews(shopId = null) {
   const reviews = readStoreData().reviews || [];
   const filtered = shopId ? reviews.filter((review) => review.shop_id === shopId) : reviews;
@@ -223,4 +238,5 @@ module.exports = {
   getOpeningHours,
   saveOpeningHours,
   resetSprint2Data,
+  listTodayHours,
 };

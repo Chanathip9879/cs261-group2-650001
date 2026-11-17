@@ -5,11 +5,12 @@ import React from 'react';
 import { X, MapPin, Clock, Phone, Utensils, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
 import OpeningHoursTable from './OpeningHoursTable';
 import BookmarkButton from './BookmarkButton';
+import { effectiveOf } from '../utils/shopDisplay';
 
 export default function ShopDetailModal({ shop, onClose, isBookmarked = false, onToggleBookmark }) {
   if (!shop) return null;
 
-  const isOpen = shop.isOpen;
+  const isOpen = effectiveOf(shop).open;
   const isGreenCanteen = shop.canteen === 'green';
 
   return (

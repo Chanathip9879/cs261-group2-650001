@@ -18,6 +18,8 @@ import fav3 from '../assets/images/fav-3.jpg';
 import fav4 from '../assets/images/fav-4.jpg';
 import fav5 from '../assets/images/fav-5.jpg';
 
+import { getEffectiveStatus } from './openingHours';
+
 // ข้อมูลร้านยังไม่มีรูป จึงใช้ภาพอาหารจาก Figma ตามหมวดหมู่ร้าน
 const CATEGORY_IMAGES = {
   chicken_rice: [chickenRice, detail1, chickenRice2],
@@ -49,15 +51,19 @@ export function parseHours(text) {
   return m ? { open: m[1].padStart(5, '0'), close: m[2].padStart(5, '0') } : null;
 }
 
+export function effectiveOf(shop) {
+  return shop?.effectiveStatus || getEffectiveStatus(shop, shop?.todayHours || []);
+}
+
 export function closingText(shop) {
-  const h = parseHours(shop?.openingHours);
-  if (!h) return shop?.openingHours || '';
-  return shop.isOpen ? `เปิดถึง ${h.close} น.` : `เปิด ${h.open} น.`;
+  const status = effectiveOf(shop);
+  const h = parseHours(status.todayText);
+  if (!h) return status.todayText || shop?.openingHours || '';
+  return status.open ? `เปิดถึง ${h.close} น.` : `เปิด ${h.open} น.`;
 }
 
 export function hoursText(shop) {
-  const h = parseHours(shop?.openingHours);
-  return h ? `${h.open} - ${h.close} น.` : shop?.openingHours || '-';
+  return effectiveOf(shop).todayText || shop?.openingHours || '-';
 }
 
 // U6: เมนูหมดหรือไม่ — รองรับทั้ง is_sold_out (ตามสเปก Task27/28) และ isAvailable (ข้อมูลปัจจุบัน)

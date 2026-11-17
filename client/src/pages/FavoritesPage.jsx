@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { HeartButton, LiveDot, Spinner } from '../components/ui/Primitives';
 import {
-  getShopImage, soldOutMenus, parseHours, canteenShort, locationText, menuSummary, priceRange, telHref,
+  getShopImage, soldOutMenus, effectiveOf, canteenShort, locationText, menuSummary, priceRange, telHref,
 } from '../utils/shopDisplay';
 import { navigate, routes } from '../router';
 
@@ -18,11 +18,11 @@ export default function FavoritesPage({ allShops, loading, bookmarkedIds, onTogg
     () => bookmarkedIds.map((id) => allShops.find((s) => s.id === id)).filter(Boolean),
     [bookmarkedIds, allShops]
   );
-  const openCount = saved.filter((s) => s.isOpen).length;
+  const openCount = saved.filter((s) => effectiveOf(s).open).length;
   const best = saved.reduce((m, s) => Math.max(m, Number(s.rating) || 0), 0);
 
   const list = useMemo(() => {
-    if (tab === 'open') return saved.filter((s) => s.isOpen);
+    if (tab === 'open') return saved.filter((s) => effectiveOf(s).open);
     if (tab === 'top') return [...saved].sort((a, b) => b.rating - a.rating);
     return saved;
   }, [saved, tab]);
@@ -124,8 +124,9 @@ export default function FavoritesPage({ allShops, loading, bookmarkedIds, onTogg
 
 function StatusRow({ shop }) {
   const soldOut = soldOutMenus(shop);
-  const h = parseHours(shop.openingHours);
-  const border = !shop.isOpen ? 'border-danger' : soldOut.length ? 'border-brand-accent' : 'border-ok';
+  const status = effectiveOf(shop);
+  const open = status.open;
+  const border = !open ? 'border-danger' : soldOut.length ? 'border-brand-accent' : 'border-ok';
   return (
     <button
       type="button"
@@ -134,13 +135,13 @@ function StatusRow({ shop }) {
     >
       <div className="flex items-start justify-between gap-2">
         <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
-          <LiveDot open={shop.isOpen} /> {shop.isOpen ? 'เปิดอยู่' : 'ปิดแล้ว'} • {shop.name}
+          <LiveDot open={open} /> {open ? 'เปิดอยู่' : 'ปิดแล้ว'} • {shop.name}
         </p>
         <span className="shrink-0 rounded bg-white px-1.5 text-[10px] text-ink-muted">โซน {canteenShort(shop)}</span>
       </div>
-      <p className={`flex items-center gap-1.5 text-xs ${!shop.isOpen ? 'text-ink-muted' : soldOut.length ? 'text-danger' : 'text-ok'}`}>
-        {!shop.isOpen ? <Info className="size-3.5" /> : soldOut.length ? <AlertTriangle className="size-3.5" /> : <CheckCircle2 className="size-3.5" />}
-        {!shop.isOpen
+      <p className={`flex items-center gap-1.5 text-xs ${!open ? 'text-ink-muted' : soldOut.length ? 'text-danger' : 'text-ok'}`}>
+        {!open ? <Info className="size-3.5" /> : soldOut.length ? <AlertTriangle className="size-3.5" /> : <CheckCircle2 className="size-3.5" />}
+        {!open
           ? shop.statusNote || 'ปิดให้บริการวันนี้'
           : soldOut.length
           ? `แจ้งเตือน: ${soldOut.map((m) => m.name).join(', ')} หมดแล้ว`
@@ -148,9 +149,9 @@ function StatusRow({ shop }) {
       </p>
       <div className="flex items-center justify-between text-xs text-ink-muted">
         <span className="flex items-center gap-1">
-          <Clock className="size-3.5" /> {h ? (shop.isOpen ? `ปิด ${h.close}` : `เปิดรอบถัดไป ${h.open}`) : shop.openingHours}
+          <Clock className="size-3.5" /> {status.todayText}
         </span>
-        <span className={`font-semibold ${shop.isOpen ? 'text-ok' : 'text-ink'}`}>{shop.isOpen ? 'เปิดบริการ' : 'ปิดบริการ'}</span>
+        <span className={`font-semibold ${open ? 'text-ok' : 'text-ink'}`}>{open ? 'เปิดบริการ' : 'ปิดบริการ'}</span>
       </div>
     </button>
   );
@@ -158,19 +159,20 @@ function StatusRow({ shop }) {
 
 function FavoriteCard({ shop, onRemove }) {
   const soldOut = soldOutMenus(shop);
-  const h = parseHours(shop.openingHours);
+  const status = effectiveOf(shop);
+  const open = status.open;
   return (
     <article className="flex flex-col overflow-hidden rounded-xl bg-white shadow-card">
       <div className="relative h-44">
-        <img src={getShopImage(shop)} alt={shop.name} loading="lazy" className={`size-full object-cover ${shop.isOpen ? '' : 'grayscale-[50%]'}`} />
+        <img src={getShopImage(shop)} alt={shop.name} loading="lazy" className={`size-full object-cover ${open ? '' : 'grayscale-[50%]'}`} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <span
           className={`absolute left-3 top-3 flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-            shop.isOpen ? 'bg-white/90 text-ok' : 'bg-danger-soft text-danger-deep'
+            open ? 'bg-white/90 text-ok' : 'bg-danger-soft text-danger-deep'
           }`}
         >
-          <LiveDot open={shop.isOpen} />
-          {shop.isOpen ? `เปิดอยู่${h ? ` • ปิด ${h.close}` : ''}` : `ปิดแล้ว${h ? ` • เปิด ${h.open}` : ''}`}
+          <LiveDot open={open} />
+          {open ? `เปิดอยู่ • ${status.todayText}` : `ปิดแล้ว • ${status.todayText}`}
         </span>
         <HeartButton active onClick={onRemove} className="absolute right-3 top-3 [&_svg]:fill-brand-accent [&_svg]:text-brand-accent" />
         <span className="absolute bottom-3 left-3 flex items-center gap-1 text-[11px] text-white">
@@ -186,7 +188,7 @@ function FavoriteCard({ shop, onRemove }) {
           <h3 className="font-display text-lg font-semibold text-ink">{shop.name}</h3>
           <span className="shrink-0 rounded bg-surface-low px-1.5 py-0.5 text-[10px] text-ink-muted">โซน {canteenShort(shop)}</span>
         </div>
-        {!shop.isOpen ? (
+        {!open ? (
           <p className="flex items-center gap-1.5 rounded-lg border border-surface-high bg-surface-low px-2.5 py-1.5 text-xs text-ink-muted">
             <Ban className="size-3.5" /> {shop.statusNote || 'ปิดให้บริการวันนี้'}
           </p>
@@ -211,7 +213,7 @@ function FavoriteCard({ shop, onRemove }) {
             type="button"
             onClick={() => navigate(routes.shop(shop.id))}
             className={`flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-xs font-semibold ${
-              shop.isOpen ? 'bg-brand-accent text-white' : 'bg-surface-mid text-ink'
+              open ? 'bg-brand-accent text-white' : 'bg-surface-mid text-ink'
             }`}
           >
             <Map className="size-4" /> ดูรายละเอียด & พิกัด

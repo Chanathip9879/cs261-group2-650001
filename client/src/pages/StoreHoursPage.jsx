@@ -13,7 +13,7 @@ import { getOpeningHours, saveOpeningHours } from '../services/api';
 import {
   DAY_NAMES, DAY_NAMES_EN, DISPLAY_ORDER, buildFullWeek, validateWeek, weekToPayload,
 } from '../utils/openingHours';
-import { getShopImage } from '../utils/shopDisplay';
+import { getShopImage, effectiveOf } from '../utils/shopDisplay';
 
 const DAY_COLORS = ['bg-danger-soft text-danger', 'bg-[#fff3c4] text-[#8a6d00]', 'bg-[#ffe1ef] text-[#a3245f]', 'bg-ok-soft/60 text-ok', 'bg-brand-peach text-brand', 'bg-[#dbeafe] text-[#1d4ed8]', 'bg-[#ede4ff] text-[#6d28d9]'];
 
@@ -55,8 +55,7 @@ export default function StoreHoursPage({ shop, showToast }) {
 
   const errors = useMemo(() => (week ? validateWeek(week) : {}), [week]);
   const dirty = week && saved && !sameWeek(week, saved);
-  const today = new Date().getDay();
-  const todayRow = week?.find((d) => d.day_of_week === today);
+  const status = shop ? effectiveOf(shop) : null;
 
   if (!shop) return <p className="py-24 text-center text-sm text-ink-muted">ไม่พบข้อมูลร้าน</p>;
 
@@ -123,15 +122,15 @@ export default function StoreHoursPage({ shop, showToast }) {
         <div className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-ok-soft/30" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <span className={`flex size-12 items-center justify-center rounded-xl ${shop.isOpen ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
+            <span className={`flex size-12 items-center justify-center rounded-xl ${status.open ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
               <Store className="size-6" />
             </span>
             <div>
               <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
-                <span className={`size-2 rounded-full ${shop.isOpen ? 'bg-ok' : 'bg-danger'}`} /> มุมมองลูกค้าขณะนี้
+                <span className={`size-2 rounded-full ${status.open ? 'bg-ok' : 'bg-danger'}`} /> มุมมองลูกค้าขณะนี้
               </p>
-              <p className={`font-display text-lg font-bold ${shop.isOpen ? 'text-ok' : 'text-danger'}`}>
-                {shop.isOpen ? 'กำลังเปิดให้บริการ' : 'ปิดให้บริการอยู่'}
+              <p className={`font-display text-lg font-bold ${status.open ? 'text-ok' : 'text-danger'}`}>
+                {status.open ? 'กำลังเปิดให้บริการ' : 'ปิดให้บริการอยู่'}
               </p>
             </div>
           </div>
@@ -139,7 +138,7 @@ export default function StoreHoursPage({ shop, showToast }) {
             <p className="flex justify-between gap-3 text-ink-muted">
               รอบเปิดวันนี้ ({DAY_NAMES[today]}):
               <span className="font-semibold text-brand">
-                {todayRow ? (todayRow.is_closed ? 'ปิดทำการ' : `${todayRow.open_time} - ${todayRow.close_time} น.`) : '...'}
+                {status.todayText}
               </span>
             </p>
             <p className="mt-1 flex items-center gap-1 text-ink-muted">

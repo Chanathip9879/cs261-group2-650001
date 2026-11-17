@@ -8,6 +8,7 @@
 // ข้อมูลอ่าน/เขียนผ่าน server/db (MSSQL หรือ JSON ตาม DB_DRIVER)
 
 const db = require('../db');
+const { decorateShops } = require('../utils/decorateShops');
 
 // ==========================================
 // Helpers: latitude / longitude ของร้าน (Task32 / U8)
@@ -75,7 +76,7 @@ exports.toPublicShop = toPublicShop;
 exports.getShops = async (req, res) => {
   try {
     const { q, canteen, category, status } = req.query;
-    const allShops = await db.listShops();
+    const allShops = await decorateShops(await db.listShops());
     let result = [...allShops];
 
     // ฟิลเตอร์ตามโรงอาหาร (กรีนแคนทีน / คณะวิทยาศาสตร์ / สังคมศาสตร์)
@@ -90,7 +91,7 @@ exports.getShops = async (req, res) => {
 
     // ฟิลเตอร์เฉพาะร้านที่เปิดอยู่
     if (status === 'open') {
-      result = result.filter(shop => shop.isOpen === true);
+      result = result.filter(shop => shop.effectiveOpen);
     }
 
     // ค้นหาตามข้อความ (ชื่อร้าน, ชื่อเมนู, ประเภทอาหาร, ที่ตั้ง)
@@ -112,13 +113,13 @@ exports.getShops = async (req, res) => {
     // เรียงลำดับ: ร้านที่เปิดอยู่จะแสดงขึ้นมาก่อน เพื่อความสะดวกของผู้ใช้งาน
     // (sort แบบ stable — ร้านที่สถานะเดียวกันยังคงลำดับตาม sort_order ที่มาจากฐานข้อมูล)
     result.sort((a, b) => {
-      if (a.isOpen === b.isOpen) return 0;
-      return a.isOpen ? -1 : 1;
+      if (a.effectiveOpen === b.effectiveOpen) return 0;
+      return a.effectiveOpen ? -1 : 1;
     });
 
     // สถิติภาพรวม
     const totalCount = allShops.length;
-    const openCount = allShops.filter(s => s.isOpen).length;
+    const openCount = allShops.filter(s => s.effectiveOpen).length;
     const closedCount = totalCount - openCount;
 
     return res.json({
@@ -142,7 +143,8 @@ exports.getShops = async (req, res) => {
 exports.getShopById = async (req, res) => {
   try {
     const { id } = req.params;
-    const [shop, canteens] = await Promise.all([db.getShopById(id), db.listCanteens()]);
+    const [rawShop, canteens] = await Promise.all([db.getShopById(id), db.listCanteens()]);
+    const [shop] = rawShop ? await decorateShops([rawShop]) : [];
 
     if (!shop) {
       return res.status(404).json({ success: false, message: 'ไม่พบร้านอาหารที่ระบุ' });
@@ -166,11 +168,11 @@ exports.getShopById = async (req, res) => {
 // 3. ดึงข้อมูลโรงอาหาร พร้อมสถานะจำนวนร้านที่เปิด (U3)
 exports.getCanteens = async (req, res) => {
   try {
-    const [canteens, shops] = await Promise.all([db.listCanteens(), db.listShops()]);
+    const [canteens, shops] = await Promise.all([db.listCanteens(), decorateShops(await db.listShops())]);
 
     const canteensWithStats = canteens.map(c => {
       const shopsInCanteen = shops.filter(s => s.canteen === c.id);
-      const openShops = shopsInCanteen.filter(s => s.isOpen).length;
+      const openShops = shopsInCanteen.filter(s => s.effectiveOpen).length;
       return {
         ...c,
         totalShops: shopsInCanteen.length,
@@ -236,10 +238,11 @@ exports.toggleShopStatus = async (req, res) => {
       lastStatusUpdate: new Date().toISOString()
     });
 
+    const [decorated] = await decorateShops([updatedShop]);
     return res.json({
       success: true,
       message: `เปลี่ยนสถานะร้าน "${updatedShop.name}" เป็น "${newStatus ? 'เปิด' : 'ปิด'}" เรียบร้อยแล้ว`,
-      data: toPublicShop(updatedShop)
+      data: toPublicShop(decorated)
     });
   } catch (err) {
     console.error('Error toggling shop status:', err);
@@ -270,10 +273,11 @@ exports.updateShopDetails = async (req, res) => {
       lastStatusUpdate: new Date().toISOString()
     });
 
+    const [decorated] = await decorateShops([shop]);
     return res.json({
       success: true,
       message: 'บันทึกข้อมูลเรียบร้อยแล้ว',
-      data: toPublicShop(shop)
+      data: toPublicShop(decorated)
     });
   } catch (err) {
     console.error('Error updating shop details:', err);
@@ -329,10 +333,11 @@ exports.updateMenuAvailability = async (req, res) => {
 
     const updatedShop = await db.setMenuAvailability(id, menuId, isAvailable);
 
+    const [decorated] = await decorateShops([updatedShop]);
     return res.json({
       success: true,
       message: isAvailable ? `เปิดขาย "${menu.name}" แล้ว` : `แจ้ง "${menu.name}" หมดแล้ว`,
-      data: toPublicShop(updatedShop)
+      data: toPublicShop(decorated)
     });
   } catch (err) {
     console.error('Error updating menu availability:', err);
