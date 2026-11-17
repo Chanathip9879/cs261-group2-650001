@@ -108,7 +108,7 @@ async function listCategories() {
 async function listShops() {
   const pool = await getPool();
   const [shopsResult, menusByShop] = await Promise.all([
-    pool.request().query(`SELECT ${SHOP_COLUMNS} FROM dbo.shops`),
+    pool.request().query(`SELECT ${SHOP_COLUMNS} FROM dbo.shops ORDER BY sort_order, id`),
     loadMenusByShop(pool),
   ]);
 
@@ -174,7 +174,7 @@ async function findShopByCredentials(phone, pin) {
     .query(`SELECT TOP 1 ${SHOP_COLUMNS} FROM dbo.shops
             WHERE phone = @phone AND pin = @pin
               AND phone <> '' AND pin IS NOT NULL
-            ORDER BY id`);
+            ORDER BY sort_order, id`);
 
   const row = result.recordset[0];
   if (!row) return null;

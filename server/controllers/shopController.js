@@ -110,6 +110,7 @@ exports.getShops = async (req, res) => {
     }
 
     // เรียงลำดับ: ร้านที่เปิดอยู่จะแสดงขึ้นมาก่อน เพื่อความสะดวกของผู้ใช้งาน
+    // (sort แบบ stable — ร้านที่สถานะเดียวกันยังคงลำดับตาม sort_order ที่มาจากฐานข้อมูล)
     result.sort((a, b) => {
       if (a.isOpen === b.isOpen) return 0;
       return a.isOpen ? -1 : 1;
