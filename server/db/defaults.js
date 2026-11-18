@@ -29,29 +29,74 @@ const INITIAL_REVIEWS = [
   }
 ];
 
-const INITIAL_OPENING_HOURS = {
-  'shop-test-01': {
-    weekly: cloneWeeklyHours(),
-    special_holidays: [
-      {
-        id: 'hol-init-001',
-        date: '2026-12-05',
-        is_closed: true,
-        open_time: null,
-        close_time: null,
-        note: 'หยุดวันพ่อแห่งชาติ'
-      }
-    ]
-  },
-  'shop-test-03': {
-    weekly: cloneWeeklyHours(),
-    special_holidays: []
-  }
+// วันหยุดพิเศษตั้งต้นของร้านทดสอบ
+// ไม่กำหนด weekly ตายตัวแล้ว — เวลาเปิด-ปิดรายสัปดาห์ seed จากสตริง openingHours ของแต่ละร้าน
+// เพื่อให้ตรงกับ database.json (เช่น shop-test-01 = "08:00 - 21:00" ทุกวัน)
+const INITIAL_SPECIAL_HOLIDAYS = {
+  'shop-test-01': [
+    {
+      id: 'hol-init-001',
+      date: '2026-12-05',
+      is_closed: true,
+      open_time: null,
+      close_time: null,
+      note: 'หยุดวันพ่อแห่งชาติ'
+    }
+  ],
+  'shop-test-03': []
 };
+
+// แปลงข้อความเวลาเปิด-ปิดของร้าน (เช่น "08:00 - 21:00") เป็นตารางรายสัปดาห์
+// เปิดทุกวัน (จันทร์-อาทิตย์) เวลาเดียวกัน คืน null เมื่อรูปแบบไม่รู้จัก
+function parseWeeklyFromShopText(text) {
+  const match = /^([01]\d|2[0-3]):([0-5]\d)\s*-\s*([01]\d|2[0-3]):([0-5]\d)$/.exec(
+    String(text || '').trim()
+  );
+  if (!match) return null;
+
+  const openTime = `${match[1]}:${match[2]}`;
+  const closeTime = `${match[3]}:${match[4]}`;
+  return DEFAULT_WEEKLY_HOURS.map((day) => ({
+    day_of_week: day.day_of_week,
+    day_name: day.day_name,
+    is_closed: false,
+    open_time: openTime,
+    close_time: closeTime
+  }));
+}
+
+// สร้างเวลาเปิด-ปิดตั้งต้นของทุกร้านจากสตริง openingHours แล้วเติมวันหยุดพิเศษตั้งต้น
+// คืน Map: shop_id -> { shop_id, weekly, special_holidays, updated_at }
+// ใช้ร่วมกันทั้ง seed ของ MSSQL (schema.js) และโหมด JSON (jsonRepository.js)
+function buildOpeningHoursSeed(shops = []) {
+  const byShop = new Map();
+
+  for (const shop of shops) {
+    const weekly = parseWeeklyFromShopText(shop.openingHours);
+    // ร้านที่ไม่มีรูปแบบเวลาเปิด-ปิดที่รู้จัก จะไม่ถูกสร้างแถวเวลาเปิด-ปิดเลย
+    if (!weekly) continue;
+    byShop.set(shop.id, {
+      shop_id: shop.id,
+      weekly,
+      special_holidays: [],
+      updated_at: null
+    });
+  }
+
+  for (const [shopId, holidays] of Object.entries(INITIAL_SPECIAL_HOLIDAYS)) {
+    const record = byShop.get(shopId);
+    if (!record) continue;
+    record.special_holidays = holidays.map((holiday) => ({ ...holiday }));
+  }
+
+  return byShop;
+}
 
 module.exports = {
   DEFAULT_WEEKLY_HOURS,
   cloneWeeklyHours,
   INITIAL_REVIEWS,
-  INITIAL_OPENING_HOURS
+  INITIAL_SPECIAL_HOLIDAYS,
+  parseWeeklyFromShopText,
+  buildOpeningHoursSeed
 };

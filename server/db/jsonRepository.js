@@ -8,7 +8,7 @@ const path = require('path');
 const DB_PATH = path.join(__dirname, '../data/database.json');
 const STORE_PATH = path.join(__dirname, '../data/sprint2_store.json');
 
-const { INITIAL_REVIEWS, INITIAL_OPENING_HOURS } = require('./defaults');
+const { INITIAL_REVIEWS, buildOpeningHoursSeed } = require('./defaults');
 
 function readDb() {
   return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
@@ -152,9 +152,17 @@ async function setMenuAvailability(shopId, menuId, isAvailable) {
 }
 
 function initialStore() {
+  // เวลาเปิด-ปิด seed จากสตริง openingHours ของทุกร้านใน database.json
+  // (เปิดทุกวันเวลาเดียวกัน) แล้วเติมวันหยุดพิเศษตั้งต้น — เหมือนโหมด MSSQL
+  const openingHours = {};
+  for (const record of buildOpeningHoursSeed(readDb().shops || []).values()) {
+    const { shop_id: shopId, ...rest } = record;
+    openingHours[shopId] = rest;
+  }
+
   return {
     reviews: INITIAL_REVIEWS.map((review) => ({ ...review })),
-    opening_hours: JSON.parse(JSON.stringify(INITIAL_OPENING_HOURS)),
+    opening_hours: openingHours,
   };
 }
 

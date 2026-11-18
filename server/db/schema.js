@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const sql = require('mssql');
 
-const { DEFAULT_WEEKLY_HOURS, cloneWeeklyHours, INITIAL_REVIEWS, INITIAL_OPENING_HOURS } = require('./defaults');
+const { INITIAL_REVIEWS, buildOpeningHoursSeed } = require('./defaults');
 
 const SEED_PATH = path.join(__dirname, '../data/database.json');
 
@@ -401,56 +401,17 @@ async function seedDatabase(pool, db, { reset = false } = {}) {
 // Sprint 2 seed (reviews / opening_hours / special_holidays)
 // ---------------------------------------------------------------------------
 
-// แปลงข้อความเวลาเปิด-ปิดของร้านเป็นตารางรายสัปดาห์
-// ใช้เวลาเดียวกันทุกวัน (จันทร์-อาทิตย์) ตามข้อความ เช่น "07:00 - 17:00"
-// คืนค่า null เมื่อข้อความไม่ใช่รูปแบบเวลาที่รู้จัก เพื่อให้ผู้เรียบข้ามการสร้างแถว
-function parseWeeklyFromShopText(text) {
-  const match = /^([01]\d|2[0-3]):([0-5]\d)\s*-\s*([01]\d|2[0-3]):([0-5]\d)$/.exec(
-    String(text || '').trim()
-  );
-  if (!match) return null;
-
-  const openTime = `${match[1]}:${match[2]}`;
-  const closeTime = `${match[3]}:${match[4]}`;
-  return DEFAULT_WEEKLY_HOURS.map((day) => ({
-    day_of_week: day.day_of_week,
-    day_name: day.day_name,
-    is_closed: false,
-    open_time: openTime,
-    close_time: closeTime
-  }));
-}
-
 function buildSprint2SeedRows(db) {
   const reviews = INITIAL_REVIEWS.map((review) => ({
     ...review,
     created_at: toDate(review.created_at)
   }));
 
-  const hoursByShop = new Map();
-  for (const shop of db.shops || []) {
-    const weekly = parseWeeklyFromShopText(shop.openingHours);
-    // ร้านที่ไม่มีรูปแบบเวลาเปิด-ปิดที่รู้จัก จะไม่ถูกสร้างแถวเวลาเปิด-ปิดเลย
-    if (!weekly) continue;
-    hoursByShop.set(shop.id, {
-      shop_id: shop.id,
-      weekly,
-      special_holidays: [],
-      updated_at: null
-    });
-  }
+  // เวลาเปิด-ปิด seed จากสตริง openingHours ของแต่ละร้าน (เปิดทุกวันเวลาเดียวกัน)
+  // แล้วเติมวันหยุดพิเศษตั้งต้นของร้านทดสอบ — ไม่มี override ตายตัวแล้ว
+  const openingHours = [...buildOpeningHoursSeed(db.shops || []).values()];
 
-  // ทับด้วยข้อมูลตั้งต้นของร้านทดสอบ (รวมวันหยุดตัวอย่าง)
-  for (const [shopId, record] of Object.entries(INITIAL_OPENING_HOURS)) {
-    hoursByShop.set(shopId, {
-      shop_id: shopId,
-      weekly: cloneWeeklyHours(record.weekly),
-      special_holidays: (record.special_holidays || []).map((holiday) => ({ ...holiday })),
-      updated_at: null
-    });
-  }
-
-  return { reviews, openingHours: [...hoursByShop.values()] };
+  return { reviews, openingHours };
 }
 
 const SPRINT2_DELETE_ORDER = [
