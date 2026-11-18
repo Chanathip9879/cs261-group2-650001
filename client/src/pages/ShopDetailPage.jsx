@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ArrowLeft, Clock, Store, CheckCircle2, XCircle, Phone, Share2, Heart, Navigation, MapPin,
-  MessageSquarePlus, Ban, BadgeCheck, AlertCircle,
+  MessageSquarePlus, AlertCircle,
 } from 'lucide-react';
 import { StatusPill, HeartButton, Stars, Spinner, LiveDot } from '../components/ui/Primitives';
 import { getOpeningHours } from '../services/api';
@@ -12,7 +12,7 @@ import { getEffectiveStatus } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
 import ShopContactCard from '../components/ShopContactCard';
 import {
-  getShopImage, getMenuImage, locationText, canteenShort, formatMenuPrice, telHref, formatPhone, isSoldOut,
+  getShopImage, locationText, canteenShort, formatMenuPrice, telHref, formatPhone, isSoldOut,
 } from '../utils/shopDisplay';
 import { navigate, routes, goBack } from '../router';
 import ReviewList from '../components/ReviewList';
@@ -140,8 +140,8 @@ export default function ShopDetailPage({ shop, canteens, isBookmarked, onToggleB
               </span>
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:gap-4">
-              {menus.map((m, i) => (
-                <MenuCard key={m.id} shop={shop} menu={m} index={i} shopClosed={!status.open} />
+              {menus.map((m) => (
+                <MenuCard key={m.id} menu={m} shopClosed={!status.open} />
               ))}
             </div>
           </section>
@@ -264,31 +264,15 @@ function InfoItem({ icon, label, value, tone }) {
   );
 }
 
-function MenuCard({ shop, menu, index, shopClosed }) {
+// การ์ดเมนูแบบไม่มีรูป (ยังไม่มีรูปเมนูจริง จึงไม่แสดงภาพตัวอย่างที่ไม่ตรงกับเมนู)
+function MenuCard({ menu, shopClosed }) {
   const soldOut = isSoldOut(menu); // U6: ป้าย "หมด" ตาม is_sold_out / isAvailable
   return (
-    <article className={`flex gap-3 rounded-xl bg-white p-3 shadow-card sm:flex-col ${soldOut ? 'bg-surface-low' : ''}`}>
-      <div className="relative size-20 shrink-0 overflow-hidden rounded-lg sm:h-36 sm:w-full">
-        <img
-          src={getMenuImage(shop, index)}
-          alt={menu.name}
-          loading="lazy"
-          className={`size-full object-cover ${soldOut ? 'grayscale' : ''}`}
-        />
-        {soldOut && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-            <span className="rounded bg-danger px-2 py-0.5 text-[11px] font-semibold text-white">หมด</span>
-          </div>
-        )}
-        <span
-          className={`absolute right-0 top-0 hidden items-center gap-1 rounded-bl-lg px-2 py-0.5 text-[10px] font-semibold text-white sm:flex ${
-            soldOut ? 'bg-danger' : 'bg-ok'
-          }`}
-        >
-          {soldOut ? <Ban className="size-3" /> : <BadgeCheck className="size-3" />}
-          {soldOut ? 'เมนูหมดแล้ววันนี้' : 'พร้อมเสิร์ฟ'}
-        </span>
-      </div>
+    <article
+      className={`flex rounded-xl border-l-4 p-4 shadow-card ${
+        soldOut ? 'border-danger bg-surface-low' : shopClosed ? 'border-surface-high bg-white' : 'border-ok bg-white'
+      }`}
+    >
       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
         <h3 className={`font-display text-base font-semibold ${soldOut ? 'text-ink-muted line-through' : 'text-ink'}`}>{menu.name}</h3>
         <div className="flex items-end justify-between gap-2">
