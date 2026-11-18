@@ -1,11 +1,35 @@
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('node:child_process');
 const { resetStore, readShops } = require('../utils/dbAdapter');
 const db = require('../db');
+const lockout = require('../utils/loginLockout');
 const { bangkokParts, getEffectiveStatus } = require('../utils/effectiveHours');
 
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:5000';
+
+// U7: เบอร์สมมติสำหรับเทสต์ lockout — ใช้ 0800 นำหน้าเพื่อไม่ให้ชนกับเบอร์ร้านเดโม
+// (0811111111 / 0822222222 / 0833333333 / 0844444444 / แอดมิน 0899999999)
+const DEMO_PHONES = new Set(['0811111111', '0822222222', '0833333333', '0844444444', '0899999999']);
+const fakePhoneBase = Date.now() % 900000;
+let fakePhoneSeq = 0;
+function uniqueFakePhone() {
+  let phone;
+  do {
+    fakePhoneSeq += 1;
+    phone = `0800${String((fakePhoneBase + fakePhoneSeq) % 1000000).padStart(6, '0')}`;
+  } while (DEMO_PHONES.has(phone));
+  return phone;
+}
+
+function postLogin(body) {
+  return fetch(`${BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+}
 
 // Token จำลองที่ไม่ได้มาจากการ Login จริง — ต้องถูกปฏิเสธเสมอ
 function createForgedToken(payload) {
@@ -530,6 +554,125 @@ async function main() {
 
       assert.equal(allJson.meta.openCount, allOpenIds.length);
       assert.equal(allJson.meta.closedCount, allJson.meta.total - allOpenIds.length);
+    }
+  );
+
+  // --------------------------------------------------------------------------
+  // U7 (Task 30): ล็อกบัญชีชั่วคราวเมื่อกรอก PIN ผิด (docs/API_LOGIN_LOCKOUT.md)
+  // --------------------------------------------------------------------------
+  await runCase(
+    'U7',
+    'U7.0 loginLockout (logic): ผิด 4 ครั้งยังไม่ล็อก / ครั้งที่ 5 ล็อก 5 นาที / หมดเวลาเริ่มนับใหม่ / login สำเร็จ reset',
+    async () => {
+      const phone = '080-000-0001'; // ใช้รูปแบบมีขีด เพื่อทดสอบการ normalize
+      const t0 = Date.parse('2026-11-18T10:00:00.000Z');
+      const lockMs = 5 * 60 * 1000;
+
+      // ยังไม่เคยผิด -> ไม่ล็อก
+      assert.equal(lockout.getLock(phone, t0), null);
+
+      // ผิด 4 ครั้ง -> ยังไม่ล็อก
+      for (let i = 0; i < 4; i += 1) {
+        const r = lockout.recordFailure(phone, t0 + i * 1000);
+        assert.equal(r.locked, false, `ครั้งที่ ${i + 1} ต้องยังไม่ล็อก`);
+        assert.equal(lockout.getLock(phone, t0 + i * 1000), null);
+      }
+
+      // ครั้งที่ 5 -> ล็อก 5 นาที
+      const fifth = lockout.recordFailure(phone, t0 + 4000);
+      assert.equal(fifth.locked, true);
+      const lock = lockout.getLock(phone, t0 + 4000);
+      assert.ok(lock, 'ต้องล็อกอยู่');
+      assert.equal(lock.lockedUntil, t0 + 4000 + lockMs);
+      assert.equal(lock.retryAfterMs, lockMs);
+
+      // ระหว่างล็อกยังคงล็อกอยู่ แต่เบอร์อื่นไม่ถูกล็อก
+      assert.ok(lockout.getLock(phone, t0 + 4000 + lockMs - 1));
+      assert.equal(lockout.getLock('0800000002', t0 + 4000), null);
+
+      // ผ่านไป 5 นาที -> ปลดอัตโนมัติและเริ่มนับใหม่
+      const afterLock = t0 + 4000 + lockMs;
+      assert.equal(lockout.getLock(phone, afterLock), null);
+      for (let i = 0; i < 4; i += 1) {
+        const r = lockout.recordFailure(phone, afterLock + i);
+        assert.equal(r.locked, false, 'หลังปลดล็อกต้องเริ่มนับใหม่');
+      }
+
+      // login สำเร็จ -> reset (ถ้าไม่ reset ครั้งถัดไปจะครบ 5 แล้วถูกล็อก)
+      lockout.reset(phone);
+      for (let i = 0; i < 4; i += 1) {
+        const r = lockout.recordFailure(phone, afterLock + 1000 + i);
+        assert.equal(r.locked, false, 'หลัง reset ต้องเริ่มนับใหม่');
+      }
+    }
+  );
+
+  await runCase(
+    'U7',
+    'U7.1 loginLockout (logic): อ่านค่า MAX_ATTEMPTS / LOCK_SECONDS จาก env ได้',
+    async () => {
+      const modulePath = path.join(__dirname, '..', 'utils', 'loginLockout.js');
+      const script = [
+        `const l = require(${JSON.stringify(modulePath)});`,
+        'let r;',
+        "for (let i = 0; i < 3; i += 1) r = l.recordFailure('0800000009', 1000 + i);",
+        "const lock = l.getLock('0800000009', 1002);",
+        'process.stdout.write(JSON.stringify({ locked: r.locked, max: l.MAX_ATTEMPTS, retryAfterMs: lock && lock.retryAfterMs }));'
+      ].join('\n');
+      const out = execFileSync(process.execPath, ['-e', script], {
+        env: { ...process.env, LOGIN_MAX_ATTEMPTS: '3', LOGIN_LOCK_SECONDS: '10' },
+        encoding: 'utf8'
+      });
+      const parsed = JSON.parse(out);
+      assert.equal(parsed.max, 3);
+      assert.equal(parsed.locked, true);
+      assert.equal(parsed.retryAfterMs, 10000);
+    }
+  );
+
+  await runCase(
+    'U7',
+    'U7.2 API: PIN ผิด 4 ครั้งตอบ 401 ข้อความกลาง / ครั้งที่ 5 ตอบ 423 พร้อม retryAfterSeconds, lockedUntil และ Retry-After',
+    async () => {
+      const phone = uniqueFakePhone();
+      for (let i = 0; i < 4; i += 1) {
+        const res = await postLogin({ phone, pin: '0000' });
+        assert.equal(res.status, 401, `ครั้งที่ ${i + 1} ต้องได้ 401`);
+        const json = await res.json();
+        assert.equal(json.success, false);
+        assert.equal(json.locked, undefined);
+        assert.equal(json.retryAfterSeconds, undefined);
+        assert.equal(json.message, 'เบอร์โทรศัพท์หรือรหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+      }
+
+      const res = await postLogin({ phone, pin: '0000' });
+      assert.equal(res.status, 423);
+      const json = await res.json();
+      assert.equal(json.success, false);
+      assert.equal(json.locked, true);
+      assert.equal(json.message, 'บัญชีถูกล็อกชั่วคราว');
+      assert.ok(Number.isInteger(json.retryAfterSeconds) && json.retryAfterSeconds > 0);
+      assert.ok(json.retryAfterSeconds <= 300);
+      assert.equal(Number(res.headers.get('Retry-After')), json.retryAfterSeconds);
+      const until = Date.parse(json.lockedUntil);
+      assert.ok(Number.isFinite(until) && until > Date.now());
+    }
+  );
+
+  await runCase(
+    'U7',
+    'U7.3 API: เบอร์ที่ถูกล็อกตอบ 423 ทันทีแม้เปลี่ยน PIN และไม่กระทบเบอร์อื่น',
+    async () => {
+      const phone = uniqueFakePhone();
+      for (let i = 0; i < 5; i += 1) await postLogin({ phone, pin: '0000' });
+
+      const res = await postLogin({ phone, pin: '9999' });
+      assert.equal(res.status, 423);
+      const json = await res.json();
+      assert.equal(json.locked, true);
+
+      const other = await postLogin({ phone: uniqueFakePhone(), pin: '0000' });
+      assert.equal(other.status, 401);
     }
   );
 
