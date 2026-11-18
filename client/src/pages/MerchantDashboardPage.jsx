@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Toggle, LiveDot } from '../components/ui/Primitives';
 import { updateMenuAvailability } from '../services/api';
-import { getMenuImage, formatMenuPrice, formatPhone, hoursText, timeAgo, canteenShort, isSoldOut } from '../utils/shopDisplay';
+import { formatMenuPrice, formatPhone, hoursText, timeAgo, canteenShort, isSoldOut } from '../utils/shopDisplay';
 import { routes } from '../router';
 
 const NOTE_PRESETS_OPEN = ['เปิดให้บริการตามปกติ', 'กับข้าวร้อนๆ พร้อมเสิร์ฟ', 'คิวยาว รอประมาณ 10 นาที'];
@@ -179,20 +179,17 @@ export default function MerchantDashboardPage({ shop, onSetStatus, statusBusy, o
           </div>
 
           <ul className="space-y-3">
-            {menus.map((m, i) => {
+            {menus.map((m) => {
               const soldOut = soldOutOf(m);
               const busy = m.id in pendingMenus;
               return (
                 <li
                   key={m.id}
-                  className={`flex flex-col gap-3 rounded-xl p-3 sm:flex-row sm:items-center sm:p-4 ${soldOut ? 'bg-danger-soft/30' : 'bg-surface-low'}`}
+                  className={`flex flex-col gap-3 rounded-xl border-l-4 p-3 sm:flex-row sm:items-center sm:p-4 ${
+                    soldOut ? 'border-danger bg-danger-soft/30' : 'border-ok bg-surface-low'
+                  }`}
                 >
                   <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <img
-                      src={getMenuImage(shop, i)}
-                      alt=""
-                      className={`size-14 shrink-0 rounded-lg object-cover sm:size-16 ${soldOut ? 'grayscale' : ''}`}
-                    />
                     <div className="min-w-0">
                       <p className={`truncate font-display text-base font-semibold ${soldOut ? 'text-ink-muted line-through' : 'text-ink'}`}>{m.name}</p>
                       <p className={`flex items-center gap-1 text-[11px] ${soldOut ? 'text-danger' : 'text-ok'}`}>
