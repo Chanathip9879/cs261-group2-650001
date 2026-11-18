@@ -93,6 +93,44 @@ async function main() {
   const OWNER_GREEN2_TOKEN = await loginAsShop('shop-test-02');
 
   // --------------------------------------------------------------------------
+  // SEED HOURS: เวลาเปิด-ปิดตั้งต้นที่ seed จาก database.json
+  // ต้องรันก่อน Task 50 / ES เพราะเทสต์เหล่านั้นแก้เวลาและไม่คืนค่าเดิม
+  // --------------------------------------------------------------------------
+  await runCase(
+    'Seed hours',
+    'SH.1 ร้านเดโม 01-03 เปิด 08:00-21:00 ทุกวัน และร้านกรีนแคนทีนเปิดเสาร์-อาทิตย์เวลาเท่าปกติ',
+    async () => {
+      for (const shopId of ['shop-test-01', 'shop-test-02', 'shop-test-03']) {
+        const res = await fetch(`${BASE_URL}/api/shops/${shopId}/opening-hours`);
+        assert.equal(res.status, 200);
+        const json = await res.json();
+        assert.equal(json.data.weekly.length, 7, `${shopId} ต้องมีตารางครบ 7 วัน`);
+        for (const day of json.data.weekly) {
+          assert.equal(day.is_closed, false, `${shopId} วัน ${day.day_of_week} ต้องเปิด`);
+          assert.equal(day.open_time, '08:00');
+          assert.equal(day.close_time, '21:00');
+        }
+      }
+
+      // shop-test-01 ยังคงมีวันหยุดพิเศษตัวอย่าง (5 ธ.ค.)
+      const test01 = await (await fetch(`${BASE_URL}/api/shops/shop-test-01/opening-hours`)).json();
+      assert.ok(
+        test01.data.special_holidays.some((h) => h.date === '2026-12-05'),
+        'shop-test-01 ต้องมีวันหยุดพิเศษ hol-init-001'
+      );
+
+      // ร้านกรีนแคนทีน: เปิดทุกวัน (รวมเสาร์-อาทิตย์) เวลาเท่ากับวันปกติ
+      const green = await (await fetch(`${BASE_URL}/api/shops/shop-green-01/opening-hours`)).json();
+      assert.equal(green.data.weekly.length, 7);
+      for (const day of green.data.weekly) {
+        assert.equal(day.is_closed, false, `กรีนแคนทีน วัน ${day.day_of_week} ต้องเปิด`);
+        assert.equal(day.open_time, '07:00');
+        assert.equal(day.close_time, '17:00');
+      }
+    }
+  );
+
+  // --------------------------------------------------------------------------
   // TASK 35 (U8): ทดสอบการเรียงระยะทางและกรณีร้านไม่มีพิกัด
   // --------------------------------------------------------------------------
   // ร้านมาจาก database.json (ร้านจริง) จึงคำนวณผลที่คาดหวังจากข้อมูลจริงแทนการ fix รหัสร้าน
@@ -468,31 +506,24 @@ async function main() {
     }
   );
 
-  const parts = bangkokParts();
-  const weekForToday = (todayRow) => [0, 1, 2, 3, 4, 5, 6].map((d) => (
-    d === parts.dayOfWeek
-      ? todayRow
-      : { day_of_week: d, is_closed: false, open_time: '00:00', close_time: '23:59' }
-  ));
+  const parts = bangkokParts(); // ใช้กับ listTodayHours เท่านั้น (ทุกวันตั้งค่าเหมือนกัน ผลจึงไม่ขึ้นกับวันจริง)
 
-  const setHours = async (shopId, token, todayRow) => {
+  // ตั้งเวลาทุกวัน (จันทร์-อาทิตย์) ให้เหมือนกัน เพื่อให้ผล effective status
+  // ไม่ขึ้นกับวัน/เวลาจริงที่รันเทสต์
+  const weekAllDays = (row) => [0, 1, 2, 3, 4, 5, 6].map((d) => ({ day_of_week: d, ...row }));
+
+  const setHours = async (shopId, token, row) => {
     const res = await fetch(`${BASE_URL}/api/shops/${shopId}/opening-hours`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ weekly: weekForToday(todayRow), special_holidays: [] })
+      body: JSON.stringify({ weekly: weekAllDays(row), special_holidays: [] })
     });
     assert.equal(res.status, 200, `PUT opening-hours ${shopId}`);
   };
 
-  await setHours('shop-test-01', OWNER_GREEN_TOKEN, {
-    day_of_week: parts.dayOfWeek, is_closed: true
-  });
-  await setHours('shop-test-02', OWNER_GREEN2_TOKEN, {
-    day_of_week: parts.dayOfWeek, is_closed: false, open_time: '00:00', close_time: '23:59'
-  });
-  await setHours('shop-test-03', OWNER_SCI_TOKEN, {
-    day_of_week: parts.dayOfWeek, is_closed: false, open_time: '00:00', close_time: '23:59'
-  });
+  await setHours('shop-test-01', OWNER_GREEN_TOKEN, { is_closed: true });
+  await setHours('shop-test-02', OWNER_GREEN2_TOKEN, { is_closed: false, open_time: '00:00', close_time: '23:59' });
+  await setHours('shop-test-03', OWNER_SCI_TOKEN, { is_closed: false, open_time: '00:00', close_time: '23:59' });
 
   await runCase(
     'Effective status',
