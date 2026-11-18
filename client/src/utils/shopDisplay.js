@@ -8,7 +8,6 @@ import papayaSalad2 from '../assets/images/food-papaya-salad-2.jpg';
 import noodles from '../assets/images/food-noodles.jpg';
 import noodles2 from '../assets/images/food-noodles-2.jpg';
 import detail1 from '../assets/images/detail-1.jpg';
-import detail2 from '../assets/images/detail-2.jpg';
 import detail3 from '../assets/images/detail-3.jpg';
 import detail4 from '../assets/images/detail-4.jpg';
 import detail5 from '../assets/images/detail-5.jpg';
@@ -33,7 +32,6 @@ const CATEGORY_IMAGES = {
   fruit_salad: [papayaSalad2, papayaSalad],
   dessert: [detail4, detail5],
 };
-const MENU_IMAGES = [detail2, detail3, detail4, detail5, chickenRice2, fav1, fav3, fav5];
 
 // รูปหน้าปกจริงของแต่ละร้าน: วางไฟล์ใน client/src/assets/shops/ ตั้งชื่อตามรหัสร้าน
 // เช่น shop-test-01.jpg — Vite อ่านรายชื่อไฟล์ให้อัตโนมัติตอน build ไม่ต้องแก้โค้ดเมื่อเพิ่มรูป
@@ -60,10 +58,6 @@ export function getShopImage(shop) {
   if (photo) return photo;
   const list = CATEGORY_IMAGES[shop?.category] || [chickenRice, papayaSalad, noodles];
   return list[hashOf(shop?.id) % list.length];
-}
-
-export function getMenuImage(shop, index) {
-  return MENU_IMAGES[(hashOf(shop?.id) + index) % MENU_IMAGES.length];
 }
 
 export function parseHours(text) {
