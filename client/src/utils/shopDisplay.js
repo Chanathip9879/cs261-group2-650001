@@ -35,13 +35,29 @@ const CATEGORY_IMAGES = {
 };
 const MENU_IMAGES = [detail2, detail3, detail4, detail5, chickenRice2, fav1, fav3, fav5];
 
+// รูปหน้าปกจริงของแต่ละร้าน: วางไฟล์ใน client/src/assets/shops/ ตั้งชื่อตามรหัสร้าน
+// เช่น shop-test-01.jpg — Vite อ่านรายชื่อไฟล์ให้อัตโนมัติตอน build ไม่ต้องแก้โค้ดเมื่อเพิ่มรูป
+const SHOP_PHOTO_FILES = import.meta.glob('../assets/shops/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+  import: 'default',
+});
+const SHOP_PHOTOS = Object.fromEntries(
+  Object.entries(SHOP_PHOTO_FILES).map(([path, url]) => [
+    path.split('/').pop().replace(/\.[^.]+$/, ''),
+    url,
+  ])
+);
+
 function hashOf(str = '') {
   let h = 0;
   for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
   return h;
 }
 
+// รูปหน้าปกร้าน: ใช้รูปของร้านก่อน ถ้าไม่มีใช้รูปตัวอย่างตามหมวดอาหาร
 export function getShopImage(shop) {
+  const photo = shop?.id ? SHOP_PHOTOS[shop.id] : null;
+  if (photo) return photo;
   const list = CATEGORY_IMAGES[shop?.category] || [chickenRice, papayaSalad, noodles];
   return list[hashOf(shop?.id) % list.length];
 }
