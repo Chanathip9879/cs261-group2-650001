@@ -4,13 +4,13 @@
 import React from 'react';
 import { MapPin, Clock, XCircle, AlertTriangle, CheckCircle2, CalendarX, UtensilsCrossed, Info } from 'lucide-react';
 import { StatusPill, RatingBadge, HeartButton } from './ui/Primitives';
-import { getShopImage, closingText, soldOutMenus, locationText, priceLevel, menuSummary } from '../utils/shopDisplay';
+import { getShopImage, effectiveOf, closingText, soldOutMenus, locationText, priceLevel, menuSummary } from '../utils/shopDisplay';
 import { navigate, routes } from '../router';
 
 export default function RestaurantCard({ shop, isBookmarked, onToggleBookmark }) {
   const soldOut = soldOutMenus(shop);
   const price = priceLevel(shop);
-  const open = shop.isOpen;
+  const open = effectiveOf(shop).open;
   const go = () => navigate(routes.shop(shop.id));
 
   let badge;
@@ -58,7 +58,7 @@ export default function RestaurantCard({ shop, isBookmarked, onToggleBookmark })
         />
         {!open && <div className="absolute inset-0 bg-ink-navy/20" />}
         <div className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
-          <StatusPill open={open}>{open ? 'เปิดอยู่' : 'ปิดแล้ววันนี้'}</StatusPill>
+          <StatusPill open={open}>{open ? 'เปิดอยู่' : 'ปิดแล้ว'}</StatusPill>
         </div>
         <div className="absolute right-3 top-3 flex items-center gap-2">
           <RatingBadge rating={shop.rating} count={shop.reviewCount} />

@@ -5,9 +5,11 @@
 import React from 'react';
 import { MapPin, Clock, ChevronRight, UtensilsCrossed } from 'lucide-react';
 import BookmarkButton from './BookmarkButton';
+import { effectiveOf } from '../utils/shopDisplay';
 
 export default function ShopCard({ shop, onSelect, isBookmarked = false, onToggleBookmark }) {
-  const isOpen = shop.isOpen;
+  const status = effectiveOf(shop);
+  const isOpen = status.open;
 
   // สีและสไตล์ตามโรงอาหาร
   const isGreenCanteen = shop.canteen === 'green';
@@ -74,7 +76,7 @@ export default function ShopCard({ shop, onSelect, isBookmarked = false, onToggl
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3 text-slate-400" />
-                {shop.openingHours} น.
+                {status.todayText}
               </span>
             </p>
           </div>

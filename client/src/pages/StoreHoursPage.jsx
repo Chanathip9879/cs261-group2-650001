@@ -11,9 +11,9 @@ import { Toggle, Spinner } from '../components/ui/Primitives';
 import useLocalState from '../hooks/useLocalList';
 import { getOpeningHours, saveOpeningHours } from '../services/api';
 import {
-  DAY_NAMES, DAY_NAMES_EN, DISPLAY_ORDER, buildFullWeek, validateWeek, weekToPayload,
+  DAY_NAMES, DAY_NAMES_EN, DISPLAY_ORDER, buildFullWeek, validateWeek, weekToPayload, getBangkokParts,
 } from '../utils/openingHours';
-import { getShopImage } from '../utils/shopDisplay';
+import { getShopImage, effectiveOf } from '../utils/shopDisplay';
 
 const DAY_COLORS = ['bg-danger-soft text-danger', 'bg-[#fff3c4] text-[#8a6d00]', 'bg-[#ffe1ef] text-[#a3245f]', 'bg-ok-soft/60 text-ok', 'bg-brand-peach text-brand', 'bg-[#dbeafe] text-[#1d4ed8]', 'bg-[#ede4ff] text-[#6d28d9]'];
 
@@ -42,7 +42,7 @@ export default function StoreHoursPage({ shop, showToast }) {
     getOpeningHours(shop.id)
       .then((rows) => {
         if (cancelled) return;
-        const full = buildFullWeek(rows, shop.openingHours);
+        const full = buildFullWeek(Array.isArray(rows) ? rows : [], shop?.openingHours);
         setSaved(full);
         setWeek(full);
       })
@@ -53,30 +53,54 @@ export default function StoreHoursPage({ shop, showToast }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shop?.id]);
 
-  const errors = useMemo(() => (week ? validateWeek(week) : {}), [week]);
-  const dirty = week && saved && !sameWeek(week, saved);
-  const today = new Date().getDay();
-  const todayRow = week?.find((d) => d.day_of_week === today);
+  const errors = useMemo(() => (Array.isArray(week) ? validateWeek(week) : {}), [week]);
+  const weekReady = Array.isArray(week) && week.length > 0;
+  const dirty = weekReady && Array.isArray(saved) && !sameWeek(week, saved);
+  const effective = shop ? effectiveOf(shop) : null;
+  const status = effective && typeof effective === 'object'
+    ? {
+        open: effective.open === true,
+        todayText: effective.todayText || '-',
+        reason: effective.reason || 'no_schedule',
+      }
+    : { open: false, todayText: '-', reason: 'no_schedule' };
+  const today = getBangkokParts().dayOfWeek;
+  const holidayList = Array.isArray(holidays) ? holidays : [];
 
   if (!shop) return <p className="py-24 text-center text-sm text-ink-muted">ไม่พบข้อมูลร้าน</p>;
 
-  const update = (day, patch) => setWeek((w) => w.map((d) => (d.day_of_week === day ? { ...d, ...patch } : d)));
+  const update = (day, patch) => setWeek((w) => (
+    Array.isArray(w) ? w.map((d) => (d.day_of_week === day ? { ...d, ...patch } : d)) : w
+  ));
 
   const copyToAll = () => {
-    const src = week.find((d) => d.day_of_week === 1) || week[0];
-    setWeek((w) => w.map((d) => ({ ...d, open_time: src.open_time, close_time: src.close_time, is_closed: src.is_closed })));
+    const src = weekReady ? (week.find((d) => d.day_of_week === 1) || week[0]) : null;
+    if (!src) return;
+    setWeek((w) => (
+      Array.isArray(w) ? w.map((d) => ({ ...d, open_time: src.open_time, close_time: src.close_time, is_closed: src.is_closed })) : w
+    ));
     showToast('คัดลอกเวลาของวันจันทร์ไปทุกวันแล้ว (ยังไม่บันทึก)', 'info');
   };
 
   const save = async () => {
+    if (!weekReady) {
+      showToast('ยังไม่มีข้อมูลตารางเวลาที่จะบันทึก', 'error');
+      return;
+    }
     if (Object.keys(errors).length) {
       showToast('มีเวลาที่ไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง', 'error');
       return;
     }
+    const payload = weekToPayload(week);
+    if (!payload.length) {
+      showToast('ยังไม่มีข้อมูลตารางเวลาที่จะบันทึก', 'error');
+      return;
+    }
     setSaving(true);
     try {
-      const res = await saveOpeningHours(shop.id, weekToPayload(week));
-      const full = buildFullWeek(res.data, shop.openingHours);
+      const res = await saveOpeningHours(shop.id, payload);
+      const savedRows = Array.isArray(res.data) ? res.data : res.data?.weekly;
+      const full = buildFullWeek(savedRows, shop?.openingHours);
       setSaved(full);
       setWeek(full);
       showToast(res.message || 'บันทึกเวลาเปิด-ปิดเรียบร้อยแล้ว', 'success');
@@ -90,7 +114,10 @@ export default function StoreHoursPage({ shop, showToast }) {
   const addHoliday = (e) => {
     e.preventDefault();
     if (!newHoliday.date || !newHoliday.name.trim()) return;
-    setHolidays((prev) => [...prev, { id: `h-${Date.now()}`, date: newHoliday.date, name: newHoliday.name.trim() }].sort((a, b) => a.date.localeCompare(b.date)));
+    setHolidays((prev) => [
+      ...(Array.isArray(prev) ? prev : []),
+      { id: `h-${Date.now()}`, date: newHoliday.date, name: newHoliday.name.trim() },
+    ].sort((a, b) => a.date.localeCompare(b.date)));
     setNewHoliday({ date: '', name: '' });
     setShowHolidayForm(false);
   };
@@ -108,8 +135,8 @@ export default function StoreHoursPage({ shop, showToast }) {
             <button
               key={label}
               type="button"
-              disabled={!week}
-              onClick={() => setWeek((w) => apply(w))}
+              disabled={!weekReady}
+              onClick={() => setWeek((w) => (Array.isArray(w) ? apply(w) : w))}
               className="flex items-center gap-1 rounded-md bg-surface-low px-2.5 py-1 text-ink hover:bg-surface-mid"
             >
               <Icon className="size-3.5 text-brand" /> {label}
@@ -123,15 +150,15 @@ export default function StoreHoursPage({ shop, showToast }) {
         <div className="pointer-events-none absolute -right-10 -top-10 size-36 rounded-full bg-ok-soft/30" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <span className={`flex size-12 items-center justify-center rounded-xl ${shop.isOpen ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
+            <span className={`flex size-12 items-center justify-center rounded-xl ${status.open ? 'bg-ok-soft text-ok' : 'bg-danger-soft text-danger'}`}>
               <Store className="size-6" />
             </span>
             <div>
               <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
-                <span className={`size-2 rounded-full ${shop.isOpen ? 'bg-ok' : 'bg-danger'}`} /> มุมมองลูกค้าขณะนี้
+                <span className={`size-2 rounded-full ${status.open ? 'bg-ok' : 'bg-danger'}`} /> มุมมองลูกค้าขณะนี้
               </p>
-              <p className={`font-display text-lg font-bold ${shop.isOpen ? 'text-ok' : 'text-danger'}`}>
-                {shop.isOpen ? 'กำลังเปิดให้บริการ' : 'ปิดให้บริการอยู่'}
+              <p className={`font-display text-lg font-bold ${status.open ? 'text-ok' : 'text-danger'}`}>
+                {status.open ? 'กำลังเปิดให้บริการ' : 'ปิดให้บริการอยู่'}
               </p>
             </div>
           </div>
@@ -139,7 +166,7 @@ export default function StoreHoursPage({ shop, showToast }) {
             <p className="flex justify-between gap-3 text-ink-muted">
               รอบเปิดวันนี้ ({DAY_NAMES[today]}):
               <span className="font-semibold text-brand">
-                {todayRow ? (todayRow.is_closed ? 'ปิดทำการ' : `${todayRow.open_time} - ${todayRow.close_time} น.`) : '...'}
+                {status.todayText}
               </span>
             </p>
             <p className="mt-1 flex items-center gap-1 text-ink-muted">
@@ -159,7 +186,7 @@ export default function StoreHoursPage({ shop, showToast }) {
               </h2>
               <p className="text-xs text-ink-muted">{shop.canteenName} {shop.boothNumber}</p>
             </div>
-            <button type="button" onClick={copyToAll} disabled={!week} className="flex items-center gap-1 text-xs font-semibold text-brand hover:underline">
+            <button type="button" onClick={copyToAll} disabled={!weekReady} className="flex items-center gap-1 text-xs font-semibold text-brand hover:underline">
               <Copy className="size-3.5" /> คัดลอกเวลาวันจันทร์ไปทุกวัน
             </button>
           </div>
@@ -168,10 +195,13 @@ export default function StoreHoursPage({ shop, showToast }) {
             <p className="flex items-center gap-2 rounded-lg bg-danger-soft/50 p-3 text-sm text-danger"><AlertCircle className="size-4" /> {loadError}</p>
           ) : !week ? (
             <div className="flex justify-center py-12"><Spinner /></div>
+          ) : !weekReady ? (
+            <p className="rounded-lg bg-surface-low p-3 text-sm text-ink-muted">ไม่พบข้อมูลตารางเวลาของร้าน</p>
           ) : (
             <ul className="space-y-2">
               {DISPLAY_ORDER.map((day, idx) => {
                 const d = week.find((x) => x.day_of_week === day);
+                if (!d) return null;
                 const err = errors[day];
                 return (
                   <li key={day} className={`rounded-xl p-3 sm:p-4 ${d.is_closed ? 'bg-surface-low' : 'border border-surface-mid'} ${err ? 'ring-2 ring-danger/40' : ''}`}>
@@ -275,11 +305,11 @@ export default function StoreHoursPage({ shop, showToast }) {
               </form>
             )}
 
-            {holidays.length === 0 ? (
+            {holidayList.length === 0 ? (
               <p className="rounded-lg bg-surface-low p-3 text-center text-xs text-ink-muted">ยังไม่มีวันหยุดพิเศษ</p>
             ) : (
               <ul className="space-y-2">
-                {holidays.map((h) => {
+                {holidayList.map((h) => {
                   const dt = new Date(`${h.date}T00:00:00`);
                   return (
                     <li key={h.id} className="flex items-center gap-3 rounded-lg bg-surface-low p-3">

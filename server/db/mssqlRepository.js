@@ -234,6 +234,52 @@ async function setMenuAvailability(shopId, menuId, isAvailable) {
   return getShopById(shopId);
 }
 
+// โหลดแถวของวันนี้ของทุกร้านใน 2 query (ไม่ยิงทีละร้าน)
+// คืน { [shopId]: { weekly: [...], special_holidays: [...] } }
+async function listTodayHours({ dayOfWeek, date }) {
+  const pool = await getPool();
+  const [weeklyResult, holidayResult] = await Promise.all([
+    pool.request()
+      .input('dayOfWeek', sql.TinyInt, dayOfWeek)
+      .query(`SELECT shop_id, day_of_week, day_name, is_closed, open_time, close_time
+              FROM dbo.opening_hours_weekly WHERE day_of_week = @dayOfWeek ORDER BY shop_id`),
+    pool.request()
+      .input('date', sql.Char(10), date)
+      .query(`SELECT shop_id, id, CONVERT(char(10), holiday_date, 23) AS holiday_date,
+                     is_closed, open_time, close_time, note
+              FROM dbo.special_holidays WHERE holiday_date = @date ORDER BY shop_id`),
+  ]);
+
+  const grouped = {};
+  const ensure = (shopId) => {
+    if (!grouped[shopId]) grouped[shopId] = { weekly: [], special_holidays: [] };
+    return grouped[shopId];
+  };
+
+  for (const row of weeklyResult.recordset) {
+    const openTime = row.open_time ? String(row.open_time).trim() : null;
+    const closeTime = row.close_time ? String(row.close_time).trim() : null;
+    ensure(row.shop_id).weekly.push({
+      day_of_week: row.day_of_week,
+      day_name: row.day_name,
+      is_closed: row.is_closed === true,
+      open_time: openTime,
+      close_time: closeTime,
+    });
+  }
+  for (const row of holidayResult.recordset) {
+    ensure(row.shop_id).special_holidays.push({
+      id: row.id,
+      date: row.holiday_date,
+      is_closed: row.is_closed === true,
+      open_time: row.open_time ? String(row.open_time).trim() : null,
+      close_time: row.close_time ? String(row.close_time).trim() : null,
+      note: row.note || '',
+    });
+  }
+  return grouped;
+}
+
 const REVIEW_COLUMNS = 'id, shop_id, username, rating, comment, client_ip, created_at';
 
 // shopId = null → คืนรีวิวทั้งหมด (ใช้ตรวจกันสแปมใน POST /reviews)
@@ -405,4 +451,5 @@ module.exports = {
   getOpeningHours,
   saveOpeningHours,
   resetSprint2Data,
+  listTodayHours,
 };

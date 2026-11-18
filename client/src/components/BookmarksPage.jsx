@@ -5,6 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Bookmark, HeartOff, ArrowLeft } from 'lucide-react';
 import BookmarkShopCard from './BookmarkShopCard';
 import { getShops } from '../services/api';
+import { effectiveOf } from '../utils/shopDisplay';
 
 const TABS = [
   { id: 'all', label: 'ทั้งหมด' },
@@ -42,10 +43,10 @@ export default function BookmarksPage({ bookmarkedIds, isBookmarked, onToggleBoo
     () => allShops.filter((s) => bookmarkedIds.includes(s.id)),
     [allShops, bookmarkedIds]
   );
-  const openCount = saved.filter((s) => s.isOpen).length;
+  const openCount = saved.filter((s) => effectiveOf(s).open).length;
 
   const visible = useMemo(() => {
-    if (tab === 'open') return saved.filter((s) => s.isOpen);
+    if (tab === 'open') return saved.filter((s) => effectiveOf(s).open);
     if (tab === 'rating') return [...saved].sort((a, b) => (b.rating || 0) - (a.rating || 0));
     return saved;
   }, [saved, tab]);

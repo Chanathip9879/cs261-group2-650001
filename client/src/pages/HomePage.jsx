@@ -11,7 +11,7 @@ import RestaurantCard from '../components/RestaurantCard';
 import { LiveDot, RatingBadge, Spinner } from '../components/ui/Primitives';
 import { getShops } from '../services/api';
 import { navigate, routes } from '../router';
-import { getShopImage, hoursText, locationText, menuSummary } from '../utils/shopDisplay';
+import { getShopImage, hoursText, effectiveOf, locationText, menuSummary } from '../utils/shopDisplay';
 
 // lgBg = สีวงกลมไอคอนบนเดสก์ท็อป (เขียนเต็มคลาสเพื่อให้ Tailwind JIT มองเห็น)
 const CATEGORY_ICONS = {
@@ -60,7 +60,7 @@ export default function HomePage({
 
   const activeFilterCount = [canteen !== 'all', category !== 'all', onlyOpen, topRated].filter(Boolean).length;
   const hasQueryOrFilter = !!searchQuery || activeFilterCount > 0;
-  const openCount = allShops.filter((s) => s.isOpen).length;
+  const openCount = allShops.filter((s) => effectiveOf(s).open).length;
 
   const clearAll = () => {
     onSearchChange('');
@@ -92,7 +92,7 @@ export default function HomePage({
 
   const realCategories = categories.filter((c) => c.id !== 'all');
   const isNotFound = shops !== null && visible.length === 0 && hasQueryOrFilter;
-  const recommended = allShops.filter((s) => s.isOpen).sort((a, b) => b.rating - a.rating).slice(0, 3);
+  const recommended = allShops.filter((s) => effectiveOf(s).open).sort((a, b) => b.rating - a.rating).slice(0, 3);
 
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 pb-28 pt-3 lg:gap-8 lg:px-8 lg:pb-12 lg:pt-6">
