@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { Toggle, LiveDot } from '../components/ui/Primitives';
 import { updateMenuAvailability } from '../services/api';
-import { getMenuImage, formatBaht, formatPhone, hoursText, timeAgo, canteenShort, isSoldOut } from '../utils/shopDisplay';
+import { getMenuImage, formatMenuPrice, formatPhone, hoursText, timeAgo, canteenShort, isSoldOut } from '../utils/shopDisplay';
 import { routes } from '../router';
 
 const NOTE_PRESETS_OPEN = ['เปิดให้บริการตามปกติ', 'กับข้าวร้อนๆ พร้อมเสิร์ฟ', 'คิวยาว รอประมาณ 10 นาที'];
@@ -199,7 +199,7 @@ export default function MerchantDashboardPage({ shop, onSetStatus, statusBusy, o
                         <span className={`size-1.5 rounded-full ${soldOut ? 'bg-danger' : 'bg-ok'}`} />
                         {soldOut ? 'สินค้าหมดแล้ว' : 'พร้อมขายปกติ'}
                       </p>
-                      <p className={`text-sm font-semibold ${soldOut ? 'text-ink-muted' : 'text-brand'}`}>{formatBaht(m.price)}.00</p>
+                      <p className={`text-sm font-semibold ${soldOut ? 'text-ink-muted' : 'text-brand'}`}>{formatMenuPrice(m.price, '.00')}</p>
                     </div>
                   </div>
                   <button

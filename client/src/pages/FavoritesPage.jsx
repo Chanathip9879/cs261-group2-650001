@@ -161,6 +161,7 @@ function FavoriteCard({ shop, onRemove }) {
   const soldOut = soldOutMenus(shop);
   const status = effectiveOf(shop);
   const open = status.open;
+  const range = priceRange(shop);
   return (
     <article className="flex flex-col overflow-hidden rounded-xl bg-white shadow-card">
       <div className="relative h-44">
@@ -203,7 +204,7 @@ function FavoriteCard({ shop, onRemove }) {
         )}
         <p className="truncate text-sm text-ink-muted">{menuSummary(shop)}</p>
         <p className="flex items-center gap-1.5 text-xs text-ink-muted">
-          <Store className="size-3.5" /> {canteenShort(shop)} มธ. รังสิต • ฿ ({priceRange(shop)})
+          <Store className="size-3.5" /> {canteenShort(shop)} มธ. รังสิต{range ? ` • ฿ (${range})` : ''}
         </p>
         <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
           <a href={telHref(shop.phone)} className="flex items-center justify-center gap-1.5 rounded-lg bg-surface-low py-2.5 text-xs font-semibold text-ink hover:bg-surface-mid">

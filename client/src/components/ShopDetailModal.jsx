@@ -5,7 +5,7 @@ import React from 'react';
 import { X, MapPin, Clock, Phone, Utensils, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
 import OpeningHoursTable from './OpeningHoursTable';
 import BookmarkButton from './BookmarkButton';
-import { effectiveOf } from '../utils/shopDisplay';
+import { effectiveOf, formatMenuPrice } from '../utils/shopDisplay';
 
 export default function ShopDetailModal({ shop, onClose, isBookmarked = false, onToggleBookmark }) {
   if (!shop) return null;
@@ -128,7 +128,7 @@ export default function ShopDetailModal({ shop, onClose, isBookmarked = false, o
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                       <span className="text-sm font-medium text-slate-800">{m.name}</span>
                     </div>
-                    <span className="text-sm font-bold text-emerald-700">฿{m.price}</span>
+                    <span className="text-sm font-bold text-emerald-700">{formatMenuPrice(m.price)}</span>
                   </div>
                 ))
               ) : (
