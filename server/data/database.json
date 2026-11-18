@@ -56,7 +56,7 @@
     },
     {
       "id": "papaya_salad",
-      "name": "ส้มตำ/ยำ",
+      "name": "ส้มตำและยำ",
       "icon": "Sparkles"
     },
     {
@@ -245,7 +245,7 @@
       "boothNumber": null,
       "locationDetails": null,
       "category": "papaya_salad",
-      "categoryName": "ส้มตำ/ยำ",
+      "categoryName": "ส้มตำและยำ",
       "isOpen": true,
       "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
       "openingHours": "07:30 - 17:00",
@@ -1871,7 +1871,7 @@
       "boothNumber": null,
       "locationDetails": null,
       "category": "papaya_salad",
-      "categoryName": "ส้มตำ/ยำ",
+      "categoryName": "ส้มตำและยำ",
       "isOpen": true,
       "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
       "openingHours": "07:00 - 17:00",
@@ -2700,7 +2700,7 @@
     },
     {
       "id": "shop-green-19",
-      "name": "สินค้าคุณภาพ (ไก่ย่างห้าดาว)",
+      "name": "ไก่ย่าง 5 ดาว",
       "canteen": "green",
       "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
       "boothNumber": null,
@@ -4463,8 +4463,8 @@
       "canteenName": "โรงอาหารกรีนแคนทีน (Green Canteen)",
       "boothNumber": null,
       "locationDetails": null,
-      "category": "snacks",
-      "categoryName": "ของทานเล่น/ปิ้งทอด",
+      "category": "papaya_salad",
+      "categoryName": "ส้มตำและยำ",
       "isOpen": true,
       "statusNote": "ข้อมูลเริ่มต้น (ร้านยังไม่ได้อัปเดตสถานะ)",
       "openingHours": "07:00 - 17:00",
