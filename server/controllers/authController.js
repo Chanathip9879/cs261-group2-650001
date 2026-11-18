@@ -1,8 +1,27 @@
 // server/controllers/authController.js
 // U4: Log in จัดการร้านอาหาร (แม่ค้า Login ด้วยเบอร์โทร + PIN 4-6 หลัก)
+// U7: ล็อกบัญชีชั่วคราวเมื่อกรอก PIN ผิดติดกันหลายครั้ง (สเปก docs/API_LOGIN_LOCKOUT.md)
 // ข้อมูลอ่านผ่าน server/db (MSSQL หรือ JSON ตาม DB_DRIVER)
 
 const db = require('../db');
+const lockout = require('../utils/loginLockout');
+
+const LOCKED_MESSAGE = 'บัญชีถูกล็อกชั่วคราว';
+// ข้อความกลาง: ไม่แยกว่า "ไม่พบเบอร์" หรือ "PIN ผิด" (กันการเดาว่าเบอร์ไหนมีบัญชี)
+const INVALID_CREDENTIALS_MESSAGE = 'เบอร์โทรศัพท์หรือรหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+
+// ตอบ 423 พร้อมเวลาปลอดล็อก (ใช้ retryAfterSeconds เป็นหลัก) + header Retry-After
+function sendLocked(res, lock) {
+  const retryAfterSeconds = Math.max(1, Math.ceil(lock.retryAfterMs / 1000));
+  res.set('Retry-After', String(retryAfterSeconds));
+  return res.status(423).json({
+    success: false,
+    locked: true,
+    retryAfterSeconds,
+    lockedUntil: new Date(lock.lockedUntil).toISOString(),
+    message: LOCKED_MESSAGE
+  });
+}
 
 // 1. เข้าสู่ระบบด้วยเบอร์โทร + PIN
 exports.login = async (req, res) => {
@@ -17,12 +36,17 @@ exports.login = async (req, res) => {
     }
 
     // Format เบอร์โทร (ตัดขีดหรือช่องว่างออก)
-    const cleanPhone = String(phone).replace(/[^0-9]/g, '');
+    const cleanPhone = lockout.normalizePhone(phone);
     const cleanPin = String(pin).trim();
+
+    // ถ้าเบอร์นี้ถูกล็อกอยู่ ตอบ 423 ทันที แม้จะส่ง PIN ถูก
+    const lock = lockout.getLock(cleanPhone);
+    if (lock) return sendLocked(res, lock);
 
     // ตรวจสอบแอดมิน
     const admin = await db.findAdminByCredentials(cleanPhone, cleanPin);
     if (admin) {
+      lockout.reset(cleanPhone);
       const token = Buffer.from(`${admin.phone}:${admin.pin}:${Date.now()}`).toString('base64');
       return res.json({
         success: true,
@@ -39,6 +63,7 @@ exports.login = async (req, res) => {
     // ตรวจสอบแม่ค้า / เจ้าของร้าน
     const shop = await db.findShopByCredentials(cleanPhone, cleanPin);
     if (shop) {
+      lockout.reset(cleanPhone);
       const token = Buffer.from(`${shop.phone}:${shop.pin}:${Date.now()}`).toString('base64');
       return res.json({
         success: true,
@@ -57,10 +82,13 @@ exports.login = async (req, res) => {
       });
     }
 
-    // กรณีเบอร์โทรหรือ PIN ไม่ตรง
+    // กรณีเบอร์โทรหรือ PIN ไม่ตรง: นับครั้งที่ผิด (รวมเบอร์ที่ไม่มีในระบบ)
+    const failure = lockout.recordFailure(cleanPhone);
+    if (failure.locked) return sendLocked(res, failure);
+
     return res.status(401).json({
       success: false,
-      message: 'เบอร์โทรศัพท์หรือรหัส PIN ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง'
+      message: INVALID_CREDENTIALS_MESSAGE
     });
   } catch (err) {
     console.error('Error in login:', err);
