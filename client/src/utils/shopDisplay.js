@@ -21,6 +21,7 @@ import fav5 from '../assets/images/fav-5.jpg';
 import { getEffectiveStatus } from './openingHours';
 
 // ข้อมูลร้านยังไม่มีรูป จึงใช้ภาพอาหารจาก Figma ตามหมวดหมู่ร้าน
+// หมายเหตุ: หมวดที่เพิ่มใหม่ (snacks/fruit_salad/dessert) ใช้ภาพถ่ายอาหารที่มีอยู่แล้วเท่านั้น
 const CATEGORY_IMAGES = {
   chicken_rice: [chickenRice, detail1, chickenRice2],
   papaya_salad: [papayaSalad, papayaSalad2, fav5],
@@ -28,6 +29,9 @@ const CATEGORY_IMAGES = {
   rice_curry: [fav4, fav1],
   made_to_order: [fav1, fav4],
   drinks_dessert: [fav2],
+  snacks: [detail3, detail1],
+  fruit_salad: [papayaSalad2, papayaSalad],
+  dessert: [detail4, detail5],
 };
 const MENU_IMAGES = [detail2, detail3, detail4, detail5, chickenRice2, fav1, fav3, fav5];
 
@@ -78,8 +82,28 @@ export function soldOutMenus(shop) {
   return (shop?.menus || []).filter(isSoldOut);
 }
 
+// เมนูที่ราคา 0/ว่าง แสดงเป็น "ราคาตามป้าย" และไม่ถูกนำมาคิดช่วงราคา/ระดับราคา
+export const PRICE_ON_LABEL = 'ราคาตามป้าย';
+
+export function isPriceOnLabel(price) {
+  const n = Number(price);
+  return !Number.isFinite(n) || n <= 0;
+}
+
+// ใช้แสดงราคาเมนูทุกจุด: ราคาจริงขึ้นต้นด้วย ฿ ส่วนราคา 0/ว่างแสดงข้อความ
+export function formatMenuPrice(price, suffix = '') {
+  if (isPriceOnLabel(price)) return PRICE_ON_LABEL;
+  return `฿${Number(price).toLocaleString('th-TH')}${suffix}`;
+}
+
+function positivePrices(shop) {
+  return (shop?.menus || [])
+    .map((m) => Number(m.price))
+    .filter((n) => Number.isFinite(n) && n > 0);
+}
+
 export function priceLevel(shop) {
-  const prices = (shop?.menus || []).map((m) => Number(m.price) || 0).filter(Boolean);
+  const prices = positivePrices(shop);
   if (!prices.length) return { symbol: '฿', label: 'ย่อมเยา' };
   const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
   if (avg < 45) return { symbol: '฿', label: 'ย่อมเยา' };
@@ -88,7 +112,7 @@ export function priceLevel(shop) {
 }
 
 export function priceRange(shop) {
-  const prices = (shop?.menus || []).map((m) => Number(m.price) || 0).filter(Boolean);
+  const prices = positivePrices(shop);
   if (!prices.length) return '';
   return `${Math.min(...prices)}-${Math.max(...prices)}฿`;
 }
@@ -107,10 +131,6 @@ export function canteenShort(shop) {
 export function locationText(shop) {
   if (!shop) return '';
   return `${canteenShort(shop)} ${shop.boothNumber || ''}`.trim();
-}
-
-export function formatBaht(n) {
-  return `฿${Number(n || 0).toLocaleString('th-TH')}`;
 }
 
 export function timeAgo(iso) {

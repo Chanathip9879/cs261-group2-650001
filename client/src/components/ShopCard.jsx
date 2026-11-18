@@ -5,7 +5,7 @@
 import React from 'react';
 import { MapPin, Clock, ChevronRight, UtensilsCrossed } from 'lucide-react';
 import BookmarkButton from './BookmarkButton';
-import { effectiveOf } from '../utils/shopDisplay';
+import { effectiveOf, formatMenuPrice } from '../utils/shopDisplay';
 
 export default function ShopCard({ shop, onSelect, isBookmarked = false, onToggleBookmark }) {
   const status = effectiveOf(shop);
@@ -109,7 +109,7 @@ export default function ShopCard({ shop, onSelect, isBookmarked = false, onToggl
               {shop.menus.slice(0, 2).map((menu) => (
                 <div key={menu.id} className="flex items-center justify-between text-xs">
                   <span className="text-slate-600 truncate max-w-[200px]">{menu.name}</span>
-                  <span className="font-semibold text-slate-800">฿{menu.price}</span>
+                  <span className="font-semibold text-slate-800">{formatMenuPrice(menu.price)}</span>
                 </div>
               ))}
             </div>

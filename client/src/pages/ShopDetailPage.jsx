@@ -12,7 +12,7 @@ import { getEffectiveStatus } from '../utils/openingHours';
 import WeeklyHours from '../components/WeeklyHours';
 import ShopContactCard from '../components/ShopContactCard';
 import {
-  getShopImage, getMenuImage, locationText, canteenShort, formatBaht, telHref, formatPhone, isSoldOut,
+  getShopImage, getMenuImage, locationText, canteenShort, formatMenuPrice, telHref, formatPhone, isSoldOut,
 } from '../utils/shopDisplay';
 import { navigate, routes, goBack } from '../router';
 import ReviewList from '../components/ReviewList';
@@ -294,7 +294,7 @@ function MenuCard({ shop, menu, index, shopClosed }) {
         <div className="flex items-end justify-between gap-2">
           <div>
             <p className="hidden text-[10px] text-ink-muted sm:block">ราคาหน้าร้าน</p>
-            <p className={`font-display text-lg font-bold ${soldOut ? 'text-ink-muted line-through' : 'text-brand'}`}>{formatBaht(menu.price)}</p>
+            <p className={`font-display text-lg font-bold ${soldOut ? 'text-ink-muted line-through' : 'text-brand'}`}>{formatMenuPrice(menu.price)}</p>
           </div>
           <span
             className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${

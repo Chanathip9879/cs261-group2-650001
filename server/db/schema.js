@@ -402,20 +402,22 @@ async function seedDatabase(pool, db, { reset = false } = {}) {
 // ---------------------------------------------------------------------------
 
 // แปลงข้อความเวลาเปิด-ปิดของร้านเป็นตารางรายสัปดาห์
-// ค่า "ยังไม่ระบุเวลา" (หรือรูปแบบอื่นที่ไม่รู้จัก) ใช้เวลาเริ่มต้นของระบบ
-// ห้ามแปลงเป็น "ปิดทั้งสัปดาห์" เพราะหน้าเว็บถือว่าเป็นเวลาเริ่มต้นจนกว่าจะกรอกจริง
+// ใช้เวลาเดียวกันทุกวัน (จันทร์-อาทิตย์) ตามข้อความ เช่น "07:00 - 17:00"
+// คืนค่า null เมื่อข้อความไม่ใช่รูปแบบเวลาที่รู้จัก เพื่อให้ผู้เรียบข้ามการสร้างแถว
 function parseWeeklyFromShopText(text) {
   const match = /^([01]\d|2[0-3]):([0-5]\d)\s*-\s*([01]\d|2[0-3]):([0-5]\d)$/.exec(
     String(text || '').trim()
   );
-  if (!match) return cloneWeeklyHours();
+  if (!match) return null;
 
   const openTime = `${match[1]}:${match[2]}`;
   const closeTime = `${match[3]}:${match[4]}`;
   return DEFAULT_WEEKLY_HOURS.map((day) => ({
-    ...day,
-    open_time: day.is_closed ? null : openTime,
-    close_time: day.is_closed ? null : closeTime
+    day_of_week: day.day_of_week,
+    day_name: day.day_name,
+    is_closed: false,
+    open_time: openTime,
+    close_time: closeTime
   }));
 }
 
@@ -427,9 +429,12 @@ function buildSprint2SeedRows(db) {
 
   const hoursByShop = new Map();
   for (const shop of db.shops || []) {
+    const weekly = parseWeeklyFromShopText(shop.openingHours);
+    // ร้านที่ไม่มีรูปแบบเวลาเปิด-ปิดที่รู้จัก จะไม่ถูกสร้างแถวเวลาเปิด-ปิดเลย
+    if (!weekly) continue;
     hoursByShop.set(shop.id, {
       shop_id: shop.id,
-      weekly: parseWeeklyFromShopText(shop.openingHours),
+      weekly,
       special_holidays: [],
       updated_at: null
     });

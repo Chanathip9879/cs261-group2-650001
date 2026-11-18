@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Search, SlidersHorizontal, Star, Megaphone, Compass, Store, ArrowRight, X, ChevronRight,
   Soup, Flame, CookingPot, Drumstick, Salad, CupSoda, Utensils, FilterX, SearchX, MapPin, Clock,
+  Cookie, IceCream,
 } from 'lucide-react';
 import RestaurantCard from '../components/RestaurantCard';
 import { LiveDot, RatingBadge, Spinner } from '../components/ui/Primitives';
@@ -21,6 +22,9 @@ const CATEGORY_ICONS = {
   chicken_rice: { Icon: Drumstick, lgBg: 'lg:bg-brand-accent/10' },
   papaya_salad: { Icon: Salad, lgBg: 'lg:bg-ok-soft/50' },
   drinks_dessert: { Icon: CupSoda, lgBg: 'lg:bg-surface-mid' },
+  snacks: { Icon: Cookie, lgBg: 'lg:bg-brand-peach' },
+  fruit_salad: { Icon: Salad, lgBg: 'lg:bg-ok-soft/50' },
+  dessert: { Icon: IceCream, lgBg: 'lg:bg-brand-accent/10' },
 };
 
 export default function HomePage({
@@ -247,7 +251,7 @@ export default function HomePage({
                   <span className="hidden text-[11px] text-ink-muted lg:inline">เลือกลิ้มรสตามสไตล์คุณ</span>
                 )}
               </div>
-              <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:grid lg:grid-cols-6 lg:px-0">
+              <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:grid lg:grid-cols-5 lg:px-0">
                 {realCategories.map((c) => {
                   const { Icon, lgBg } = CATEGORY_ICONS[c.id] || { Icon: Utensils, lgBg: 'lg:bg-surface-mid' };
                   const active = category === c.id;
