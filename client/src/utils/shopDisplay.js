@@ -8,7 +8,6 @@ import papayaSalad2 from '../assets/images/food-papaya-salad-2.jpg';
 import noodles from '../assets/images/food-noodles.jpg';
 import noodles2 from '../assets/images/food-noodles-2.jpg';
 import detail1 from '../assets/images/detail-1.jpg';
-import detail2 from '../assets/images/detail-2.jpg';
 import detail3 from '../assets/images/detail-3.jpg';
 import detail4 from '../assets/images/detail-4.jpg';
 import detail5 from '../assets/images/detail-5.jpg';
@@ -33,7 +32,6 @@ const CATEGORY_IMAGES = {
   fruit_salad: [papayaSalad2, papayaSalad],
   dessert: [detail4, detail5],
 };
-const MENU_IMAGES = [detail2, detail3, detail4, detail5, chickenRice2, fav1, fav3, fav5];
 
 function hashOf(str = '') {
   let h = 0;
@@ -44,10 +42,6 @@ function hashOf(str = '') {
 export function getShopImage(shop) {
   const list = CATEGORY_IMAGES[shop?.category] || [chickenRice, papayaSalad, noodles];
   return list[hashOf(shop?.id) % list.length];
-}
-
-export function getMenuImage(shop, index) {
-  return MENU_IMAGES[(hashOf(shop?.id) + index) % MENU_IMAGES.length];
 }
 
 export function parseHours(text) {
